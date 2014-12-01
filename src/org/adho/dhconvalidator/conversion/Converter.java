@@ -18,11 +18,14 @@ public class Converter {
 		this.baseURL = baseURL;
 	}
 
-	public ZipResult convert(InputStream sourceStream, ConversionPath toTeiConversionPath) throws IOException {
+	public ZipResult convert(byte[] sourceData, ConversionPath toTeiConversionPath) throws IOException {
+
+		sourceData = toTeiConversionPath.applyInputFormatConversions(sourceData);		
+		
 		OxGarageConversionClient oxGarageConversionClient = new OxGarageConversionClient(baseURL);
 	
 		ZipResult zipResult = new ZipResult(oxGarageConversionClient.convert(
-				sourceStream, 
+				sourceData, 
 				toTeiConversionPath, 
 				toTeiConversionPath.getDefaultProperties()));
 		
@@ -31,18 +34,14 @@ public class Converter {
 		
 		
 		
-		
-		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		Serializer serializer = new Serializer(bos);
 		serializer.setIndent(2);
 		serializer.write(document);
-		System.out.println(bos.toString());
-		ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
-		
-		
+		System.out.println(bos.toString("UTF-8"));
+
 		contentAsXhtml = oxGarageConversionClient.convertToString(
-				bis, 
+				bos.toByteArray(), 
 				ConversionPath.TEI_TO_XHTML,
 				ConversionPath.TEI_TO_XHTML.getDefaultProperties());
 		System.out.println(contentAsXhtml);

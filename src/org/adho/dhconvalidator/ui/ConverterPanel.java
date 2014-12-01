@@ -49,8 +49,6 @@ public class ConverterPanel extends VerticalLayout {
 			
 			@Override
 			public void uploadSucceeded(SucceededEvent event) {
-				ByteArrayInputStream sourceStream = 
-						new ByteArrayInputStream(uploadContent.toByteArray());
 				try {
 					Converter converter =
 							new Converter(
@@ -58,7 +56,8 @@ public class ConverterPanel extends VerticalLayout {
 //								"http://www.tei-c.org/ege-webservice/"); //TODO: config							
 					
 					
-					ZipResult zipResult = converter.convert(sourceStream, ConversionPath.ODT_TO_TEI); //TODO: config
+					ZipResult zipResult = converter.convert(
+						uploadContent.toByteArray(), ConversionPath.ODT_TO_TEI); //TODO: config
 					VaadinSession.getCurrent().setAttribute(
 							SessionStorageKey.ZIPRESULT.name(), zipResult);
 					System.out.println(converter.getContentAsXhtml());

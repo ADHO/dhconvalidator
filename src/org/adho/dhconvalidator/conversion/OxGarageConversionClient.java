@@ -2,10 +2,8 @@ package org.adho.dhconvalidator.conversion;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -16,7 +14,6 @@ import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
-import org.apache.commons.io.IOUtils;
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -37,7 +34,7 @@ public class OxGarageConversionClient {
 		this.baseURL = baseURL;
 	}
 	
-	public String convertToString(InputStream sourceStream, ConversionPath conversionPath, Properties properties) throws IOException {
+	public String convertToString(byte[] sourceStream, ConversionPath conversionPath, Properties properties) throws IOException {
 		ZipResult zipResult = new ZipResult(convert(sourceStream, conversionPath, properties));
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		Serializer serializer = new Serializer(buffer);
@@ -46,39 +43,16 @@ public class OxGarageConversionClient {
 		return buffer.toString("UTF-8");
 	}
 	
-	public String convertToString(File file, ConversionPath conversionPath, Properties properties) throws IOException {
-		
-		ZipResult zipResult = new ZipResult(convert(file, conversionPath, properties));
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		Serializer serializer = new Serializer(buffer);
-		serializer.setIndent(2);
-		serializer.write(zipResult.getDocument());
-		return buffer.toString("UTF-8");
-	}
-	
-	public InputStream convert(File file, ConversionPath conversionPath, Properties properties) throws IOException {
-		FileRepresentation fr = new FileRepresentation(file, MediaType.APPLICATION_ALL);
-		return convert(fr, conversionPath, properties);
-	}
-	
-	public InputStream convert(final InputStream sourceStream, ConversionPath conversionPath, Properties properties) throws IOException {
-		StreamRepresentation sr = new StreamRepresentation(MediaType.APPLICATION_ALL) {
-			
-			@Override
-			public void write(OutputStream outputStream) throws IOException {
-				IOUtils.copy(sourceStream, outputStream);
-			}
-			
-			@Override
-			public InputStream getStream() throws IOException {
-				return sourceStream;
-			}
-		};
+	public InputStream convert(final byte[] sourceStream, ConversionPath conversionPath, Properties properties) throws IOException {
+		StreamRepresentation sr = new ByteArrayStreamRepresentation(sourceStream);
 		return convert(sr, conversionPath, properties);
 	}
 	
 	
-	private InputStream convert(Representation sourceRep, ConversionPath conversionPath, Properties properties) throws IOException {
+	private InputStream convert(
+			Representation sourceRep, 
+			ConversionPath conversionPath, 
+			Properties properties) throws IOException {
 		
 		String uri = baseURL + CONVERSION_OPERATION + conversionPath.getPath();
 		if (!properties.isEmpty()) {
@@ -148,6 +122,22 @@ public class OxGarageConversionClient {
 		catch (ParsingException e) {
 			throw new IOException(e);
 		}
+	}
+	
+	
+	private String convertToString(File file, ConversionPath conversionPath, Properties properties) throws IOException {
+		
+		ZipResult zipResult = new ZipResult(convert(file, conversionPath, properties));
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		Serializer serializer = new Serializer(buffer);
+		serializer.setIndent(2);
+		serializer.write(zipResult.getDocument());
+		return buffer.toString("UTF-8");
+	}
+
+	private InputStream convert(File file, ConversionPath conversionPath, Properties properties) throws IOException {
+		FileRepresentation fr = new FileRepresentation(file, MediaType.APPLICATION_ALL);
+		return convert(fr, conversionPath, properties);
 	}
 	
 	public static void main(String[] args) {
