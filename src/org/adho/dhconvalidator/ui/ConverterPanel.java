@@ -7,7 +7,7 @@ import java.io.OutputStream;
 
 import org.adho.dhconvalidator.conversion.ConversionPath;
 import org.adho.dhconvalidator.conversion.Converter;
-import org.adho.dhconvalidator.conversion.ZipResult;
+import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -15,6 +15,8 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.UI;
@@ -50,19 +52,31 @@ public class ConverterPanel extends VerticalLayout {
 			@Override
 			public void uploadSucceeded(SucceededEvent event) {
 				try {
-					Converter converter =
-							new Converter(
-								"http://85.214.78.116:8080/ege-webservice/");
-//								"http://www.tei-c.org/ege-webservice/"); //TODO: config							
 					
-					
-					ZipResult zipResult = converter.convert(
-						uploadContent.toByteArray(), ConversionPath.ODT_TO_TEI); //TODO: config
-					VaadinSession.getCurrent().setAttribute(
-							SessionStorageKey.ZIPRESULT.name(), zipResult);
-					System.out.println(converter.getContentAsXhtml());
-					preview.setValue(converter.getContentAsXhtml());
-					resultCaption.setValue("Preview and Conversion log " + filename );
+					byte[] uploadData = uploadContent.toByteArray();
+					if (uploadData.length == 0) {
+						Notification.show(
+							"Info", 
+							"Please select a file first!", 
+							Type.TRAY_NOTIFICATION);
+					}
+					else {
+						
+						Converter converter =
+								new Converter(
+									"http://85.214.78.116:8080/ege-webservice/");
+	//								"http://www.tei-c.org/ege-webservice/"); //TODO: config							
+						
+						
+						ZipResult zipResult = converter.convert(
+							uploadData, 
+							ConversionPath.getConvertionPathByFilename(filename));
+						VaadinSession.getCurrent().setAttribute(
+								SessionStorageKey.ZIPRESULT.name(), zipResult);
+						System.out.println(converter.getContentAsXhtml());
+						preview.setValue(converter.getContentAsXhtml());
+						resultCaption.setValue("Preview and Conversion log " + filename );
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -109,7 +123,7 @@ public class ConverterPanel extends VerticalLayout {
 			});
 
 		inputPanel.addComponent(upload);
-
+		
 		progressBar = new ProgressBar();
 		progressBar.setIndeterminate(true);
 		progressBar.setVisible(false);

@@ -1,12 +1,13 @@
 package org.adho.dhconvalidator.conversion;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import nu.xom.Document;
 import nu.xom.Serializer;
+
+import org.adho.dhconvalidator.conversion.oxgarage.OxGarageConversionClient;
+import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 
 public class Converter {
 
@@ -20,7 +21,7 @@ public class Converter {
 
 	public ZipResult convert(byte[] sourceData, ConversionPath toTeiConversionPath) throws IOException {
 
-		sourceData = toTeiConversionPath.applyInputFormatConversions(sourceData);		
+		sourceData = toTeiConversionPath.applyInputConversions(sourceData);		
 		
 		OxGarageConversionClient oxGarageConversionClient = new OxGarageConversionClient(baseURL);
 	

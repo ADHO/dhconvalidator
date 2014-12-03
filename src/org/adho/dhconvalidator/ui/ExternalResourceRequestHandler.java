@@ -2,7 +2,7 @@ package org.adho.dhconvalidator.ui;
 
 import java.io.IOException;
 
-import org.adho.dhconvalidator.conversion.ZipResult;
+import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 
 import com.vaadin.server.RequestHandler;
 import com.vaadin.server.VaadinRequest;
