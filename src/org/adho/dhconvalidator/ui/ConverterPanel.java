@@ -1,6 +1,5 @@
 package org.adho.dhconvalidator.ui;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -8,6 +7,7 @@ import java.io.OutputStream;
 import org.adho.dhconvalidator.conversion.ConversionPath;
 import org.adho.dhconvalidator.conversion.Converter;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
+import org.adho.dhconvalidator.properties.PropertyKey;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -64,9 +64,7 @@ public class ConverterPanel extends VerticalLayout {
 						
 						Converter converter =
 								new Converter(
-									"http://85.214.78.116:8080/ege-webservice/");
-	//								"http://www.tei-c.org/ege-webservice/"); //TODO: config							
-						
+									PropertyKey.oxgarage_url.getValue());
 						
 						ZipResult zipResult = converter.convert(
 							uploadData, 

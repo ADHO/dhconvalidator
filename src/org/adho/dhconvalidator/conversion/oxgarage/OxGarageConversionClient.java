@@ -171,6 +171,7 @@ public class OxGarageConversionClient {
 			oxclient.printDocument(oxclient.getConversions(Type.ODT));
 //			oxclient.printDocument(oxclient.getConversions(Type.XHTML));
 //			oxclient.printDocument(oxclient.getConversions(Type.TEI));
+			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
