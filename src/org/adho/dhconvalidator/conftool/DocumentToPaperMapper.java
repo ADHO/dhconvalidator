@@ -33,11 +33,4 @@ public class DocumentToPaperMapper {
 		
 		return result;
 	}
-
-	private List<String> makeAuthorNameList(String value) {
-
-		
-		return null;
-	}
-
 }

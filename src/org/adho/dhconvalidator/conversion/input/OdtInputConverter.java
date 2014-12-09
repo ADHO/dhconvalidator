@@ -16,17 +16,40 @@ import org.adho.dhconvalidator.conversion.Type;
 import org.adho.dhconvalidator.conversion.ZipFs;
 
 public class OdtInputConverter implements InputConverter {
-	private static final String STYLE_NAMESPACE = "urn:oasis:names:tc:opendocument:xmlns:style:1.0";
-	private static final String TEXT_NAMESPACE = "urn:oasis:names:tc:opendocument:xmlns:text:1.0"; 
+	private enum Namespace {
+		STYLE("style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0"),
+		TEXT("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0"),
+		DC("dc", "http://purl.org/dc/elements/1.1/"),
+		OFFICE("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0"),
+		META("meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0"),
+		;
+		private String name;
+		private String uri;
+
+		private Namespace(String name, String uri) {
+			this.name = name;
+			this.uri = uri;
+		}
+
+		public String toUri() {
+			return uri;
+		}
+		
+		public String getName() {
+			return name;
+		}
+	}
 	private static final String TEMPLATE = "template/DH_template_v1.ott";
 	
 	private XPathContext xPathContext;
 	
 	public OdtInputConverter() {
 		xPathContext = new XPathContext();
-		xPathContext.addNamespace("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
-		xPathContext.addNamespace("style", STYLE_NAMESPACE);
-		xPathContext.addNamespace("text", TEXT_NAMESPACE);
+		for (Namespace ns : Namespace.values()) {
+			xPathContext.addNamespace(
+				ns.getName(),
+				ns.toUri());
+		}
 	}
 
 	@Override
@@ -50,8 +73,9 @@ public class OdtInputConverter implements InputConverter {
 		for (int i=0; i<styleResult.size(); i++) {
 			Element styleNode = (Element)styleResult.get(i);
 			System.out.println(styleNode);
-			String adhocName = styleNode.getAttributeValue("name", STYLE_NAMESPACE);
-			String definedName = styleNode.getAttributeValue("parent-style-name", STYLE_NAMESPACE);
+			String adhocName = styleNode.getAttributeValue("name", Namespace.STYLE.toUri());
+			String definedName = 
+				styleNode.getAttributeValue("parent-style-name", Namespace.STYLE.toUri());
 			paragraphStyleMapping.put(adhocName, definedName);
 		}
 		
@@ -60,11 +84,11 @@ public class OdtInputConverter implements InputConverter {
 		
 		for (int i=0; i<textResult.size(); i++) {
 			Element textNode = (Element)textResult.get(i);
-			String styleName = textNode.getAttributeValue("style-name", TEXT_NAMESPACE);
+			String styleName = textNode.getAttributeValue("style-name", Namespace.TEXT.toUri());
 			if (styleName != null) {
 				String definedName = paragraphStyleMapping.get(styleName);
 				if (definedName != null) {
-					textNode.getAttribute("style-name", TEXT_NAMESPACE).setValue(definedName);
+					textNode.getAttribute("style-name", Namespace.TEXT.toUri()).setValue(definedName);
 				}
 			}
 		}
@@ -80,7 +104,71 @@ public class OdtInputConverter implements InputConverter {
 		injectAuthorsIntoContent(contentDoc, paper.getAuthorsAndAffiliations());
 		
 		zipFs.putDocument("content.xml", contentDoc);
+		
+		Document metaDoc = zipFs.getDocument("meta.xml");
+		injectTitleIntoMeta(metaDoc, paper.getTitle());
+		injectAuthorsIntoMeta(metaDoc, paper.getAuthorsAndAffiliations());
+		zipFs.putDocument("meta.xml", metaDoc);
+		
 		return zipFs.toZipData();
+	}
+
+	private void injectAuthorsIntoMeta(Document metaDoc,
+			List<String> authorsAndAffiliations) {
+		Nodes searchResult = 
+				metaDoc.query(
+					"/office:document-meta/office:meta/meta:initial-creator", 
+					xPathContext);
+		Element initialCreatorElement = null;
+		if (searchResult.size() > 0) {
+			initialCreatorElement = (Element) searchResult.get(0);
+			
+		}
+		else {
+			initialCreatorElement = 
+				new Element("meta:initial-creator", Namespace.META.toUri());
+			Element metaElement = metaDoc.getRootElement()
+					.getFirstChildElement("meta", Namespace.OFFICE.toUri());
+			metaElement.appendChild(initialCreatorElement);
+		}
+		
+		initialCreatorElement.removeChildren();
+		StringBuilder builder = new StringBuilder();
+		String conc  = "";
+		for (String author : authorsAndAffiliations) {
+			builder.append(conc);
+			builder.append(author);
+			conc = "; ";
+		}
+		initialCreatorElement.appendChild(builder.toString());
+		
+		Nodes creatorSearchResult = 
+				metaDoc.query(
+					"/office:document-meta/office:meta/dc:creator", 
+					xPathContext);
+		if (creatorSearchResult.size() > 0) {
+			creatorSearchResult.get(0).getParent().removeChild(creatorSearchResult.get(0));
+		}
+	}
+
+	private void injectTitleIntoMeta(Document metaDoc, String title) {
+		Nodes searchResult = 
+				metaDoc.query(
+					"/office:document-meta/office:meta/dc:title", 
+					xPathContext);
+		Element titleElement = null;
+		if (searchResult.size() > 0) {
+			titleElement = (Element) searchResult.get(0);
+			
+		}
+		else {
+			titleElement = new Element("dc:title", Namespace.DC.toUri());
+			Element metaElement = metaDoc.getRootElement()
+				.getFirstChildElement("meta", Namespace.OFFICE.toUri());
+			metaElement.appendChild(titleElement);
+		}
+		titleElement.removeChildren();
+		titleElement.appendChild(title);
 	}
 
 	private void injectAuthorsIntoContent(Document contentDoc,
@@ -106,11 +194,11 @@ public class OdtInputConverter implements InputConverter {
 		
 		authorSectionElement.removeChildren();
 		for (String authorAffiliation : authorsAndAffiliations){
-			Element authorParagraphElement = new Element("p", TEXT_NAMESPACE);
+			Element authorParagraphElement = new Element("p", Namespace.TEXT.toUri());
 			authorSectionElement.appendChild(authorParagraphElement);
 			authorParagraphElement.appendChild(authorAffiliation);
 			authorParagraphElement.addAttribute(
-				new Attribute("text:style-name", TEXT_NAMESPACE, "P6"));
+				new Attribute("text:style-name", Namespace.TEXT.toUri(), "P6"));
 		}
 	}
 
@@ -135,11 +223,11 @@ public class OdtInputConverter implements InputConverter {
 		Element titleSectionElement = (Element) searchResult.get(0);
 		
 		titleSectionElement.removeChildren();
-		Element titleParagraphElement = new Element("p", TEXT_NAMESPACE);
+		Element titleParagraphElement = new Element("p", Namespace.TEXT.toUri());
 		titleSectionElement.appendChild(titleParagraphElement);
 		titleParagraphElement.appendChild(title);
 		titleParagraphElement.addAttribute(
-				new Attribute("text:style-name", TEXT_NAMESPACE, "P1"));
+				new Attribute("text:style-name", Namespace.TEXT.toUri(), "P1"));
 
 	}
 	
