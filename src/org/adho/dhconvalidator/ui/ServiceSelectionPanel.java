@@ -1,13 +1,16 @@
 package org.adho.dhconvalidator.ui;
 
+import org.adho.dhconvalidator.conversion.input.OdtInputConverter;
+
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class ServiceSelectionPanel extends VerticalLayout {
+public class ServiceSelectionPanel extends CenterPanel {
 	
 	private Button btOdtTemplate;
 	private Button btDocxTemplate;
@@ -24,21 +27,28 @@ public class ServiceSelectionPanel extends VerticalLayout {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
-				
+				UI.getCurrent().setContent(new PaperSelectionPanel(new OdtInputConverter()));
 			}
 		});
-		
+		btConversionPanel.addClickListener(new ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				UI.getCurrent().setContent(new ConverterPanel());
+			}
+		});
 	}
 
 	private void initComponents() {
-		setSpacing(true);
+		LogoutLink logoutLink = new LogoutLink();
+
 		VerticalLayout templateGeneratorServiceContent = new VerticalLayout();
 		templateGeneratorServiceContent.setSpacing(true);
 		templateGeneratorServiceContent.setMargin(true);
 		
 		Panel templateGeneratorServicePanel = 
 			new Panel("Template Generation Service", templateGeneratorServiceContent);
-//		templateGeneratorServicePanel.setSizeUndefined();
+
 		btOdtTemplate = new Button("Open Document (odt)");
 		
 		btOdtTemplate.setDescription(
@@ -50,9 +60,8 @@ public class ServiceSelectionPanel extends VerticalLayout {
 			"If you want to use Microsoft Office choose the docx format.");
 		templateGeneratorServiceContent.addComponent(btDocxTemplate);
 		
-		addComponent(templateGeneratorServicePanel);
-		
 		VerticalLayout conversionAndValidationServiceContent = new VerticalLayout();
+		
 		conversionAndValidationServiceContent.setSpacing(true);
 		conversionAndValidationServiceContent.setMargin(true);
 
@@ -60,13 +69,15 @@ public class ServiceSelectionPanel extends VerticalLayout {
 				new Panel(
 						"Conversion and Validation Service",
 						conversionAndValidationServiceContent);
-//		conversionAndValidationServicePanel.setSizeUndefined();
+		
 		btConversionPanel = new Button("Continue");
 		conversionAndValidationServiceContent.addComponent(btConversionPanel);
 		conversionAndValidationServiceContent.setComponentAlignment(
 				btConversionPanel, Alignment.MIDDLE_CENTER);
-		addComponent(conversionAndValidationServicePanel);
-		
+
+		addCenteredComponent(logoutLink, Alignment.TOP_RIGHT);
+		addCenteredComponent(templateGeneratorServicePanel); 
+		addCenteredComponent(conversionAndValidationServicePanel);
 	}
 
 }

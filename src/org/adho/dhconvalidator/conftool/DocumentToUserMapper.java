@@ -24,7 +24,7 @@ public class DocumentToUserMapper {
 			String firstName = 
 					authorElement.getFirstChildElement("firstname").getValue();
 			String lastName =  
-					authorElement.getFirstChildElement("firstname").getValue();
+					authorElement.getFirstChildElement("lastname").getValue();
 					
 			List<Integer> paperIds = 
 				makeIntegerList(
@@ -42,7 +42,7 @@ public class DocumentToUserMapper {
 		if (!value.isEmpty()) {
 			String[] split = value.split(",");
 			for (String splitValue : split) {
-				result.add(Integer.valueOf(splitValue));
+				result.add(Integer.valueOf(splitValue.trim()));
 			}
 		}
 		return result;

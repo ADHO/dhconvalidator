@@ -3,6 +3,7 @@ package org.adho.dhconvalidator.conversion;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -22,13 +23,18 @@ public class ZipFs {
 
 	public ZipFs(byte[] zipData) throws IOException {
 		super();
-		load(zipData);
+		load(new ZipInputStream(new ByteArrayInputStream(zipData)));
 	}
 
-	private void load(byte[] zipData) throws IOException {
-		ZipInputStream zipInputStream = 
-				new ZipInputStream(new ByteArrayInputStream(zipData));
-		
+	public ZipFs(InputStream zipData) throws IOException {
+		super();
+		load(new ZipInputStream(zipData));
+	}
+	
+	public ZipFs() {
+	}
+
+	private void load(ZipInputStream zipInputStream) throws IOException {
 		ZipEntry entry = null;
 		while ((entry = zipInputStream.getNextEntry()) !=null) {
 			ByteArrayOutputStream entryBuffer = new ByteArrayOutputStream();
@@ -53,7 +59,7 @@ public class ZipFs {
 		serializer.setIndent(2);
 		serializer.write(document);
 
-		content.put(path, bos.toByteArray());
+		putDocument(path, bos.toByteArray());
 	}
 	
 	public byte[] toZipData() throws IOException {
@@ -69,5 +75,9 @@ public class ZipFs {
 		}
 		
 		return bos.toByteArray();
+	}
+
+	public void putDocument(String path, byte[] document) {
+		content.put(path, document);
 	}
 }

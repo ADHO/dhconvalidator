@@ -2,18 +2,23 @@ package org.adho.dhconvalidator.conversion.input;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.adho.dhconvalidator.conversion.ZipFs;
-
+import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Nodes;
 import nu.xom.XPathContext;
 
+import org.adho.dhconvalidator.conftool.Paper;
+import org.adho.dhconvalidator.conversion.Type;
+import org.adho.dhconvalidator.conversion.ZipFs;
+
 public class OdtInputConverter implements InputConverter {
 	private static final String STYLE_NAMESPACE = "urn:oasis:names:tc:opendocument:xmlns:style:1.0";
 	private static final String TEXT_NAMESPACE = "urn:oasis:names:tc:opendocument:xmlns:text:1.0"; 
+	private static final String TEMPLATE = "template/DH_template_v1.ott";
 	
 	private XPathContext xPathContext;
 	
@@ -27,11 +32,11 @@ public class OdtInputConverter implements InputConverter {
 	@Override
 	public byte[] convert(byte[] sourceData) throws IOException {
 		ZipFs zipFs = new ZipFs(sourceData);
-		
 		Document contentDoc = zipFs.getDocument("content.xml");
-		stripAutomaticParagraphStyles(contentDoc);
-		zipFs.putDocument("content.xml", contentDoc);
 		
+		stripAutomaticParagraphStyles(contentDoc);
+
+		zipFs.putDocument("content.xml", contentDoc);
 		return zipFs.toZipData();
 	}
 
@@ -65,4 +70,81 @@ public class OdtInputConverter implements InputConverter {
 		}
 	}
 
+	public byte[] getPersonalizedTemplate(Paper paper) throws IOException {
+		ZipFs zipFs = 
+			new ZipFs(
+				Thread.currentThread().getContextClassLoader().getResourceAsStream(TEMPLATE));
+		Document contentDoc = zipFs.getDocument("content.xml");
+		
+		injectTitleIntoContent(contentDoc, paper.getTitle());
+		injectAuthorsIntoContent(contentDoc, paper.getAuthorsAndAffiliations());
+		
+		zipFs.putDocument("content.xml", contentDoc);
+		return zipFs.toZipData();
+	}
+
+	private void injectAuthorsIntoContent(Document contentDoc,
+			List<String> authorsAndAffiliations) throws IOException {
+		Nodes searchResult = 
+				contentDoc.query(
+					"//text:section[@text:name='Authors from ConfTool']", 
+					xPathContext);
+		
+		if (searchResult.size()!=1) {
+			throw new IOException(
+				"document does not contain exactly one section element "
+				+ "for the ConfTool author/affiliation, found: "
+				+ searchResult.size());
+		}
+		
+		if (!(searchResult.get(0) instanceof Element)) {
+			throw new IllegalStateException(
+				"section for ConfTool author/affiliation doesn't seem to be a proper Element");
+		}
+		
+		Element authorSectionElement = (Element) searchResult.get(0);
+		
+		authorSectionElement.removeChildren();
+		for (String authorAffiliation : authorsAndAffiliations){
+			Element authorParagraphElement = new Element("p", TEXT_NAMESPACE);
+			authorSectionElement.appendChild(authorParagraphElement);
+			authorParagraphElement.appendChild(authorAffiliation);
+			authorParagraphElement.addAttribute(
+				new Attribute("text:style-name", TEXT_NAMESPACE, "P6"));
+		}
+	}
+
+	private void injectTitleIntoContent(Document contentDoc, String title) throws IOException {
+		Nodes searchResult = 
+			contentDoc.query(
+				"//text:section[@text:name='Title from ConfTool']", 
+				xPathContext);
+		
+		if (searchResult.size()!=1) {
+			throw new IOException(
+				"document does not contain exactly one section element "
+				+ "for the ConfTool title, found: "
+				+ searchResult.size());
+		}
+		
+		if (!(searchResult.get(0) instanceof Element)) {
+			throw new IllegalStateException(
+				"section for ConfTool title doesn't seem to be a proper Element");
+		}
+		
+		Element titleSectionElement = (Element) searchResult.get(0);
+		
+		titleSectionElement.removeChildren();
+		Element titleParagraphElement = new Element("p", TEXT_NAMESPACE);
+		titleSectionElement.appendChild(titleParagraphElement);
+		titleParagraphElement.appendChild(title);
+		titleParagraphElement.addAttribute(
+				new Attribute("text:style-name", TEXT_NAMESPACE, "P1"));
+
+	}
+	
+	@Override
+	public String getFileExtension() {
+		return Type.ODT.getExtension();
+	}
 }

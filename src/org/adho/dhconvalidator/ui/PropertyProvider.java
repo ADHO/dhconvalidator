@@ -6,7 +6,7 @@ public enum PropertyProvider {
 	
 	INSTANCE;
 	
-	private Properties properties;
+	private volatile Properties properties;
 	
 	public static Properties getProperties() {
 		return INSTANCE.properties;

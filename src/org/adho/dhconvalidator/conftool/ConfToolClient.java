@@ -2,6 +2,7 @@ package org.adho.dhconvalidator.conftool;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import nu.xom.Builder;
@@ -18,10 +19,15 @@ import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 
 public class ConfToolClient {
+	private static final boolean LOGIN_SUCCESS = true;
 	public static final class AuthenticationException extends Exception {
 
 		public AuthenticationException() {
 			super();
+		}
+
+		public AuthenticationException(String message) {
+			super(message);
 		}
 	}
 	
@@ -39,7 +45,7 @@ public class ConfToolClient {
 	}
 	
 	public String getDetails(String user) throws IOException {
-		String nonce = String.valueOf(System.nanoTime());
+		String nonce = getNonce();
 		
 		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
 		urlBuilder.append("?page=remoteLogin");
@@ -76,8 +82,13 @@ public class ConfToolClient {
 				getExportData(ExportType.papers));
 	}
 	
+	private String getNonce() {
+		Date date = new Date(new Date().getTime()*60);
+		return String.valueOf(date.getTime());
+	}
+	
 	private Document getExportData(ExportType type) throws IOException {
-		String nonce = String.valueOf(System.nanoTime());
+		String nonce = getNonce();
 		
 		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
 		urlBuilder.append("?page=adminExport");
@@ -109,7 +120,7 @@ public class ConfToolClient {
 	
 	public User authenticate(String user, char[] pass) 
 			throws IOException, AuthenticationException {
-		String nonce = String.valueOf(System.nanoTime());
+		String nonce = getNonce();
 		
 		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
 		urlBuilder.append("?page=remoteLogin");
@@ -132,15 +143,16 @@ public class ConfToolClient {
 			Builder builder = new Builder();
 			Document resultDoc = builder.build(resultStream);
 			System.out.println(resultDoc.toXML());
-			if (getLoginResult(resultDoc)) {
+			if (getLoginResult(resultDoc) == LOGIN_SUCCESS) {
 				return getUser(resultDoc);
+			}
+			else {
+				throw new AuthenticationException(getMessage(resultDoc));
 			}
 		}
 		catch (Exception e) {
 			throw new IOException(e);
 		}
-
-		throw new AuthenticationException();
 	}
 	
 	private String getUserId(Document resultDoc) {
@@ -162,4 +174,8 @@ public class ConfToolClient {
 		return Boolean.valueOf(resultElement.getValue());
 	}
 	
+	private String getMessage(Document resultDoc) {
+		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/message");
+		return resultElement.getValue();
+	}
 }

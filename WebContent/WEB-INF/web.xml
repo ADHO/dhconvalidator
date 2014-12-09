@@ -12,6 +12,11 @@
 	<servlet-class>org.adho.dhconvalidator.properties.PropertiesInitializerServlet</servlet-class> 
 	<load-on-startup>1</load-on-startup>
   </servlet>
+    <servlet> 
+	<servlet-name>ConvToolCache</servlet-name> 
+	<servlet-class>org.adho.dhconvalidator.conftool.ConfToolCacheLoaderInitializerServlet</servlet-class> 
+	<load-on-startup>2</load-on-startup>
+  </servlet>
   <servlet>
   	<servlet-name>DHConvalidator</servlet-name>
   	<servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
@@ -27,7 +32,7 @@
   		<param-name>legacyPropertyToString</param-name>
   		<param-value>false</param-value>
   	</init-param>
-  	<load-on-startup>2</load-on-startup>
+  	<load-on-startup>3</load-on-startup>
   </servlet>
   <servlet-mapping>
   	<servlet-name>DHConvalidator</servlet-name>
