@@ -64,4 +64,16 @@ public class ConfToolCache {
 		}
 		return loginUser;
 	}
+
+	public Paper getPaper(User user, Integer paperId) {
+		List<Paper> papers = getPapers(user);
+		if (papers != null) {
+			for (Paper paper : papers) {
+				if (paper.getPaperId().equals(paperId)) {
+					return paper;
+				}
+			}
+		}
+		return null;
+	}
 }

@@ -8,10 +8,13 @@ import java.util.Map;
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.XPathContext;
 
+import org.adho.dhconvalidator.conftool.ConfToolCacheProvider;
 import org.adho.dhconvalidator.conftool.Paper;
+import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.Type;
 import org.adho.dhconvalidator.conversion.ZipFs;
 
@@ -40,6 +43,7 @@ public class OdtInputConverter implements InputConverter {
 		}
 	}
 	private static final String TEMPLATE = "template/DH_template_v1.ott";
+	private static final String CONFTOOLPAPERID_ATTRIBUTENAME = "ConfToolPaperID";
 	
 	private XPathContext xPathContext;
 	
@@ -53,14 +57,75 @@ public class OdtInputConverter implements InputConverter {
 	}
 
 	@Override
-	public byte[] convert(byte[] sourceData) throws IOException {
+	public byte[] convert(byte[] sourceData, User user) throws IOException {
 		ZipFs zipFs = new ZipFs(sourceData);
 		Document contentDoc = zipFs.getDocument("content.xml");
 		
 		stripAutomaticParagraphStyles(contentDoc);
+		stripTemplateSections(contentDoc);
+		
+		Document metaDoc = zipFs.getDocument("meta.xml");
+		Integer paperId = getPaperIdFromMeta(metaDoc);
+		Paper paper = ConfToolCacheProvider.INSTANCE.getConfToolCache().getPaper(user, paperId );
+
+		injectTitleIntoMeta(metaDoc, paper.getTitle());
+		injectAuthorsIntoMeta(metaDoc, paper.getAuthorsAndAffiliations());
 
 		zipFs.putDocument("content.xml", contentDoc);
 		return zipFs.toZipData();
+	}
+
+	private void stripTemplateSections(Document contentDoc) {
+		Nodes searchResult = 
+				contentDoc.query(
+					"//text:section[@text:name='Authors from ConfTool']", 
+					xPathContext);
+		if (searchResult.size() > 0) {
+			removeNodes(searchResult);
+		}
+		
+		searchResult = 
+			contentDoc.query(
+				"//text:section[@text:name='Guidelines']", 
+				xPathContext);
+		
+		if (searchResult.size() > 0) {
+			removeNodes(searchResult);
+		}
+				
+		searchResult = 
+			contentDoc.query(
+				"//text:section[@text:name='Title from ConfTool']", 
+				xPathContext);
+		
+		if (searchResult.size() > 0) {
+			removeNodes(searchResult);
+		}
+	}
+
+	private void removeNodes(Nodes nodes) {
+		for (int i=0; i<nodes.size(); i++) {
+			Node n = nodes.get(i);
+			n.getParent().removeChild(n);
+		}
+	}
+
+	private Integer getPaperIdFromMeta(Document metaDoc) throws IOException {
+
+		Nodes searchResult = 
+			metaDoc.query(
+				"/office:document-meta/office:meta/meta:user-defined[@meta:name='"
+						+CONFTOOLPAPERID_ATTRIBUTENAME+"']", 
+				xPathContext);
+	
+		if (searchResult.size() == 1) {
+			Element confToolPaperIdElement = (Element) searchResult.get(0);
+			return Integer.valueOf(confToolPaperIdElement.getValue());
+		}
+		else {
+			throw new IOException(
+				"document has invalid meta section: ConfToolPaperID not found!");
+		}
 	}
 
 	private void stripAutomaticParagraphStyles(Document contentDoc) {
@@ -108,9 +173,37 @@ public class OdtInputConverter implements InputConverter {
 		Document metaDoc = zipFs.getDocument("meta.xml");
 		injectTitleIntoMeta(metaDoc, paper.getTitle());
 		injectAuthorsIntoMeta(metaDoc, paper.getAuthorsAndAffiliations());
+		injectPaperIdIntoMeta(metaDoc, paper.getPaperId());
+		
 		zipFs.putDocument("meta.xml", metaDoc);
 		
 		return zipFs.toZipData();
+	}
+
+	private void injectPaperIdIntoMeta(Document metaDoc, Integer paperId) {
+		Nodes searchResult = 
+			metaDoc.query(
+				"/office:document-meta/office:meta/meta:user-defined[@meta:name='"
+						+CONFTOOLPAPERID_ATTRIBUTENAME+"']", 
+				xPathContext);
+		
+		if (searchResult.size() != 0) {
+			for (int i=0; i<searchResult.size(); i++) {
+				Node n = searchResult.get(i);
+				n.getParent().removeChild(n);
+			}
+		}
+		
+		Element confToolPaperIdElement = 
+				new Element("meta:user-defined", Namespace.META.toUri());
+		confToolPaperIdElement.addAttribute(
+			new Attribute("meta:name", Namespace.META.toUri(), CONFTOOLPAPERID_ATTRIBUTENAME));
+		confToolPaperIdElement.appendChild(String.valueOf(paperId));
+		
+		Element metaElement = metaDoc.getRootElement()
+				.getFirstChildElement("meta", Namespace.OFFICE.toUri());
+		metaElement.appendChild(confToolPaperIdElement);
+		
 	}
 
 	private void injectAuthorsIntoMeta(Document metaDoc,

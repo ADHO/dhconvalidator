@@ -3,6 +3,7 @@ package org.adho.dhconvalidator.conversion;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.conversion.input.OdtInputConverter;
 import org.adho.dhconvalidator.util.Pair;
@@ -24,7 +25,8 @@ public enum ConversionPath {
 		"xhtml",
 		new Pair<>("oxgarage.textOnly", "false"), 
 		new Pair<>("oxgarage.getImages", "false"),
-		new Pair<>("oxgarage.getOnlineImages", "false")
+		new Pair<>("oxgarage.getOnlineImages", "false"),
+		new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator")
 	),
 	DOCX_TO_TEI( 
 		Type.DOCX.getIdentifier()+Type.TEI.getIdentifier(),
@@ -39,7 +41,8 @@ public enum ConversionPath {
 		"tei",
 		new Pair<>("oxgarage.textOnly", "false"), 
 		new Pair<>("oxgarage.getImages", "false"),
-		new Pair<>("oxgarage.getOnlineImages", "false")
+		new Pair<>("oxgarage.getOnlineImages", "false"),
+		new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator")
 	),
 	;
 	
@@ -49,21 +52,25 @@ public enum ConversionPath {
 	private String defaultFileExt;
 	
 	private ConversionPath(
-			String path, String defaultFileExt, InputConverter inputConverter, Pair<String,String>... pairs) {
+			String path,
+			String defaultFileExt, 
+			InputConverter inputConverter, 
+			Pair<String,String>... propertyPairs) {
+		
 		this.path = path;
 		this.defaultFileExt = defaultFileExt;
 		this.inputConverter = inputConverter;
 		this.properties = new Properties();
-		if (pairs != null) {
-			for (Pair<String,String> pair : pairs) {
+		if (propertyPairs != null) {
+			for (Pair<String,String> pair : propertyPairs) {
 				this.properties.setProperty(pair.getFirst(), pair.getSecond());
 			}
 		}
 		
 	}
 	
-	private ConversionPath(String path, String defaultFileExt, Pair<String,String>... pairs) {
-		this(path, defaultFileExt, null, pairs);
+	private ConversionPath(String path, String defaultFileExt, Pair<String,String>... propertyPairs) {
+		this(path, defaultFileExt, null, propertyPairs);
 	}
 
 	public String getPath() {
@@ -74,9 +81,9 @@ public enum ConversionPath {
 		return properties;
 	}
 
-	public byte[] applyInputConversions(byte[] sourceData) throws IOException {
+	public byte[] applyInputConversions(byte[] sourceData, User user) throws IOException {
 		if (inputConverter !=null) {
-			return inputConverter.convert(sourceData);
+			return inputConverter.convert(sourceData, user);
 		}
 		return sourceData;
 	}

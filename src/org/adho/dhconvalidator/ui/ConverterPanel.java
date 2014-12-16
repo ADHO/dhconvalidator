@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.ConversionPath;
 import org.adho.dhconvalidator.conversion.Converter;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
@@ -68,7 +69,10 @@ public class ConverterPanel extends VerticalLayout {
 						
 						ZipResult zipResult = converter.convert(
 							uploadData, 
-							ConversionPath.getConvertionPathByFilename(filename));
+							ConversionPath.getConvertionPathByFilename(filename),
+							(User)VaadinSession.getCurrent().getAttribute(
+									SessionStorageKey.USER.name()));
+						
 						VaadinSession.getCurrent().setAttribute(
 								SessionStorageKey.ZIPRESULT.name(), zipResult);
 						System.out.println(converter.getContentAsXhtml());

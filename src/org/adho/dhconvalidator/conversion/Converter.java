@@ -6,6 +6,7 @@ import java.io.IOException;
 import nu.xom.Document;
 import nu.xom.Serializer;
 
+import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.oxgarage.OxGarageConversionClient;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 
@@ -19,9 +20,11 @@ public class Converter {
 		this.baseURL = baseURL;
 	}
 
-	public ZipResult convert(byte[] sourceData, ConversionPath toTeiConversionPath) throws IOException {
+	public ZipResult convert(
+			byte[] sourceData, ConversionPath toTeiConversionPath, 
+			User user) throws IOException {
 
-		sourceData = toTeiConversionPath.applyInputConversions(sourceData);		
+		sourceData = toTeiConversionPath.applyInputConversions(sourceData, user);		
 		
 		OxGarageConversionClient oxGarageConversionClient = new OxGarageConversionClient(baseURL);
 	
