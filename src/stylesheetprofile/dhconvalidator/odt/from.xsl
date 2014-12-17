@@ -77,21 +77,21 @@ of this software, even if advised of the possibility of such damage.
 
   <xsl:param name="odt-dir">.</xsl:param>
 
-           <xsl:variable name="dir">
-            <xsl:value-of
-                select="$odt-dir"/>
-          </xsl:variable>
+  <xsl:variable name="dir">
+    <xsl:value-of select="$odt-dir"/>
+  </xsl:variable>
 
-      <xsl:template match="text:p[@text:style-name='ADHO_20_Quotation']">
-	<quote>		
-	  <xsl:apply-templates/>
-	</quote>
-      </xsl:template>
+  <xsl:template match="text:p[@text:style-name='DH-Quotation']">
+    <quote>		
+      <xsl:apply-templates/>
+    </quote>
+  </xsl:template>
 
-      <xsl:template match="text:p[@text:style-name='DH-Title']">
-	<head>		
-	  <xsl:apply-templates/>
-	</head>
-      </xsl:template>
+  <xsl:template match="text:p[@text:style-name='DH-Subtitle']">
+    <head type="subtitle">
+      <xsl:apply-templates/>
+    </head>
+  </xsl:template>
+
 </xsl:stylesheet>
   

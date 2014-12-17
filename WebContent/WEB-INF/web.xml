@@ -24,7 +24,7 @@
   		<description>
   		Vaadin UI class to use</description>
   		<param-name>UI</param-name>
-  		<param-value>org.adho.dhconvalidator.ui.DHConvalidatorUI</param-value>
+  		<param-value>org.adho.dhconvalidator.ui.DHConvalidatorLogin</param-value>
   	</init-param>
   	<init-param>
   		<description>

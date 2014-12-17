@@ -12,6 +12,8 @@ import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
@@ -24,7 +26,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Table;
 
-public class PaperSelectionPanel extends CenterPanel {
+public class PaperSelectionPanel extends CenterPanel implements View {
 	
 	private Table paperTable;
 	private Button btGenerate;
@@ -33,37 +35,17 @@ public class PaperSelectionPanel extends CenterPanel {
 	public PaperSelectionPanel(InputConverter inputConverter) {
 		this.inputConverter = inputConverter;
 		initComponents();
-		initActions();
-		initData();
 	}
 
 	private void initData() {
+		paperTable.removeAllValidators();
+		
 		List<Paper> papers = ConfToolCacheProvider.INSTANCE.getConfToolCache().getPapers(
 				(User)VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name()));
 		for (Paper paper : papers) {
 			paperTable.addItem(new Object[] {paper.getTitle()}, paper);
 		}
 		
-	}
-
-	private void initActions() {
-//		btGenerate.addClickListener(new ClickListener() {
-//			
-//			@Override
-//			public void buttonClick(ClickEvent event) {
-//				@SuppressWarnings("unchecked")
-//				Set<Paper> selection = (Set<Paper>) paperTable.getValue();
-//				if (selection.isEmpty()) {
-//					Notification.show(
-//						"Info", 
-//						"Please select a submission first!", 
-//						Type.HUMANIZED_MESSAGE);
-//				}
-//				else {
-//					System.out.println(paperTable.getValue());
-//				}
-//			}
-//		});
 	}
 
 	private void initComponents() {
@@ -132,5 +114,10 @@ public class PaperSelectionPanel extends CenterPanel {
 			}
 		}
 		
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event) {
+		initData();
 	}
 }

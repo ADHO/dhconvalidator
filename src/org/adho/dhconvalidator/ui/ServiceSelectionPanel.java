@@ -1,7 +1,7 @@
 package org.adho.dhconvalidator.ui;
 
-import org.adho.dhconvalidator.conversion.input.OdtInputConverter;
-
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -10,7 +10,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class ServiceSelectionPanel extends CenterPanel {
+public class ServiceSelectionPanel extends CenterPanel implements View {
 	
 	private Button btOdtTemplate;
 	private Button btDocxTemplate;
@@ -27,14 +27,16 @@ public class ServiceSelectionPanel extends CenterPanel {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
-				UI.getCurrent().setContent(new PaperSelectionPanel(new OdtInputConverter()));
+				UI.getCurrent().getNavigator().navigateTo(
+						ServicesViewName.odt.name());
 			}
 		});
 		btConversionPanel.addClickListener(new ClickListener() {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
-				UI.getCurrent().setContent(new ConverterPanel());
+				UI.getCurrent().getNavigator().navigateTo(
+						ServicesViewName.converter.name());
 			}
 		});
 	}
@@ -78,6 +80,11 @@ public class ServiceSelectionPanel extends CenterPanel {
 		addCenteredComponent(logoutLink, Alignment.TOP_RIGHT);
 		addCenteredComponent(templateGeneratorServicePanel); 
 		addCenteredComponent(conversionAndValidationServicePanel);
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event) {
+		
 	}
 
 }

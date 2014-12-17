@@ -17,6 +17,7 @@ import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.Type;
 import org.adho.dhconvalidator.conversion.ZipFs;
+import org.adho.dhconvalidator.util.Pair;
 
 public class OdtInputConverter implements InputConverter {
 	private enum Namespace {
@@ -46,6 +47,7 @@ public class OdtInputConverter implements InputConverter {
 	private static final String CONFTOOLPAPERID_ATTRIBUTENAME = "ConfToolPaperID";
 	
 	private XPathContext xPathContext;
+	private Paper paper;
 	
 	public OdtInputConverter() {
 		xPathContext = new XPathContext();
@@ -61,18 +63,39 @@ public class OdtInputConverter implements InputConverter {
 		ZipFs zipFs = new ZipFs(sourceData);
 		Document contentDoc = zipFs.getDocument("content.xml");
 		
-		stripAutomaticParagraphStyles(contentDoc);
+		cleanupParagraphStyles(contentDoc);
+		makeHeaderElement(contentDoc);
 		stripTemplateSections(contentDoc);
 		
 		Document metaDoc = zipFs.getDocument("meta.xml");
 		Integer paperId = getPaperIdFromMeta(metaDoc);
-		Paper paper = ConfToolCacheProvider.INSTANCE.getConfToolCache().getPaper(user, paperId );
+		paper = ConfToolCacheProvider.INSTANCE.getConfToolCache().getPaper(user, paperId);
 
 		injectTitleIntoMeta(metaDoc, paper.getTitle());
 		injectAuthorsIntoMeta(metaDoc, paper.getAuthorsAndAffiliations());
 
 		zipFs.putDocument("content.xml", contentDoc);
 		return zipFs.toZipData();
+	}
+
+	private void makeHeaderElement(Document contentDoc) {
+		Nodes searchResult = 
+			contentDoc.query(
+				"//office:text/text:p[starts-with(@text:style-name,'DH-Heading')]",
+				xPathContext);
+		
+		for (int i=0; i<searchResult.size(); i++) {
+			Element headElement = (Element) searchResult.get(i);
+			String styleName = headElement.getAttributeValue("style-name", Namespace.TEXT.toUri());
+			Integer level = 1;
+			if (!styleName.equals("DH-Heading")) {
+				level = Integer.valueOf(styleName.substring("DH-Heading".length()));
+			}
+			headElement.setLocalName("h");
+			headElement.addAttribute(
+				new Attribute("text:outline-level", Namespace.TEXT.toUri(), level.toString()));
+		}
+		
 	}
 
 	private void stripTemplateSections(Document contentDoc) {
@@ -111,7 +134,6 @@ public class OdtInputConverter implements InputConverter {
 	}
 
 	private Integer getPaperIdFromMeta(Document metaDoc) throws IOException {
-
 		Nodes searchResult = 
 			metaDoc.query(
 				"/office:document-meta/office:meta/meta:user-defined[@meta:name='"
@@ -128,7 +150,7 @@ public class OdtInputConverter implements InputConverter {
 		}
 	}
 
-	private void stripAutomaticParagraphStyles(Document contentDoc) {
+	private void cleanupParagraphStyles(Document contentDoc) {
 		Map<String,String> paragraphStyleMapping = new HashMap<>();
 		
 		Nodes styleResult = contentDoc.query(
@@ -207,7 +229,7 @@ public class OdtInputConverter implements InputConverter {
 	}
 
 	private void injectAuthorsIntoMeta(Document metaDoc,
-			List<String> authorsAndAffiliations) {
+			List<Pair<String,String>> authorsAndAffiliations) {
 		Nodes searchResult = 
 				metaDoc.query(
 					"/office:document-meta/office:meta/meta:initial-creator", 
@@ -228,9 +250,11 @@ public class OdtInputConverter implements InputConverter {
 		initialCreatorElement.removeChildren();
 		StringBuilder builder = new StringBuilder();
 		String conc  = "";
-		for (String author : authorsAndAffiliations) {
+		for (Pair<String,String> authorAffiliation : authorsAndAffiliations) {
 			builder.append(conc);
-			builder.append(author);
+			builder.append(authorAffiliation.getFirst());
+			builder.append(", ");
+			builder.append(authorAffiliation.getSecond());
 			conc = "; ";
 		}
 		initialCreatorElement.appendChild(builder.toString());
@@ -265,7 +289,7 @@ public class OdtInputConverter implements InputConverter {
 	}
 
 	private void injectAuthorsIntoContent(Document contentDoc,
-			List<String> authorsAndAffiliations) throws IOException {
+			List<Pair<String,String>> authorsAndAffiliations) throws IOException {
 		Nodes searchResult = 
 				contentDoc.query(
 					"//text:section[@text:name='Authors from ConfTool']", 
@@ -286,10 +310,13 @@ public class OdtInputConverter implements InputConverter {
 		Element authorSectionElement = (Element) searchResult.get(0);
 		
 		authorSectionElement.removeChildren();
-		for (String authorAffiliation : authorsAndAffiliations){
+		for (Pair<String,String> authorAffiliation : authorsAndAffiliations){
 			Element authorParagraphElement = new Element("p", Namespace.TEXT.toUri());
 			authorSectionElement.appendChild(authorParagraphElement);
-			authorParagraphElement.appendChild(authorAffiliation);
+			authorParagraphElement.appendChild(
+					authorAffiliation.getFirst()
+					+", "
+					+authorAffiliation.getSecond());
 			authorParagraphElement.addAttribute(
 				new Attribute("text:style-name", Namespace.TEXT.toUri(), "P6"));
 		}
@@ -327,5 +354,10 @@ public class OdtInputConverter implements InputConverter {
 	@Override
 	public String getFileExtension() {
 		return Type.ODT.getExtension();
+	}
+	
+	@Override
+	public Paper getPaper() {
+		return paper;
 	}
 }

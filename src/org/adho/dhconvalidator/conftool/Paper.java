@@ -9,12 +9,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.adho.dhconvalidator.util.Pair;
+
 public class Paper {
 	
 	private static final String AUTHOR_PATTERN = "([^;]+)|((.*?\\((\\d+)\\);)+(.*?\\((\\d+)\\)))";
 	private static final String FIND_AUTHOR_PATTERN = "((.*?)\\((\\d+)\\));?";
 	private static final String FIND_ORGANIZATION_PATTERN = "\\s*((\\d+):)?([^;]+);?";
-	private static final String AUTHOR_AFFILIATION_CONC = ", ";
 
 	private Integer paperId;
 	private String title;
@@ -45,17 +46,17 @@ public class Paper {
 		return "#"+paperId + "["+title+"]";
 	}
 	
-	public List<String> getAuthorsAndAffiliations() throws IOException {
+	public List<Pair<String, String>> getAuthorsAndAffiliations() throws IOException {
 		Matcher fullAuthorMatcher = Pattern.compile(AUTHOR_PATTERN).matcher(authors);
 		if (fullAuthorMatcher.matches()) {
 			if (fullAuthorMatcher.group(1) != null) {
 				return Collections.singletonList(
-						fullAuthorMatcher.group(1).trim() 
-						+ AUTHOR_AFFILIATION_CONC 
-						+ organisations.trim());
+						new Pair<>(
+							fullAuthorMatcher.group(1).trim(),
+							organisations.trim()));
 			}
 			else {
-				List<String> result = new ArrayList<>();
+				List<Pair<String,String>> result = new ArrayList<>();
 				
 				Matcher findOrganizationsMatcher = 
 					Pattern.compile(FIND_ORGANIZATION_PATTERN).matcher(organisations);
@@ -72,8 +73,7 @@ public class Paper {
 					int idx = Integer.valueOf(findAuthorMatcher.group(3).trim());
 					String author = findAuthorMatcher.group(2).trim();
 					result.add(
-						author + AUTHOR_AFFILIATION_CONC 
-						+ organizationsByIndex.get(idx));
+						new Pair<>(author, organizationsByIndex.get(idx)));
 				}
 				
 				if (result.isEmpty()) {
@@ -94,4 +94,5 @@ public class Paper {
 					+ "/"
 					+ organisations);
 	}
+
 }

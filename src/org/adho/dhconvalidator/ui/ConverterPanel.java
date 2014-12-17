@@ -10,6 +10,8 @@ import org.adho.dhconvalidator.conversion.Converter;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 import org.adho.dhconvalidator.properties.PropertyKey;
 
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -31,7 +33,7 @@ import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
 import com.vaadin.ui.VerticalLayout;
 
-public class ConverterPanel extends VerticalLayout {
+public class ConverterPanel extends VerticalLayout implements View {
 	
 	private Upload upload;
 	private ByteArrayOutputStream uploadContent;
@@ -80,7 +82,7 @@ public class ConverterPanel extends VerticalLayout {
 						resultCaption.setValue("Preview and Conversion log " + filename );
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					e.printStackTrace(); //TODO: handle exc
 				}
 				progressBar.setVisible(false);
 				UI.getCurrent().setPollInterval(-1);	
@@ -148,6 +150,11 @@ public class ConverterPanel extends VerticalLayout {
 		resultPanel.addComponent(preview);
 		
 		setExpandRatio(resultPanel, 1.0f);
+		
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event) {
 		
 	}
 

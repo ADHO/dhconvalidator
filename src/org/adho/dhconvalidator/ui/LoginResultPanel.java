@@ -45,7 +45,7 @@ public class LoginResultPanel extends CenterPanel {
 			(User)VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name());
 		
 		btContinue = new Button("Continue");
-		new BrowserWindowOpener(DHConvalidatorTabUI.class).extend(btContinue);
+		new BrowserWindowOpener(DHConvalidatorServices.class).extend(btContinue);
 		
 		btRetry = new Button("Retry");
 		btRetry.setVisible(false);

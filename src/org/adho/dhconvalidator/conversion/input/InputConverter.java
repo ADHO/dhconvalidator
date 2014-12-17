@@ -10,5 +10,6 @@ public interface InputConverter {
 	byte[] convert(byte[] sourceData, User user) throws IOException;
 	public byte[] getPersonalizedTemplate(Paper paper) throws IOException;
 	String getFileExtension();
+	public Paper getPaper();
 
 }
