@@ -66,6 +66,7 @@ public class OdtInputConverter implements InputConverter {
 		cleanupParagraphStyles(contentDoc);
 		makeHeaderElement(contentDoc);
 		stripTemplateSections(contentDoc);
+		makeReferencesChapter(contentDoc);
 		
 		Document metaDoc = zipFs.getDocument("meta.xml");
 		Integer paperId = getPaperIdFromMeta(metaDoc);
@@ -76,6 +77,35 @@ public class OdtInputConverter implements InputConverter {
 
 		zipFs.putDocument("content.xml", contentDoc);
 		return zipFs.toZipData();
+	}
+
+	private void makeReferencesChapter(Document contentDoc) throws IOException {
+		Nodes searchResult = 
+				contentDoc.query(
+					"//text:section[@text:name='References']", 
+					xPathContext);
+		if (searchResult.size() == 1) {
+			Element referencesSectionElement = (Element) searchResult.get(0);
+			Element parent = (Element) referencesSectionElement.getParent();
+			int position = parent.indexOf(referencesSectionElement);
+			if (position == parent.getChildCount()-1) {
+				parent.removeChild(referencesSectionElement);
+			}
+			else {
+				Element headElement = new Element("text:h", Namespace.TEXT.toUri());
+				headElement.addAttribute(
+					new Attribute("text:outline-level", Namespace.TEXT.toUri(), "1"));
+				headElement.addAttribute(
+					new Attribute("text:style-name", Namespace.TEXT.toUri(), "DH-BibliographyHeading"));
+				headElement.appendChild("Bibliography");
+				parent.replaceChild(referencesSectionElement, headElement);
+			}
+		}
+		else {
+			throw new IOException(
+				"found " + searchResult.size() + " References section(s) "
+						+ "but expected one and only one");
+		}
 	}
 
 	private void makeHeaderElement(Document contentDoc) {
@@ -159,7 +189,6 @@ public class OdtInputConverter implements InputConverter {
 		
 		for (int i=0; i<styleResult.size(); i++) {
 			Element styleNode = (Element)styleResult.get(i);
-			System.out.println(styleNode);
 			String adhocName = styleNode.getAttributeValue("name", Namespace.STYLE.toUri());
 			String definedName = 
 				styleNode.getAttributeValue("parent-style-name", Namespace.STYLE.toUri());
