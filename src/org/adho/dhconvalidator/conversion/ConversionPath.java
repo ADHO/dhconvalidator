@@ -2,9 +2,11 @@ package org.adho.dhconvalidator.conversion;
 
 import java.util.Properties;
 
+import org.adho.dhconvalidator.conversion.input.DocxInputConverter;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.conversion.input.InputConverterFactory;
 import org.adho.dhconvalidator.conversion.input.OdtInputConverter;
+import org.adho.dhconvalidator.conversion.output.DocxOutputConverter;
 import org.adho.dhconvalidator.conversion.output.OdtOutputConverter;
 import org.adho.dhconvalidator.conversion.output.OutputConverter;
 import org.adho.dhconvalidator.conversion.output.OutputConverterFactory;
@@ -44,6 +46,18 @@ public enum ConversionPath {
 	DOCX_TO_TEI( 
 		Type.DOCX.getIdentifier()+Type.TEI.getIdentifier(),
 		"docx",
+		new InputConverterFactory() {
+			public InputConverter createInputConverter() {
+				return new DocxInputConverter();
+			}
+		},
+		new OutputConverterFactory() {
+
+			@Override
+			public OutputConverter createOutputConverter() {
+				return new DocxOutputConverter();
+			}
+		},
 		new Pair<>("oxgarage.textOnly", "false"), 
 		new Pair<>("oxgarage.getImages", "true"),
 		new Pair<>("oxgarage.getOnlineImages", "true"),

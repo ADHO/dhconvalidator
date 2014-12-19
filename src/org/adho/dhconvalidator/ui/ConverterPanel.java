@@ -55,6 +55,8 @@ public class ConverterPanel extends VerticalLayout implements View {
 			@Override
 			public void uploadSucceeded(SucceededEvent event) {
 				try {
+					preview.setValue("");
+					logArea.setValue("");
 					
 					byte[] uploadData = uploadContent.toByteArray();
 					if (uploadData.length == 0) {
@@ -83,7 +85,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 					}
 				} catch (IOException e) {
 					e.printStackTrace(); //TODO: handle exc
-					appendLogMessage(e.getMessage());
+					appendLogMessage("ERROR: " + e.getMessage());
 				}
 				progressBar.setVisible(false);
 				UI.getCurrent().setPollInterval(-1);	
@@ -168,7 +170,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
-		
+		//noop
 	}
 
 }

@@ -6,6 +6,7 @@ public enum PropertyKey {
 	conftool_shared_pass,
 	conftool_url,
 	oxgarage_url,
+	tei_pictures_location,
 	;
 	
 	public String getValue() {

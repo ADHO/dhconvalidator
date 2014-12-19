@@ -19,4 +19,15 @@ public class DocumentUtil {
 		
 		throw new IllegalStateException("unexpected result");
 	}
+	
+	public static Element getFirstMatch(Element subtreeRoot, String query,
+			XPathContext xPathContext) {
+		Nodes nodes = subtreeRoot.query(query, xPathContext);
+		if ((nodes.size() > 0) && (nodes.get(0) instanceof Element)) {
+			return (Element)nodes.get(0);
+		}
+		
+		throw new IllegalStateException("unexpected result");
+	}
+
 }

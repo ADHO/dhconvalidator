@@ -56,7 +56,7 @@ public class ZipFs {
 	public void putDocument(String path, Document document) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		Serializer serializer = new Serializer(bos);
-		serializer.setIndent(2);
+		serializer.setIndent(4);
 		serializer.write(document);
 
 		putDocument(path, bos.toByteArray());

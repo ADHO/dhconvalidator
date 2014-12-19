@@ -39,6 +39,14 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 						ServicesViewName.converter.name());
 			}
 		});
+		btDocxTemplate.addClickListener(new ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				UI.getCurrent().getNavigator().navigateTo(
+						ServicesViewName.docx.name());
+			}
+		});
 	}
 
 	private void initComponents() {
@@ -59,7 +67,7 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 		
 		btDocxTemplate = new Button("Microsoft Office Document (docx)");
 		btDocxTemplate.setDescription(
-			"If you want to use Microsoft Office choose the docx format.");
+			"If you want to use Microsoft Office 2007 or later choose the docx format.");
 		templateGeneratorServiceContent.addComponent(btDocxTemplate);
 		
 		VerticalLayout conversionAndValidationServiceContent = new VerticalLayout();
@@ -84,7 +92,7 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
-		
+		//noop
 	}
 
 }

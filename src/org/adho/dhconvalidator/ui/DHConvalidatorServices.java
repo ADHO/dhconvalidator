@@ -1,6 +1,8 @@
 package org.adho.dhconvalidator.ui;
 
+import org.adho.dhconvalidator.conversion.input.DocxInputConverter;
 import org.adho.dhconvalidator.conversion.input.OdtInputConverter;
+import org.adho.dhconvalidator.properties.PropertyKey;
 
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
@@ -27,11 +29,15 @@ public class DHConvalidatorServices extends UI {
 				ServicesViewName.odt.name(), 
 				new PaperSelectionPanel(new OdtInputConverter()));
 			navigator.addView(
+				ServicesViewName.docx.name(), 
+				new PaperSelectionPanel(new DocxInputConverter()));
+			navigator.addView(
 				ServicesViewName.converter.name(), 
 				new ConverterPanel());
 			
 			VaadinSession.getCurrent().addRequestHandler(
-			        new ExternalResourceRequestHandler("/Pictures")); //TODO: config
+			        new ExternalResourceRequestHandler(
+			        		PropertyKey.tei_pictures_location.getValue()));
 		}
 	}
 

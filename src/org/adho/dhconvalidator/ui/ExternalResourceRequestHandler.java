@@ -11,7 +11,7 @@ import com.vaadin.server.VaadinSession;
 
 final class ExternalResourceRequestHandler implements
 		RequestHandler {
-	
+	private static final int PATH_PREFIX_LENGTH = 7;
 	private String imagePath;
 	
 	public ExternalResourceRequestHandler(String imagePath) {
@@ -24,12 +24,14 @@ final class ExternalResourceRequestHandler implements
 	                             VaadinRequest request,
 	                             VaadinResponse response)
 	        throws IOException {
-		 //TODO: more external resoures?
+
 		if (request.getPathInfo().startsWith("/popup"+imagePath)) {
 			ZipResult zipResult =
-				(ZipResult) VaadinSession.getCurrent().getAttribute(SessionStorageKey.ZIPRESULT.name());
+				(ZipResult) VaadinSession.getCurrent().getAttribute(
+						SessionStorageKey.ZIPRESULT.name());
 			if (zipResult != null) {
-				byte[] resource = zipResult.getExternalResource(request.getPathInfo().substring(7));
+				byte[] resource = zipResult.getExternalResource(
+						request.getPathInfo().substring(PATH_PREFIX_LENGTH));
 				response.getOutputStream().write(resource);
 				return true;
 			}
