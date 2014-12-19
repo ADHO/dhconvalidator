@@ -1,7 +1,7 @@
 package org.adho.dhconvalidator.ui;
 
-import org.adho.dhconvalidator.conversion.input.DocxInputConverter;
-import org.adho.dhconvalidator.conversion.input.OdtInputConverter;
+import org.adho.dhconvalidator.conversion.input.docx.DocxInputConverter;
+import org.adho.dhconvalidator.conversion.input.odt.OdtInputConverter;
 import org.adho.dhconvalidator.properties.PropertyKey;
 
 import com.vaadin.annotations.PreserveOnRefresh;

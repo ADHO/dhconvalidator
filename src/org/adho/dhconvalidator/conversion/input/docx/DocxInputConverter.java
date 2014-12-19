@@ -1,4 +1,4 @@
-package org.adho.dhconvalidator.conversion.input;
+package org.adho.dhconvalidator.conversion.input.docx;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,15 +8,18 @@ import nu.xom.Element;
 import nu.xom.Nodes;
 import nu.xom.XPathContext;
 
+import org.adho.dhconvalidator.conftool.ConfToolCacheProvider;
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.Type;
 import org.adho.dhconvalidator.conversion.ZipFs;
+import org.adho.dhconvalidator.conversion.input.InputConverter;
+import org.adho.dhconvalidator.conversion.input.docx.paragraphparser.ParagaphParser;
 import org.adho.dhconvalidator.util.DocumentUtil;
 import org.adho.dhconvalidator.util.Pair;
 
 public class DocxInputConverter implements InputConverter {
-	private enum Namespace {
+	public enum Namespace {
 		MAIN("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"),
 		DOCPROPSVTYPES("vt", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"),
 		;
@@ -54,7 +57,48 @@ public class DocxInputConverter implements InputConverter {
 	
 	@Override
 	public byte[] convert(byte[] sourceData, User user) throws IOException {
-		return sourceData;
+		ZipFs zipFs = new ZipFs(sourceData);
+
+		Document document = zipFs.getDocument("word/document.xml");
+
+		cleanupParagraphStyles(document);
+		stripTemplateSections(document);
+
+		zipFs.putDocument("word/document.xml", document);
+		
+		Document customPropDoc = zipFs.getDocument("docProps/custom.xml");
+		Integer paperId = getPaperIdFromMeta(customPropDoc);
+		paper = ConfToolCacheProvider.INSTANCE.getConfToolCache().getPaper(user, paperId);
+
+		return zipFs.toZipData();
+	}
+
+	private void stripTemplateSections(Document document) {
+		ParagaphParser paragaphParser = new ParagaphParser();
+		paragaphParser.stripTemplateSections(document, xPathContext);
+	}
+
+	private void cleanupParagraphStyles(Document document) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private Integer getPaperIdFromMeta(Document customPropDoc) throws IOException {
+		Element propertyElement = 
+				DocumentUtil.getFirstMatch(
+					customPropDoc, 
+					"//*[@name='ConfToolPaperID']/vt:lpwstr", 
+					xPathContext);
+		if (propertyElement == null) {
+			throw new IOException("document property ConfToolPaperID not found");
+		}
+		try {
+			return Integer.valueOf(propertyElement.getValue());
+		}
+		catch (NumberFormatException nfe) {
+			throw new IOException("invalid ConfToolPaperID", nfe);
+
+		}
 	}
 
 	@Override

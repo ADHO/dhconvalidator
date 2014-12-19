@@ -2,10 +2,10 @@ package org.adho.dhconvalidator.conversion;
 
 import java.util.Properties;
 
-import org.adho.dhconvalidator.conversion.input.DocxInputConverter;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.conversion.input.InputConverterFactory;
-import org.adho.dhconvalidator.conversion.input.OdtInputConverter;
+import org.adho.dhconvalidator.conversion.input.docx.DocxInputConverter;
+import org.adho.dhconvalidator.conversion.input.odt.OdtInputConverter;
 import org.adho.dhconvalidator.conversion.output.DocxOutputConverter;
 import org.adho.dhconvalidator.conversion.output.OdtOutputConverter;
 import org.adho.dhconvalidator.conversion.output.OutputConverter;

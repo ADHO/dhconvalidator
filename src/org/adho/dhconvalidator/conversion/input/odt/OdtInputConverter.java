@@ -1,4 +1,4 @@
-package org.adho.dhconvalidator.conversion.input;
+package org.adho.dhconvalidator.conversion.input.odt;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,6 +17,7 @@ import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.Type;
 import org.adho.dhconvalidator.conversion.ZipFs;
+import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.util.Pair;
 
 public class OdtInputConverter implements InputConverter {
