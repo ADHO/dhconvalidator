@@ -26,6 +26,9 @@ public class OdtInputConverter implements InputConverter {
 		DC("dc", "http://purl.org/dc/elements/1.1/"),
 		OFFICE("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0"),
 		META("meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0"),
+		XLINK("xlink", "http://www.w3.org/1999/xlink"),
+		DRAW("draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"), 
+		SVG("svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"),
 		;
 		private String name;
 		private String uri;
@@ -67,6 +70,7 @@ public class OdtInputConverter implements InputConverter {
 		makeHeaderElement(contentDoc);
 		stripTemplateSections(contentDoc);
 		makeReferencesChapter(contentDoc);
+		embedExternalFormulae(contentDoc, zipFs);
 		
 		Document metaDoc = zipFs.getDocument("meta.xml");
 		Integer paperId = getPaperIdFromMeta(metaDoc);
@@ -77,6 +81,42 @@ public class OdtInputConverter implements InputConverter {
 
 		zipFs.putDocument("content.xml", contentDoc);
 		return zipFs.toZipData();
+	}
+
+	private void embedExternalFormulae(Document contentDoc, ZipFs zipFs) throws IOException {
+		Nodes searchResult = 
+				contentDoc.query("//draw:object", xPathContext);
+		
+		for (int i=0; i<searchResult.size(); i++) {
+			Element drawObjectElement = (Element)searchResult.get(i);
+			String contentPath = 
+				drawObjectElement.getAttributeValue("href", Namespace.XLINK.toUri()).substring(2)
+				+ "/content.xml";
+			
+			Element parent = (Element) drawObjectElement.getParent();
+			
+			Document externalContentDoc = zipFs.getDocument(contentPath);
+			
+			if (!externalContentDoc.getRootElement().getLocalName().equals("math")) {
+				throw new IOException(
+					"We only support Math formulae as embedded content so far, "
+					+ "expected math but found " 
+					+ externalContentDoc.getRootElement().getLocalName()); 
+			}
+			
+			Element drawImageElement = parent.getFirstChildElement("image", Namespace.DRAW.toUri());
+			if (drawImageElement != null) {
+				parent.removeChild(drawImageElement);
+			}
+			
+			Element svgDescElement = parent.getFirstChildElement("desc", Namespace.SVG.toUri());
+			if (svgDescElement != null) {
+				parent.removeChild(svgDescElement);
+			}
+			parent.replaceChild(
+				drawObjectElement, 
+				externalContentDoc.getRootElement().copy());
+		}
 	}
 
 	private void makeReferencesChapter(Document contentDoc) throws IOException {

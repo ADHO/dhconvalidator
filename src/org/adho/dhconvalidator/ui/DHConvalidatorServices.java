@@ -30,6 +30,8 @@ public class DHConvalidatorServices extends UI {
 				ServicesViewName.converter.name(), 
 				new ConverterPanel());
 			
+			VaadinSession.getCurrent().addRequestHandler(
+			        new ExternalResourceRequestHandler("/Pictures")); //TODO: config
 		}
 	}
 

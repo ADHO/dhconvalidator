@@ -83,6 +83,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 					}
 				} catch (IOException e) {
 					e.printStackTrace(); //TODO: handle exc
+					appendLogMessage(e.getMessage());
 				}
 				progressBar.setVisible(false);
 				UI.getCurrent().setPollInterval(-1);	
@@ -106,6 +107,18 @@ public class ConverterPanel extends VerticalLayout implements View {
 				UI.getCurrent().setPollInterval(-1);
 			}
 		});
+	}
+	
+	private void appendLogMessage(String logmesssage) {
+		StringBuilder logBuilder = 
+			new StringBuilder(
+				(logArea.getValue()==null)?"":logArea.getValue());
+		
+		logBuilder.append("\n");
+		logBuilder.append(logmesssage);
+		logArea.setReadOnly(false);
+		logArea.setValue(logBuilder.toString());
+		logArea.setReadOnly(true);
 	}
 
 	private void initComponents() {

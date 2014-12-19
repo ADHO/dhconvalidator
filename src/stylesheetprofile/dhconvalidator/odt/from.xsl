@@ -93,5 +93,14 @@ of this software, even if advised of the possibility of such damage.
     </head>
   </xsl:template>
 
+  <!-- math formulae are not directly supported: odt stores formulae in separate files 
+       which are linked by the main content file. DHConvalidator merges the external 
+       content into the main content file for the following match to work --> 
+  <xsl:template match="math:math">
+    <formula>
+      <xsl:copy-of select="." copy-namespaces="no"/>
+    </formula>
+  </xsl:template>
+
 </xsl:stylesheet>
   

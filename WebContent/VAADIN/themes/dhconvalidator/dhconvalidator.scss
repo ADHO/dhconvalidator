@@ -1,26 +1,28 @@
-    $v-shade: #e8e8e8;
-    $v-font-family: "Open Sans";
-	$v-font-weight: 400;
-	$v-font-weight--header: 400;
-	$v-font-size: 13px;
-	$v-background-color: #fff;
-	$v-focus-color: #73c3ad;
-	$v-luminance-threshold: 180;
-	$v-border: 1px solid v-shade;
-	$v-border-radius: 6px;
-	$v-bevel: false;
-	$v-gradient: false;
-	$v-shadow: false;
-	$v-textfield-bevel: false;
-	$v-textfield-shadow: false;
-	$v-link-text-decoration: false;
-	$v-selection-overlay-padding-horizontal: 0;
-	$v-selection-overlay-padding-vertical: 6px;
-	$v-selection-item-height: 30px;
-	$v-selection-item-border-radius: 0;
-	$valo-menu-background-color: #eee;
+/* set valo specific parameters */
+    
+$v-shade: #e8e8e8;
+$v-font-family: "Open Sans";
+$v-font-weight: 400;
+$v-font-weight--header: 400;
+$v-font-size: 13px;
+$v-background-color: #fff;
+$v-focus-color: #73c3ad;
+$v-luminance-threshold: 180;
+$v-border: 1px solid v-shade;
+$v-border-radius: 6px;
+$v-bevel: false;
+$v-gradient: false;
+$v-shadow: false;
+$v-textfield-bevel: false;
+$v-textfield-shadow: false;
+$v-link-text-decoration: false;
+$v-selection-overlay-padding-horizontal: 0;
+$v-selection-overlay-padding-vertical: 6px;
+$v-selection-item-height: 30px;
+$v-selection-item-border-radius: 0;
+$valo-menu-background-color: #eee;
 	
-/* Import the reindeer theme.*/
+/* Import the valo theme.*/
 /* This only allows us to use the mixins defined in it and does not add any styles by itself. */
 @import "../valo/valo.scss";
 
@@ -41,5 +43,9 @@
   .logout-link:focus:after {
   	box-shadow: none;
   	border-color:none;
+  }
+  
+  .v-upload .v-button {
+  	margin-left: 5px;
   }
 }

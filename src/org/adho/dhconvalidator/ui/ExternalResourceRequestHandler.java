@@ -24,11 +24,12 @@ final class ExternalResourceRequestHandler implements
 	                             VaadinRequest request,
 	                             VaadinResponse response)
 	        throws IOException {
-		if (request.getPathInfo().startsWith(imagePath)) { //TODO: more external resoures?
+		 //TODO: more external resoures?
+		if (request.getPathInfo().startsWith("/popup"+imagePath)) {
 			ZipResult zipResult =
 				(ZipResult) VaadinSession.getCurrent().getAttribute(SessionStorageKey.ZIPRESULT.name());
 			if (zipResult != null) {
-				byte[] resource = zipResult.getExternalResource(request.getPathInfo().substring(1));
+				byte[] resource = zipResult.getExternalResource(request.getPathInfo().substring(7));
 				response.getOutputStream().write(resource);
 				return true;
 			}
