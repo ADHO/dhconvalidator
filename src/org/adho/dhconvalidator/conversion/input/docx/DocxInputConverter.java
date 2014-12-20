@@ -63,6 +63,8 @@ public class DocxInputConverter implements InputConverter {
 
 		cleanupParagraphStyles(document);
 		stripTemplateSections(document);
+		
+		//TODO: detect invalid paragraph styles
 
 		zipFs.putDocument("word/document.xml", document);
 		

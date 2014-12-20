@@ -7,6 +7,7 @@ public enum PropertyKey {
 	conftool_url,
 	oxgarage_url,
 	tei_pictures_location,
+	tei_media_location,
 	;
 	
 	public String getValue() {

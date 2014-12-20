@@ -37,7 +37,8 @@ public class DHConvalidatorServices extends UI {
 			
 			VaadinSession.getCurrent().addRequestHandler(
 			        new ExternalResourceRequestHandler(
-			        		PropertyKey.tei_pictures_location.getValue()));
+			        		PropertyKey.tei_pictures_location.getValue(),
+			        		PropertyKey.tei_media_location.getValue()));
 		}
 	}
 

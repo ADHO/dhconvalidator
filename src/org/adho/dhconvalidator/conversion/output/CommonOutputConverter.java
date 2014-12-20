@@ -25,7 +25,7 @@ public class CommonOutputConverter implements OutputConverter {
 	public void convert(Document document, User user, Paper paper) throws IOException {
 		
 		makeAuthorStatement(document, paper);
-
+//TODO: make editionStmt, sourceDesc, publicationStmt, encodingDesc, remove revisionDesc
 	}
 
 	private void makeAuthorStatement(Document document, Paper paper) throws IOException {

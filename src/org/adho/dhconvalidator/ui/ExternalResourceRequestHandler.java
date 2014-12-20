@@ -13,10 +13,12 @@ final class ExternalResourceRequestHandler implements
 		RequestHandler {
 	private static final int PATH_PREFIX_LENGTH = 7;
 	private String imagePath;
+	private String mediaPath;
 	
-	public ExternalResourceRequestHandler(String imagePath) {
+	public ExternalResourceRequestHandler(String imagePath, String mediaPath) {
 		super();
 		this.imagePath = imagePath;
+		this.mediaPath = mediaPath;
 	}
 
 	@Override
@@ -25,7 +27,8 @@ final class ExternalResourceRequestHandler implements
 	                             VaadinResponse response)
 	        throws IOException {
 
-		if (request.getPathInfo().startsWith("/popup"+imagePath)) {
+		if (request.getPathInfo().startsWith("/popup"+imagePath)
+				|| request.getPathInfo().startsWith("/popup"+mediaPath)) {
 			ZipResult zipResult =
 				(ZipResult) VaadinSession.getCurrent().getAttribute(
 						SessionStorageKey.ZIPRESULT.name());
