@@ -5,6 +5,7 @@ import java.util.List;
 
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Elements;
 import nu.xom.Nodes;
 import nu.xom.XPathContext;
 
@@ -63,8 +64,6 @@ public class DocxInputConverter implements InputConverter {
 
 		cleanupParagraphStyles(document);
 		stripTemplateSections(document);
-		
-		//TODO: detect invalid paragraph styles
 
 		zipFs.putDocument("word/document.xml", document);
 		
@@ -81,7 +80,30 @@ public class DocxInputConverter implements InputConverter {
 	}
 
 	private void cleanupParagraphStyles(Document document) {
-		// TODO Auto-generated method stub
+		Nodes searchResult = 
+				document.query("//w:pPr/w:rPr", xPathContext);
+		// remove region properties from paragraphs, they are not supported 
+		for (int i=0; i<searchResult.size(); i++) {
+			Element element = (Element) searchResult.get(i);
+			element.getParent().removeChild(element);
+		}
+
+		searchResult = document.query("//w:p", xPathContext);
+		
+		for (int i=0; i<searchResult.size(); i++) {
+			Element paragraphElement = (Element) searchResult.get(i);
+			Elements regions = paragraphElement.getChildElements("r", Namespace.MAIN.toUri());
+			// there is only one region...
+			if (regions.size() == 1) {
+				Element region = regions.get(0);
+				Element regionProps = region.getFirstChildElement("rPr", Namespace.MAIN.toUri());
+				if (regionProps != null) {
+					// ... and it contains region properties. This looks like a trick to avoid proper head styles
+					// so we remove the properties.
+					region.removeChild(regionProps);
+				}
+			}
+		}		
 		
 	}
 

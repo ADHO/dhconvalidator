@@ -128,6 +128,7 @@ public class OxGarageConversionClient {
 	}
 	
 	
+	@SuppressWarnings("unused")
 	private String convertToString(File file, ConversionPath conversionPath, Properties properties) throws IOException {
 		
 		ZipResult zipResult = new ZipResult(convert(file, conversionPath, properties));

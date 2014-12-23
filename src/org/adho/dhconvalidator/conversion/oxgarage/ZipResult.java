@@ -9,10 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.ParsingException;
+import nu.xom.Serializer;
 
 import org.apache.commons.io.IOUtils;
 
@@ -20,6 +22,7 @@ public class ZipResult {
 	
 	private Document document;
 	private Map<String, byte[]> externalResources;
+	private String documentName;
 	
 	public ZipResult(InputStream is) throws IOException {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -31,7 +34,7 @@ public class ZipResult {
 		}
 		else {
 			externalResources = Collections.emptyMap();
-
+			documentName = "tei.xml";
 			buildDocument(buffer);
 		}
 	}
@@ -57,6 +60,7 @@ public class ZipResult {
 				externalResources.put(entry.getName(), entryBuffer.toByteArray());
 			}
 			else {
+				documentName = entry.getName();
 				buildDocument(entryBuffer);
 			}
 		}
@@ -78,5 +82,28 @@ public class ZipResult {
 
 	public byte[] getExternalResource(String resourceKey) {
 		return externalResources.get(resourceKey);
+	}
+	
+	public byte[] toZipData() throws IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		
+		try (ZipOutputStream zipOutputStream = new ZipOutputStream(bos)) {
+			
+			ZipEntry docEntry = new ZipEntry(documentName);
+			zipOutputStream.putNextEntry(docEntry);
+			Serializer serializer = new Serializer(zipOutputStream);
+			serializer.setIndent(4);
+			serializer.write(document);
+			zipOutputStream.closeEntry();
+			
+			for (Map.Entry<String, byte[]> entry : externalResources.entrySet()) {
+				ZipEntry extResourceEntry = new ZipEntry(entry.getKey());
+				zipOutputStream.putNextEntry(extResourceEntry);
+				zipOutputStream.write(entry.getValue());
+				zipOutputStream.closeEntry();
+			}
+		}
+		
+		return bos.toByteArray();
 	}
 }

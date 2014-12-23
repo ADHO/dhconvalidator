@@ -24,11 +24,23 @@ public class DocxOutputConverter extends CommonOutputConverter {
 		makeChapterAttributes(document);
 		cleanupParagraphRendAttribute(document);
 		cleanupGraphics(document);
-		makeBibliography(document);
 		
-		// TODO: hi rend Strong to hi rend bold
+		makeBibliography(document);
+		cleanupBoldRendition(document);
 	}
 	
+	private void cleanupBoldRendition(Document document) {
+		Nodes searchResult = 
+				document.query(
+					"//*[@rend='Strong']", 
+					xPathContext);
+		
+		for (int i=0; i<searchResult.size(); i++) {
+			Element element = (Element)searchResult.get(i);
+			element.getAttribute("rend").setValue("bold");
+		}
+	}
+
 	private void cleanupGraphics(Document document) {
 		Nodes searchResult = 
 				document.query(

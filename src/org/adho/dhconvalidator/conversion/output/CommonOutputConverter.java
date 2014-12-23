@@ -2,13 +2,16 @@ package org.adho.dhconvalidator.conversion.output;
 
 import java.io.IOException;
 
+import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.ParsingException;
 import nu.xom.XPathContext;
 
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.TeiNamespace;
+import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentUtil;
 import org.adho.dhconvalidator.util.Pair;
 
@@ -25,7 +28,28 @@ public class CommonOutputConverter implements OutputConverter {
 	public void convert(Document document, User user, Paper paper) throws IOException {
 		
 		makeAuthorStatement(document, paper);
-//TODO: make editionStmt, sourceDesc, publicationStmt, encodingDesc, remove revisionDesc
+//TODO: make editionStmt, sourceDesc, encodingDesc, remove revisionDesc
+		makePublicationStmt(document);
+	}
+
+	private void makePublicationStmt(Document document) throws IOException {
+		
+		Element publicationStmtElement = DocumentUtil.getFirstMatch(
+				document, 
+				"/tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt", 
+				xPathContext);
+		
+		publicationStmtElement.removeChildren();
+		try {
+			Document publicationStmtDoc = 
+				new Builder().build(
+					PropertyKey.publicationStmt.getValue(), TeiNamespace.TEI.toUri());
+			publicationStmtElement.getParent().replaceChild(
+					publicationStmtElement, publicationStmtDoc.getRootElement().copy());
+		}
+		catch (ParsingException pe) {
+			throw new IOException(pe);
+		}
 	}
 
 	private void makeAuthorStatement(Document document, Paper paper) throws IOException {
