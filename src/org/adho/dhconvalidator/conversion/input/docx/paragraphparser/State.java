@@ -1,10 +1,8 @@
 package org.adho.dhconvalidator.conversion.input.docx.paragraphparser;
 
 enum State {
-	SEEKSUBTITLE(new SeekSubtitleHandler()),
-	FIRSTSUBTITLEFOUND(new SeekSecondSubtitleHandler()),
-	SECONDSUBTITLEFOUND(new SecondSubtitleFoundHandler()),
-	DONE(null)
+	SEEKPERMSTART(new SeekPermStartHandler()),
+	INPERM(new InPermHandler()),
 	;
 	private StateHandler stateHandler;
 

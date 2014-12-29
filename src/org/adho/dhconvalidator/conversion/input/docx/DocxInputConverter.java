@@ -1,5 +1,6 @@
 package org.adho.dhconvalidator.conversion.input.docx;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Nodes;
+import nu.xom.Serializer;
 import nu.xom.XPathContext;
 
 import org.adho.dhconvalidator.conftool.ConfToolCacheProvider;
@@ -15,7 +17,7 @@ import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.Type;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
-import org.adho.dhconvalidator.conversion.input.docx.paragraphparser.ParagaphParser;
+import org.adho.dhconvalidator.conversion.input.docx.paragraphparser.ParagraphParser;
 import org.adho.dhconvalidator.util.DocumentUtil;
 import org.adho.dhconvalidator.util.Pair;
 
@@ -66,6 +68,13 @@ public class DocxInputConverter implements InputConverter {
 		stripTemplateSections(document);
 
 		zipFs.putDocument("word/document.xml", document);
+
+		ByteArrayOutputStream pre = new ByteArrayOutputStream();
+		
+		Serializer serializerPre = new Serializer(pre);
+		serializerPre.setIndent(2);
+		serializerPre.write(document);
+		System.out.println(pre.toString("UTF-8"));
 		
 		Document customPropDoc = zipFs.getDocument("docProps/custom.xml");
 		Integer paperId = getPaperIdFromMeta(customPropDoc);
@@ -75,8 +84,8 @@ public class DocxInputConverter implements InputConverter {
 	}
 
 	private void stripTemplateSections(Document document) {
-		ParagaphParser paragaphParser = new ParagaphParser();
-		paragaphParser.stripTemplateSections(document, xPathContext);
+		ParagraphParser paragraphParser = new ParagraphParser();
+		paragraphParser.stripTemplateSections(document, xPathContext);
 	}
 
 	private void cleanupParagraphStyles(Document document) {
@@ -109,7 +118,7 @@ public class DocxInputConverter implements InputConverter {
 
 	private Integer getPaperIdFromMeta(Document customPropDoc) throws IOException {
 		Element propertyElement = 
-				DocumentUtil.getFirstMatch(
+				DocumentUtil.tryFirstMatch(
 					customPropDoc, 
 					"//*[@name='ConfToolPaperID']/vt:lpwstr", 
 					xPathContext);

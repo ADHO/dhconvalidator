@@ -29,5 +29,32 @@ public class DocumentUtil {
 		
 		throw new IllegalStateException("unexpected result");
 	}
+	
+	public static Element tryFirstMatch(Document document, String query,
+			XPathContext xPathContext) {
+		Nodes nodes = document.query(query, xPathContext);
+		if ((nodes.size() > 0) && (nodes.get(0) instanceof Element)) {
+			return (Element)nodes.get(0);
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public static Element tryFirstMatch(Element subtreeRoot, String query,
+			XPathContext xPathContext) {
+		Nodes nodes = subtreeRoot.query(query, xPathContext);
+		if ((nodes.size() > 0) && (nodes.get(0) instanceof Element)) {
+			return (Element)nodes.get(0);
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public static boolean hasMatch(Element subtreeRoot, String query,
+			XPathContext xPathContext) {
+		return tryFirstMatch(subtreeRoot, query, xPathContext) != null;
+	}
 
 }

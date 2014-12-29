@@ -44,6 +44,13 @@ public class Converter {
 		
 		document = zipResult.getDocument();
 		
+		ByteArrayOutputStream pre = new ByteArrayOutputStream();
+		
+		Serializer serializerPre = new Serializer(pre);
+		serializerPre.setIndent(2);
+		serializerPre.write(document);
+		System.out.println(pre.toString("UTF-8"));
+		
 		OutputConverterFactory outputConverterFactory = 
 				toTeiConversionPath.getOutputConverterFactory(); 
 		OutputConverter outputConverter = outputConverterFactory.createOutputConverter();

@@ -27,8 +27,17 @@ public class DocxOutputConverter extends CommonOutputConverter {
 		
 		makeBibliography(document);
 		cleanupBoldRendition(document);
+		removeFrontSection(document);
 	}
 	
+	private void removeFrontSection(Document document) {
+		Element frontElement = DocumentUtil.tryFirstMatch(
+				document, "//tei:front", xPathContext);
+		if (frontElement != null) {
+			frontElement.getParent().removeChild(frontElement);
+		}
+	}
+
 	private void cleanupBoldRendition(Document document) {
 		Nodes searchResult = 
 				document.query(
@@ -148,21 +157,11 @@ public class DocxOutputConverter extends CommonOutputConverter {
 						"/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title", 
 						xPathContext);
 		
-		Element frontElement = 
-			DocumentUtil.getFirstMatch(document, "/tei:TEI/tei:text/tei:front", xPathContext);
+		Nodes searchResult = 
+			document.query("/tei:TEI/tei:text/tei:body/tei:p[@rend='DH-Subtitle']", xPathContext);
 		
-		Element titlePageElement =
-			frontElement.getFirstChildElement("titlePage", TeiNamespace.TEI.toUri());
 		
-
-		if (titlePageElement.getChildElements().size() > 0) {
-			Element titlePart =
-				DocumentUtil.getFirstMatch(
-					titlePageElement,
-					"tei:docTitle/tei:titlePart", 
-					xPathContext);
-			String subtitle = titlePart.getValue();
-			
+		if (searchResult.size() > 0) {
 			String title = paper.getTitle();
 			
 			Element titleStmtElement = (Element) titleElement.getParent();
@@ -175,16 +174,17 @@ public class DocxOutputConverter extends CommonOutputConverter {
 			
 			titleElement.getParent().removeChild(titleElement);
 			complexTitle.appendChild(titleElement);
-
-			Element subtitleElement = new Element("title", TeiNamespace.TEI.toUri());
-			subtitleElement.addAttribute(new Attribute("type", "sub"));
-			subtitleElement.appendChild(subtitle);
-			complexTitle.appendChild(subtitleElement);
+			for (int i=0; i<searchResult.size(); i++) {
+				Element dhSubtitleElement = (Element)searchResult.get(i);
+				Element subtitleElement = new Element("title", TeiNamespace.TEI.toUri());
+				subtitleElement.addAttribute(new Attribute("type", "sub"));
+				subtitleElement.appendChild(dhSubtitleElement.getValue());
+				complexTitle.appendChild(subtitleElement);
+				dhSubtitleElement.getParent().removeChild(dhSubtitleElement);
+			}
 		}
 		else {
 			titleElement.appendChild(paper.getTitle());
 		}
-		
-		frontElement.getParent().removeChild(frontElement);
 	}
 }

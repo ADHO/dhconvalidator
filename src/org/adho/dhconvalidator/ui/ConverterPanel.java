@@ -95,7 +95,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 						resultCaption.setValue("Preview and Conversion log for " + filename );
 						prepareForResultDownload();
 					}
-				} catch (IOException e) {
+				} catch (Exception e) {
 					LOGGER.log(Level.SEVERE, "error converting document", e);
 					appendLogMessage("ERROR: " + e.getMessage());
 				}
