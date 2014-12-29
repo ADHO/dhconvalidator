@@ -5,5 +5,5 @@ import nu.xom.Element;
 import nu.xom.XPathContext;
 
 interface StateHandler {
-	public State handleParagraph(Element paragraphElement, Document document, XPathContext xPathContext);
+	public State handleParagraph(Element matchElement, Document document, XPathContext xPathContext);
 }

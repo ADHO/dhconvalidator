@@ -7,10 +7,10 @@ import nu.xom.XPathContext;
 public class InPermHandler implements StateHandler {
 
 	@Override
-	public State handleParagraph(Element paragraphElement, Document document,
+	public State handleParagraph(Element matchElement, Document document,
 			XPathContext xPathContext) {
 		
-		if (paragraphElement.getLocalName().equals("permEnd")) {
+		if (matchElement.getLocalName().equals("permEnd")) {
 			return State.SEEKPERMSTART;
 		}
 		

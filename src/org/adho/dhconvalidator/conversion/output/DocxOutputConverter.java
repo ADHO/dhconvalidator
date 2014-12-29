@@ -157,11 +157,13 @@ public class DocxOutputConverter extends CommonOutputConverter {
 						"/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title", 
 						xPathContext);
 		
-		Nodes searchResult = 
-			document.query("/tei:TEI/tei:text/tei:body/tei:p[@rend='DH-Subtitle']", xPathContext);
+		Element docTitle = 
+				DocumentUtil.tryFirstMatch(
+					document, 
+					"/tei:TEI/tei:text/tei:front/tei:titlePage/tei:docTitle", 
+					xPathContext);
 		
-		
-		if (searchResult.size() > 0) {
+		if (docTitle != null) {
 			String title = paper.getTitle();
 			
 			Element titleStmtElement = (Element) titleElement.getParent();
@@ -174,8 +176,10 @@ public class DocxOutputConverter extends CommonOutputConverter {
 			
 			titleElement.getParent().removeChild(titleElement);
 			complexTitle.appendChild(titleElement);
-			for (int i=0; i<searchResult.size(); i++) {
-				Element dhSubtitleElement = (Element)searchResult.get(i);
+			Elements titleParts = docTitle.getChildElements("titlePart", TeiNamespace.TEI.toUri());
+			
+			for (int i=0; i<titleParts.size(); i++) {
+				Element dhSubtitleElement = titleParts.get(i);
 				Element subtitleElement = new Element("title", TeiNamespace.TEI.toUri());
 				subtitleElement.addAttribute(new Attribute("type", "sub"));
 				subtitleElement.appendChild(dhSubtitleElement.getValue());

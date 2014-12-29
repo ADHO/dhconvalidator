@@ -66,7 +66,8 @@ public class DocxInputConverter implements InputConverter {
 
 		cleanupParagraphStyles(document);
 		stripTemplateSections(document);
-
+		ensureNumberedHeading(document);
+		
 		zipFs.putDocument("word/document.xml", document);
 
 		ByteArrayOutputStream pre = new ByteArrayOutputStream();
@@ -83,9 +84,32 @@ public class DocxInputConverter implements InputConverter {
 		return zipFs.toZipData();
 	}
 
+	private void ensureNumberedHeading(Document document) {
+		Nodes searchResult = document.query("//w:pStyle[@w:val='DH-Heading']", xPathContext);
+		for (int i=0; i<searchResult.size(); i++) {
+			Element styleElement = (Element) searchResult.get(i);
+			styleElement.getAttribute("val", Namespace.MAIN.toUri()).setValue("DH-Heading1");
+		}
+		
+	}
+
 	private void stripTemplateSections(Document document) {
 		ParagraphParser paragraphParser = new ParagraphParser();
 		paragraphParser.stripTemplateSections(document, xPathContext);
+		
+		Element subtitleStyleElement =
+			DocumentUtil.tryFirstMatch(
+				document, "/w:document/w:body/w:p/w:pPr/w:pStyle[@w:val='DH-Subtitle']", 
+				xPathContext);
+
+		if (subtitleStyleElement != null) {
+			
+			//we put the subtitle as a preliminary title and handle the 
+			// title stuff later when merging with the ConfTool data
+			subtitleStyleElement.getAttribute(
+					"val", 
+					DocxInputConverter.Namespace.MAIN.toUri()).setValue("Title");
+		}
 	}
 
 	private void cleanupParagraphStyles(Document document) {
