@@ -21,17 +21,23 @@ public class Paper {
 	private String title;
 	private String authors;
 	private String organisations;
-	private String keywords;
+	private List<String> keywords;
+	private String contributionType;
+	private List<String> topics;
 	
 	public Paper(Integer paperId, String title, String authors,
-			String organisations, String keywords) {
+			String organisations, String keywords, String topics,
+			String contributionType) {
 		super();
 		this.paperId = paperId;
 		this.title = title;
 		this.authors = authors;
 		this.organisations = organisations;
-		this.keywords = keywords;
+		this.keywords = makeCollection(keywords);
+		this.contributionType = contributionType;
+		this.topics = makeCollection(topics);
 	}
+	
 
 	public String getTitle() {
 		return title;
@@ -94,5 +100,27 @@ public class Paper {
 					+ "/"
 					+ organisations);
 	}
+	
+	public String getContributionType() {
+		return contributionType;
+	}
 
+	public List<String> makeCollection(String items) {
+		if ((items == null) || items.trim().isEmpty()) {
+			return Collections.emptyList();
+		}
+		ArrayList<String> result = new ArrayList<>();
+		for (String item : items.split(",")) {
+			result.add(item.trim());
+		}
+		return result;
+	}
+
+	public List<String> getKeywords() {
+		return keywords;
+	}
+	
+	public List<String> getTopics() {
+		return topics;
+	}
 }

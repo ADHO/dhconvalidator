@@ -8,7 +8,9 @@ public enum PropertyKey {
 	oxgarage_url,
 	tei_pictures_location,
 	tei_media_location,
-	publicationStmt,
+	publicationStmt, 
+	encodingDesc,
+	version,
 	;
 	
 	public String getValue() {

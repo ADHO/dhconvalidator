@@ -19,6 +19,9 @@
 		xmlns:html="http://www.w3.org/1999/xhtml"
 		xmlns:its="http://www.w3.org/2005/11/its"
                 xmlns:tbx="http://www.lisa.org/TBX-Specification.33.0.html"
+                xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:dcterms="http://purl.org/dc/terms/"
                 version="2.0"
                 exclude-result-prefixes="#all">
     <!-- import base conversion style -->
@@ -73,4 +76,8 @@ of this software, even if advised of the possibility of such damage.
     <xsl:template match="@rend[.='Text Body']" mode="pass2"/>
     <xsl:template match="@rend[.='Text body']" mode="pass2"/>
     <xsl:template match="@rend[.='Body Text Indent']" mode="pass2"/>
+    
+    <xsl:template name="getDocDate">
+      <xsl:value-of select="$docProps/cp:coreProperties/dcterms:created"/>
+    </xsl:template>
 </xsl:stylesheet>

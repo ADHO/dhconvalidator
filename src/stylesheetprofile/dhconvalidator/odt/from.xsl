@@ -92,6 +92,37 @@ of this software, even if advised of the possibility of such damage.
       <xsl:apply-templates/>
     </head>
   </xsl:template>
+  
+  <xsl:template name="teiHeader">
+    <teiHeader>
+      <fileDesc>
+        <titleStmt>
+          <title>
+            <xsl:value-of select="$document-title"/>
+          </title>
+          <author>
+             injected during post conversion 
+          </author>
+        </titleStmt>
+        <editionStmt>
+          <edition>
+            <date>
+              <xsl:value-of
+                select="$META/office:meta/meta:creation-date"/>
+            </date>
+          </edition>
+        </editionStmt>
+        <publicationStmt>
+          <p>injected during post conversion</p>
+        </publicationStmt>
+        <sourceDesc>
+          <p>
+	    <xsl:text>Converted from an OASIS Open Document</xsl:text>
+	  </p>
+        </sourceDesc>
+      </fileDesc>
+    </teiHeader>
+  </xsl:template>
 
   <!-- math formulae are not directly supported: odt stores formulae in separate files 
        which are linked by the main content file. DHConvalidator merges the external 
