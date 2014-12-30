@@ -64,9 +64,9 @@ public class Converter {
 		serializer.write(document);
 		System.out.println(bos.toString("UTF-8"));
 
-		try (FileOutputStream fos = new FileOutputStream("c://test/converted.xml")) {
-			fos.write(bos.toByteArray());
-		}
+//		try (FileOutputStream fos = new FileOutputStream("c://test/converted.xml")) {
+//			fos.write(bos.toByteArray());
+//		}
 
 		contentAsXhtml = oxGarageConversionClient.convertToString(
 				bos.toByteArray(), 

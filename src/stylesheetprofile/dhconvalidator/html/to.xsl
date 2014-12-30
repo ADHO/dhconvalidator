@@ -54,6 +54,7 @@ of this software, even if advised of the possibility of such damage.
    <xsl:output method="xhtml" omit-xml-declaration="yes" encoding="utf-8"/>
    <xsl:param name="institution"></xsl:param>
    <xsl:param name="autoToc">false</xsl:param>
+   <xsl:param name="linkPanel">false</xsl:param>
     
     <xsl:template match="html:*">
       <xsl:element name="{local-name()}">
