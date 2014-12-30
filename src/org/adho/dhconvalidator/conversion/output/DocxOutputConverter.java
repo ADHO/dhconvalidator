@@ -26,10 +26,24 @@ public class DocxOutputConverter extends CommonOutputConverter {
 		cleanupGraphics(document);
 		
 		makeBibliography(document);
-		cleanupBoldRendition(document);
+		cleanupBoldAndItalicsRendition(document);
 		removeFrontSection(document);
+		makeQuotations(document);
 	}
 	
+	private void makeQuotations(Document document) {
+		Nodes searchResult = 
+				document.query(
+					"//tei:p[@rend='DH-Quotation']", 
+					xPathContext);
+		
+		for (int i=0; i<searchResult.size(); i++) {
+			Element element = (Element)searchResult.get(i);
+			element.setLocalName("quote");
+			element.removeAttribute(element.getAttribute("rend"));
+		}
+	}
+
 	private void removeFrontSection(Document document) {
 		Element frontElement = DocumentUtil.tryFirstMatch(
 				document, "//tei:front", xPathContext);
@@ -38,7 +52,7 @@ public class DocxOutputConverter extends CommonOutputConverter {
 		}
 	}
 
-	private void cleanupBoldRendition(Document document) {
+	private void cleanupBoldAndItalicsRendition(Document document) {
 		Nodes searchResult = 
 				document.query(
 					"//*[@rend='Strong']", 
@@ -47,6 +61,16 @@ public class DocxOutputConverter extends CommonOutputConverter {
 		for (int i=0; i<searchResult.size(); i++) {
 			Element element = (Element)searchResult.get(i);
 			element.getAttribute("rend").setValue("bold");
+		}
+		
+		searchResult = 
+				document.query(
+					"//*[@rend='Emphasis']", 
+					xPathContext);
+		
+		for (int i=0; i<searchResult.size(); i++) {
+			Element element = (Element)searchResult.get(i);
+			element.getAttribute("rend").setValue("italic");
 		}
 	}
 

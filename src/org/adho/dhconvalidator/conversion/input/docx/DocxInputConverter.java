@@ -90,7 +90,6 @@ public class DocxInputConverter implements InputConverter {
 			Element styleElement = (Element) searchResult.get(i);
 			styleElement.getAttribute("val", Namespace.MAIN.toUri()).setValue("DH-Heading1");
 		}
-		
 	}
 
 	private void stripTemplateSections(Document document) {
