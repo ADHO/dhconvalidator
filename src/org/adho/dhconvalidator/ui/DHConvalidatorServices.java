@@ -8,6 +8,7 @@ import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
@@ -19,8 +20,10 @@ public class DHConvalidatorServices extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
+		
 		if ((VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name())) == null) {
 			setContent(new LoginPanel());
+			Page.getCurrent().setTitle("DHConvalidator Login");
 		}
 		else {
 			Navigator navigator = new Navigator(this, this);
@@ -39,6 +42,7 @@ public class DHConvalidatorServices extends UI {
 			        new ExternalResourceRequestHandler(
 			        		PropertyKey.tei_pictures_location.getValue(),
 			        		PropertyKey.tei_media_location.getValue()));
+			Page.getCurrent().setTitle("DHConvalidator Services");
 		}
 	}
 

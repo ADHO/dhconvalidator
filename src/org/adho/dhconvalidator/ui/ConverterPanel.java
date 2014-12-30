@@ -16,7 +16,9 @@ import org.adho.dhconvalidator.properties.PropertyKey;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.FileDownloader;
+import com.vaadin.server.Page;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.server.VaadinSession;
@@ -39,6 +41,7 @@ import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
+import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.VerticalLayout;
 
 public class ConverterPanel extends VerticalLayout implements View {
@@ -55,6 +58,8 @@ public class ConverterPanel extends VerticalLayout implements View {
 	private Label resultCaption;
 	private Button btDownloadResult;
 	private Label downloadInfo;
+
+	private FileDownloader currentFileDownloader;
 	
 	public ConverterPanel() {
 		initComponents();
@@ -132,14 +137,19 @@ public class ConverterPanel extends VerticalLayout implements View {
 	private void prepareForResultDownload() {
 		downloadInfo.setVisible(true);
 		
-		new FileDownloader(new StreamResource(
+		if (currentFileDownloader != null) {
+			currentFileDownloader.remove();
+		}
+		
+		currentFileDownloader = new FileDownloader(new StreamResource(
 				new StreamSource() {
 			
 					@Override
 					public InputStream getStream() {
 						return createResultStream();
 					}
-				}, filename.substring(0, filename.lastIndexOf('.')) + ".zip" )).extend(btDownloadResult);
+				}, filename.substring(0, filename.lastIndexOf('.')) + ".zip" ));
+		currentFileDownloader.extend(btDownloadResult);
 		
 		btDownloadResult.setVisible(true);
 	}
@@ -161,6 +171,10 @@ public class ConverterPanel extends VerticalLayout implements View {
 		setMargin(true);
 		setSizeFull();
 		setSpacing(true);
+		LogoutLink logoutLink = new LogoutLink();
+		addComponent(logoutLink);
+		setComponentAlignment(logoutLink, Alignment.TOP_RIGHT);
+		
 		HorizontalLayout inputPanel = new HorizontalLayout();
 		inputPanel.setSpacing(true);
 		addComponent(inputPanel);
@@ -198,6 +212,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 		setExpandRatio(resultPanel, 1.0f);
 		
 		preview = new Label("", ContentMode.HTML);
+		preview.addStyleName("tei-preview");
 		resultPanel.addComponent(preview);
 		VerticalLayout rightPanel = new VerticalLayout();
 		rightPanel.setMargin(new MarginInfo(false, false, true, true));
@@ -221,6 +236,15 @@ public class ConverterPanel extends VerticalLayout implements View {
 		rightPanel.addComponent(btDownloadResult);
 		rightPanel.setComponentAlignment(btDownloadResult, Alignment.BOTTOM_CENTER);
 		btDownloadResult.setHeight("50px");
+		
+		rightPanel.addComponent(new Label("If you are unsure about what the preview "
+				+ "should look like have a look at our example submission: "));
+		Button btExample = new Button("Take me to the example!");
+		btExample.setStyleName(BaseTheme.BUTTON_LINK);
+		btExample.addStyleName("plain-link");
+		rightPanel.addComponent(btExample);
+
+		new BrowserWindowOpener(DHConvalidatorExample.class).extend(btExample);
 	}
 	
 	private InputStream createResultStream() {
@@ -247,7 +271,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 		preview.setValue("");
 		logArea.setValue("");
 		resultCaption.setValue("Preview and Conversion log");
-		
+		Page.getCurrent().setTitle("DHConvalidator Conversion and Validation");
 	}
 
 }

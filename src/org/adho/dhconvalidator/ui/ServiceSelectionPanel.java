@@ -2,10 +2,13 @@ package org.adho.dhconvalidator.ui;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Page;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -59,6 +62,13 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 		Panel templateGeneratorServicePanel = 
 			new Panel("Template Generation Service", templateGeneratorServiceContent);
 
+		templateGeneratorServiceContent.addComponent(
+				new Label("This service will generate a template for each of "
+						+ "your accepted submissions.<br>"
+				+ "Please use these templates to prepare your submissions for "
+				+ "the Conversion<br>and Validation Service.",
+				ContentMode.HTML));
+		
 		btOdtTemplate = new Button("Open Document (odt)");
 		
 		btOdtTemplate.setDescription(
@@ -79,7 +89,10 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 				new Panel(
 						"Conversion and Validation Service",
 						conversionAndValidationServiceContent);
-		
+		conversionAndValidationServiceContent.addComponent(
+			new Label("This service will convert your edited and template based documents<br>"
+					+ " to compressed TEI packages which can be uploaded to ConfTool.", 
+						ContentMode.HTML));
 		btConversionPanel = new Button("Continue");
 		conversionAndValidationServiceContent.addComponent(btConversionPanel);
 		conversionAndValidationServiceContent.setComponentAlignment(
@@ -92,7 +105,7 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
-		//noop
+		Page.getCurrent().setTitle("DHConvalidator Service Selection");
 	}
 
 }

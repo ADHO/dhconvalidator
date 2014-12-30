@@ -6,7 +6,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 
-@SuppressWarnings("serial")
 @Theme("dhconvalidator")
 @PreserveOnRefresh
 @Push

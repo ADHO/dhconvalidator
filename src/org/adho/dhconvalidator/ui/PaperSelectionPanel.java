@@ -15,6 +15,7 @@ import org.adho.dhconvalidator.conversion.input.InputConverter;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileDownloader;
+import com.vaadin.server.Page;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.server.VaadinSession;
@@ -38,7 +39,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 	}
 
 	private void initData() {
-		paperTable.removeAllValidators();
+		paperTable.removeAllItems();
 		
 		List<Paper> papers = ConfToolCacheProvider.INSTANCE.getConfToolCache().getPapers(
 				(User)VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name()));
@@ -119,5 +120,6 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 		initData();
+		Page.getCurrent().setTitle("DHConvalidator Template Generation Service");
 	}
 }

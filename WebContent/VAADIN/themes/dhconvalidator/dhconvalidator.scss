@@ -45,6 +45,14 @@ $valo-menu-background-color: #eee;
   	border-color:none;
   }
   
+  .plain-link {
+  	padding: 0px;
+  }
+  .plain-link:focus:after {
+  	box-shadow: none;
+  	border-color:none;
+  }
+  
   .v-upload .v-button {
   	margin-left: 5px;
   }
@@ -56,5 +64,14 @@ $valo-menu-background-color: #eee;
   .converterpanel-progressbar {
   	margin-top: 14px;
   	
+  }
+  
+  .tei-preview span.titlem {
+    display: block;
+  }
+  
+  .tei-preview h1.maintitle {
+  	margin-left: 0px;
+  	text-align:center;
   }
 }
