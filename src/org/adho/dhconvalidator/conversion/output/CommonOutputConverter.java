@@ -181,13 +181,15 @@ public class CommonOutputConverter implements OutputConverter {
 				String forename = author.substring(splitPos+1, author.length());
 				
 				Element authorElement = new Element("author", TeiNamespace.TEI.toUri());
+				Element persNameElement = new Element("persName", TeiNamespace.TEI.toUri());
+				authorElement.appendChild(persNameElement);
 				
 				Element surnameElement = new Element("surname", TeiNamespace.TEI.toUri());
 				surnameElement.appendChild(surname);
-				authorElement.appendChild(surnameElement);
+				persNameElement.appendChild(surnameElement);
 				Element forenameElement = new Element("forename", TeiNamespace.TEI.toUri());
 				forenameElement.appendChild(forename);
-				authorElement.appendChild(forenameElement);
+				persNameElement.appendChild(forenameElement);
 				
 				Element affiliationElement = new Element("affiliation", TeiNamespace.TEI.toUri());
 				affiliationElement.appendChild(authorAffiliation.getSecond());

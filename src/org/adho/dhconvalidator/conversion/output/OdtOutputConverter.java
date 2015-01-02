@@ -78,7 +78,7 @@ public class OdtOutputConverter extends CommonOutputConverter {
 			Element titleStmtElement = (Element) titleElement.getParent();
 			Element complexTitle = new Element("title", TeiNamespace.TEI.toUri());
 			complexTitle.addAttribute(new Attribute("type", "full"));
-			titleStmtElement.appendChild(complexTitle);
+			titleStmtElement.insertChild(complexTitle,0);
 			
 			titleElement.addAttribute(new Attribute("type", "main"));
 			titleElement.getParent().removeChild(titleElement);

@@ -193,7 +193,7 @@ public class DocxOutputConverter extends CommonOutputConverter {
 			Element titleStmtElement = (Element) titleElement.getParent();
 			Element complexTitle = new Element("title", TeiNamespace.TEI.toUri());
 			complexTitle.addAttribute(new Attribute("type", "full"));
-			titleStmtElement.appendChild(complexTitle);
+			titleStmtElement.insertChild(complexTitle,0);
 			
 			titleElement.addAttribute(new Attribute("type", "main"));
 			titleElement.appendChild(title);
