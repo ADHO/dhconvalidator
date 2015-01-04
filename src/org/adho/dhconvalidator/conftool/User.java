@@ -1,7 +1,5 @@
 package org.adho.dhconvalidator.conftool;
 
-import java.util.Collections;
-import java.util.List;
 
 public class User {
 	
@@ -9,7 +7,6 @@ public class User {
 	private String userName;
 	private String firstName;
 	private String lastName;
-	private List<Integer> paperIds;
 	
 	public User(Integer userId, String userName) {
 		super();
@@ -17,13 +14,11 @@ public class User {
 		this.userName = userName;
 	}
 
-	public User(Integer userId, String firstName, String lastName,
-			List<Integer> paperIds) {
+	public User(Integer userId, String firstName, String lastName) {
 		super();
 		this.userId = userId;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.paperIds = paperIds;
 	}
 
 	public Integer getUserId() {
@@ -40,10 +35,6 @@ public class User {
 	
 	public String getLastName() {
 		return lastName;
-	}
-	
-	public List<Integer> getPaperIds() {
-		return Collections.unmodifiableList(paperIds);
 	}
 	
 	@Override

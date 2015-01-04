@@ -2,14 +2,13 @@ package org.adho.dhconvalidator.ui;
 
 import java.io.IOException;
 
-import org.adho.dhconvalidator.conftool.ConfToolCacheProvider;
 import org.adho.dhconvalidator.conftool.ConfToolClient;
 import org.adho.dhconvalidator.conftool.ConfToolClient.AuthenticationException;
 import org.adho.dhconvalidator.conftool.User;
-import org.adho.dhconvalidator.properties.PropertyKey;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -25,6 +24,7 @@ public class LoginPanel extends CenterPanel {
 	private Button btLogin;
 
 	public LoginPanel() {
+		super(false);
 		initComponents();
 		initActions();
 	}
@@ -42,15 +42,12 @@ public class LoginPanel extends CenterPanel {
 
 
 	protected void authenticate(String username, char[] pass) {
-		ConfToolClient confToolClient = 
-				new ConfToolClient(
-					PropertyKey.conftool_url.getValue(), 
-					PropertyKey.conftool_shared_pass.getValue().toCharArray());
+		ConfToolClient confToolClient = new ConfToolClient();
 		try {
 			User user = confToolClient.authenticate(username, pass);
 
 			user = 
-				ConfToolCacheProvider.INSTANCE.getConfToolCache().getDetailedUser(user);
+				confToolClient.getDetailedUser(user);
 			
 			VaadinSession.getCurrent().setAttribute(
 				SessionStorageKey.USER.name(), user);
@@ -73,7 +70,7 @@ public class LoginPanel extends CenterPanel {
 		btLogin = new Button("Login");
 		btLogin.setClickShortcut(KeyCode.ENTER);
 
-		Label caption = new Label("ConfTool Authentication");
+		Label caption = new Label("DHConvalidator<br>ConfTool Authentication", ContentMode.HTML);
 		caption.addStyleName("login-caption");
 		addCenteredComponent(caption);
 		addCenteredComponent(userNameInput);

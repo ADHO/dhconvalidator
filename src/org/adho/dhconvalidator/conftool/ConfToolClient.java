@@ -9,6 +9,7 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 
+import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentUtil;
 import org.restlet.Context;
 import org.restlet.data.Method;
@@ -37,6 +38,12 @@ public class ConfToolClient {
 	public ConfToolClient(String confToolUrl, char[] restSharedPass) {
 		this.confToolUrl = confToolUrl;
 		this.restSharedPass = restSharedPass;
+	}
+	
+	public ConfToolClient() {
+		this(
+			PropertyKey.conftool_url.getValue(),
+			PropertyKey.conftool_shared_pass.getValue().toCharArray());
 	}
 	
 	private String getPassHash(String nonce) {
@@ -72,22 +79,40 @@ public class ConfToolClient {
 		}
 	}
 	
-	public List<User> getAuthors() throws IOException {
-		return new DocumentToUserMapper().getUserList(
-					getExportData(ExportType.subsumed_authors));
+	public User getDetailedUser(User loginUser) throws IOException {
+		User author = new DocumentToUserMapper().getUser(
+				getExportData(ExportType.users, loginUser));
+		if (author != null) {
+			loginUser.setFirstName(author.getFirstName());
+			loginUser.setLastName(author.getLastName());
+		}
+		return loginUser;
 	}
 	
-	public List<Paper> getPapers() throws IOException {
+	public List<Paper> getPapers(User user) throws IOException {
 		return new DocumentToPaperMapper().getPaperList(
-				getExportData(ExportType.papers));
+				getExportData(ExportType.papers, user));
 	}
+
+	public Paper getPaper(User user, Integer paperId) throws IOException {
+		List<Paper> papers = getPapers(user);
+		if (papers != null) {
+			for (Paper paper : papers) {
+				if (paper.getPaperId().equals(paperId)) {
+					return paper;
+				}
+			}
+		}
+		return null;
+	}
+
 	
 	private String getNonce() {
 		Date date = new Date(new Date().getTime()*60);
 		return String.valueOf(date.getTime());
 	}
 	
-	private Document getExportData(ExportType type) throws IOException {
+	private Document getExportData(ExportType type, User user) throws IOException {
 		String nonce = getNonce();
 		
 		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
@@ -103,11 +128,16 @@ public class ConfToolClient {
 		urlBuilder.append("&form_export_header=default");
 		urlBuilder.append("&cmd_create_export=true");
 		
+		if (user != null) {
+			urlBuilder.append("&form_userID=");
+			urlBuilder.append(user.getUserId());
+		}
+		
 		ClientResource client = 
 				new ClientResource(Context.getCurrent(), Method.GET, urlBuilder.toString());
 		
 		Representation result = client.get();
-
+		
 		try (InputStream resultStream = result.getStream()) {
 			Builder builder = new Builder();
 			Document resultDoc = builder.build(resultStream);
@@ -177,5 +207,14 @@ public class ConfToolClient {
 	private String getMessage(Document resultDoc) {
 		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/message");
 		return resultElement.getValue();
+	}
+	
+	public static void main(String[] args) {
+		try {
+			System.out.println(new ConfToolClient("https://www.conftool.net/demo/dh2015_26a/rest.php", "DHhed8QD15".toCharArray()).getExportData(ExportType.users, new User(979, "mpetris")).toXML());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -171,9 +171,16 @@ public class ConverterPanel extends VerticalLayout implements View {
 		setMargin(true);
 		setSizeFull();
 		setSpacing(true);
+		HorizontalLayout headerPanel = new HorizontalLayout();
+		headerPanel.setWidth("100%");
+		Label title = new Label("DHConvalidator");
+		title.addStyleName("title-caption");
+		headerPanel.addComponent(title);
+		headerPanel.setComponentAlignment(title, Alignment.TOP_LEFT);
 		LogoutLink logoutLink = new LogoutLink();
-		addComponent(logoutLink);
-		setComponentAlignment(logoutLink, Alignment.TOP_RIGHT);
+		headerPanel.addComponent(logoutLink);
+		headerPanel.setComponentAlignment(logoutLink, Alignment.TOP_RIGHT);
+		addComponent(headerPanel);
 		
 		HorizontalLayout inputPanel = new HorizontalLayout();
 		inputPanel.setSpacing(true);

@@ -10,7 +10,7 @@ public enum PropertyKey {
 	tei_media_location,
 	publicationStmt, 
 	encodingDesc,
-	version,
+	version, 
 	;
 	
 	public String getValue() {

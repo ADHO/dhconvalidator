@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
-import org.adho.dhconvalidator.conftool.ConfToolCacheProvider;
+import org.adho.dhconvalidator.conftool.ConfToolClient;
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.ZipFs;
@@ -20,7 +20,6 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -34,24 +33,30 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 	private InputConverter inputConverter;
 
 	public PaperSelectionPanel(InputConverter inputConverter) {
+		super(true);
 		this.inputConverter = inputConverter;
 		initComponents();
 	}
 
 	private void initData() {
 		paperTable.removeAllItems();
-		
-		List<Paper> papers = ConfToolCacheProvider.INSTANCE.getConfToolCache().getPapers(
-				(User)VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name()));
-		for (Paper paper : papers) {
-			paperTable.addItem(new Object[] {paper.getTitle()}, paper);
+		try {
+			List<Paper> papers = new ConfToolClient().getPapers(
+					(User)VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name()));
+			for (Paper paper : papers) {
+				paperTable.addItem(new Object[] {paper.getTitle()}, paper);
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			Notification.show(
+				"Error", "Unable to load papers from ConfTool: " + e.getLocalizedMessage(), 
+				Type.ERROR_MESSAGE);
 		}
 		
 	}
 
 	private void initComponents() {
-		LogoutLink logoutLink = new LogoutLink();
-		
 		Label info = new Label(
 			"Please select one or more "
 			+ "submissions to generate the templates:", ContentMode.HTML);
@@ -75,7 +80,6 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 					}
 				}, "your_personal_dh_templates.zip" )).extend(btGenerate);
 		
-		addCenteredComponent(logoutLink, Alignment.TOP_RIGHT);
 		addCenteredComponent(info);
 		addCenteredComponent(paperTable);
 		addCenteredComponent(btGenerate);

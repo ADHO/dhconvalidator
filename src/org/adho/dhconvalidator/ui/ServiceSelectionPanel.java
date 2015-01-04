@@ -20,6 +20,7 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 	private Button btConversionPanel;
 
 	public ServiceSelectionPanel() {
+		super(true);
 		initComponents();
 		initActions();
 		
@@ -53,15 +54,13 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 	}
 
 	private void initComponents() {
-		LogoutLink logoutLink = new LogoutLink();
-
 		VerticalLayout templateGeneratorServiceContent = new VerticalLayout();
 		templateGeneratorServiceContent.setSpacing(true);
 		templateGeneratorServiceContent.setMargin(true);
 		
 		Panel templateGeneratorServicePanel = 
 			new Panel("Template Generation Service", templateGeneratorServiceContent);
-
+		templateGeneratorServicePanel.setWidth("500px");
 		templateGeneratorServiceContent.addComponent(
 				new Label("This service will generate a template for each of "
 						+ "your accepted submissions.<br>"
@@ -98,7 +97,6 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 		conversionAndValidationServiceContent.setComponentAlignment(
 				btConversionPanel, Alignment.MIDDLE_CENTER);
 
-		addCenteredComponent(logoutLink, Alignment.TOP_RIGHT);
 		addCenteredComponent(templateGeneratorServicePanel); 
 		addCenteredComponent(conversionAndValidationServicePanel);
 	}

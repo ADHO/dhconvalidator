@@ -23,6 +23,7 @@ public class LoginResultPanel extends CenterPanel {
 	}
 	
 	public LoginResultPanel(String errorMessage) {
+		super(false);
 		initComponents(errorMessage);
 		initActions();
 	}

@@ -1,51 +1,32 @@
 package org.adho.dhconvalidator.conftool;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 
 public class DocumentToUserMapper {
 
-	public List<User> getUserList(Document document) {
+	public User getUser(Document document) {
 		System.out.println(document.toXML());
 		
-		Elements authorElements = 
-				document.getRootElement().getChildElements("subsumed_author");
-		List<User> result = new ArrayList<>();
+		Elements userElements = 
+				document.getRootElement().getChildElements("user");
 		
-		for (int i=0; i<authorElements.size(); i++) {
-			Element authorElement = authorElements.get(i);
+		if (userElements.size() == 1) {
+			
+			Element userElement = userElements.get(0);
 			Integer userId = 
 				Integer.valueOf(
-					authorElement.getFirstChildElement("personID").getValue());
+					userElement.getFirstChildElement("personID").getValue());
 			String firstName = 
-					authorElement.getFirstChildElement("firstname").getValue();
+					userElement.getFirstChildElement("firstname").getValue();
 			String lastName =  
-					authorElement.getFirstChildElement("lastname").getValue();
+					userElement.getFirstChildElement("name").getValue();
 					
-			List<Integer> paperIds = 
-				makeIntegerList(
-					authorElement.getFirstChildElement("paperIDs").getValue());
-		
-			result.add(new User(userId, firstName, lastName, paperIds));
+			return new User(userId, firstName, lastName);
 		}
 		
-		
-		return result;
-	}
-
-	private List<Integer> makeIntegerList(String value) {
-		List<Integer> result = new ArrayList<>();
-		if (!value.isEmpty()) {
-			String[] split = value.split(",");
-			for (String splitValue : split) {
-				result.add(Integer.valueOf(splitValue.trim()));
-			}
-		}
-		return result;
+		return null;
 	}
 
 }

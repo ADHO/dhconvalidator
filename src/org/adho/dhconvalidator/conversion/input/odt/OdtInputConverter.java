@@ -12,7 +12,7 @@ import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.XPathContext;
 
-import org.adho.dhconvalidator.conftool.ConfToolCacheProvider;
+import org.adho.dhconvalidator.conftool.ConfToolClient;
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.Type;
@@ -75,7 +75,7 @@ public class OdtInputConverter implements InputConverter {
 		
 		Document metaDoc = zipFs.getDocument("meta.xml");
 		Integer paperId = getPaperIdFromMeta(metaDoc);
-		paper = ConfToolCacheProvider.INSTANCE.getConfToolCache().getPaper(user, paperId);
+		paper = new ConfToolClient().getPaper(user, paperId);
 
 		injectTitleIntoMeta(metaDoc, paper.getTitle());
 		injectAuthorsIntoMeta(metaDoc, paper.getAuthorsAndAffiliations());

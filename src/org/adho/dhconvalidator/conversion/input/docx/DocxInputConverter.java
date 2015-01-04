@@ -11,7 +11,7 @@ import nu.xom.Nodes;
 import nu.xom.Serializer;
 import nu.xom.XPathContext;
 
-import org.adho.dhconvalidator.conftool.ConfToolCacheProvider;
+import org.adho.dhconvalidator.conftool.ConfToolClient;
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.Type;
@@ -79,7 +79,7 @@ public class DocxInputConverter implements InputConverter {
 		
 		Document customPropDoc = zipFs.getDocument("docProps/custom.xml");
 		Integer paperId = getPaperIdFromMeta(customPropDoc);
-		paper = ConfToolCacheProvider.INSTANCE.getConfToolCache().getPaper(user, paperId);
+		paper = new ConfToolClient().getPaper(user, paperId);
 
 		return zipFs.toZipData();
 	}

@@ -34,7 +34,7 @@ public class ZipResult {
 		}
 		else {
 			externalResources = Collections.emptyMap();
-			documentName = "tei.xml";
+			documentName = "tei.xml"; //TODO: name after original input file
 			buildDocument(buffer);
 		}
 	}
