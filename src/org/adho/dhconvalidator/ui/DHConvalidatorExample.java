@@ -62,9 +62,9 @@ public class DHConvalidatorExample extends UI {
 					@Override
 					public InputStream getStream() {
 						return Thread.currentThread().getContextClassLoader().getResourceAsStream(
-							"/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.zip");
+							"/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.dhc");
 					}
-				}, "1_Digital_Humanities.zip"));
+				}, "1_Digital_Humanities.dhc"));
 			outputFileDownloader.extend(btGetOutputfile);
 
 			Label preview = new Label("", ContentMode.HTML);

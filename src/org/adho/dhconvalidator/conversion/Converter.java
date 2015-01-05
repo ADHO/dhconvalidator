@@ -1,7 +1,6 @@
 package org.adho.dhconvalidator.conversion;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import nu.xom.Document;
@@ -16,6 +15,11 @@ import org.adho.dhconvalidator.conversion.output.OutputConverterFactory;
 import org.adho.dhconvalidator.conversion.oxgarage.OxGarageConversionClient;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 
+//TODO: logging, print statements
+//TODO: validation: schema
+//TODO: validation: image resolution
+//TODO: validation: warning no titles
+//TODO: centerpanel about link/box
 public class Converter {
 
 	private String contentAsXhtml;
@@ -28,7 +32,7 @@ public class Converter {
 
 	public ZipResult convert(
 			byte[] sourceData, ConversionPath toTeiConversionPath, 
-			User user) throws IOException {
+			User user, String inputFilename) throws IOException {
 
 		InputConverterFactory inputConverterFactory = toTeiConversionPath.getInputConverterFactory();
 		InputConverter	inputConverter = inputConverterFactory.createInputConverter();
@@ -40,7 +44,8 @@ public class Converter {
 		ZipResult zipResult = new ZipResult(oxGarageConversionClient.convert(
 				sourceData, 
 				toTeiConversionPath, 
-				toTeiConversionPath.getDefaultProperties()));
+				toTeiConversionPath.getDefaultProperties()),
+				inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".xml");
 		
 		document = zipResult.getDocument();
 		

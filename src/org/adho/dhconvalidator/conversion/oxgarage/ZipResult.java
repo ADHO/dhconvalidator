@@ -25,6 +25,11 @@ public class ZipResult {
 	private String documentName;
 	
 	public ZipResult(InputStream is) throws IOException {
+		this(is, null);
+	}
+	
+	public ZipResult(InputStream is, String documentName) throws IOException {
+		this.documentName = documentName;
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		IOUtils.copy(is, buffer);
 		
@@ -34,7 +39,6 @@ public class ZipResult {
 		}
 		else {
 			externalResources = Collections.emptyMap();
-			documentName = "tei.xml"; //TODO: name after original input file
 			buildDocument(buffer);
 		}
 	}

@@ -89,7 +89,8 @@ public class ConverterPanel extends VerticalLayout implements View {
 							uploadData, 
 							ConversionPath.getConvertionPathByFilename(filename),
 							(User)VaadinSession.getCurrent().getAttribute(
-									SessionStorageKey.USER.name()));
+									SessionStorageKey.USER.name()),
+							filename);
 						appendLogMessage("Finished conversion.");
 						VaadinSession.getCurrent().setAttribute(
 								SessionStorageKey.ZIPRESULT.name(), zipResult);
@@ -148,7 +149,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 					public InputStream getStream() {
 						return createResultStream();
 					}
-				}, filename.substring(0, filename.lastIndexOf('.')) + ".zip" ));
+				}, filename.substring(0, filename.lastIndexOf('.')) + ".dhc" ));
 		currentFileDownloader.extend(btDownloadResult);
 		
 		btDownloadResult.setVisible(true);
