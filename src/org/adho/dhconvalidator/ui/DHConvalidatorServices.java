@@ -11,11 +11,13 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.communication.PushMode;
+import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.ui.UI;
 
 @Theme("dhconvalidator")
 @PreserveOnRefresh
-@Push
+@Push(value=PushMode.MANUAL, transport=Transport.LONG_POLLING)
 public class DHConvalidatorServices extends UI {
 
 	@Override

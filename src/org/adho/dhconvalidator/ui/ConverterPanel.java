@@ -41,8 +41,8 @@ import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
-import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.BaseTheme;
 
 public class ConverterPanel extends VerticalLayout implements View {
 	
@@ -106,7 +106,6 @@ public class ConverterPanel extends VerticalLayout implements View {
 					appendLogMessage("ERROR: " + e.getMessage());
 				}
 				progressBar.setVisible(false);
-				UI.getCurrent().setPollInterval(-1);	
 			}
 		});
 		upload.addStartedListener(new StartedListener() {
@@ -117,10 +116,9 @@ public class ConverterPanel extends VerticalLayout implements View {
 				logArea.setValue("");
 				btDownloadResult.setVisible(false);
 				downloadInfo.setVisible(false);
-				UI.getCurrent().push();
 				
 				progressBar.setVisible(true);
-				UI.getCurrent().setPollInterval(500);
+				UI.getCurrent().push();
 			}
 		});
 
@@ -130,7 +128,6 @@ public class ConverterPanel extends VerticalLayout implements View {
 			public void uploadFailed(FailedEvent event) {
 				resultCaption.setValue("Preview and Conversion log for file " + filename );
 				progressBar.setVisible(false);
-				UI.getCurrent().setPollInterval(-1);
 			}
 		});
 	}
@@ -142,14 +139,20 @@ public class ConverterPanel extends VerticalLayout implements View {
 			currentFileDownloader.remove();
 		}
 		
-		currentFileDownloader = new FileDownloader(new StreamResource(
-				new StreamSource() {
-			
-					@Override
-					public InputStream getStream() {
-						return createResultStream();
-					}
-				}, filename.substring(0, filename.lastIndexOf('.')) + ".dhc" ));
+		StreamResource resultStreamResource = 
+				new StreamResource(
+						new StreamSource() {
+					
+							@Override
+							public InputStream getStream() {
+								return createResultStream();
+							}
+						}, filename.substring(0, filename.lastIndexOf('.')) + ".dhc" ) {
+					
+				};
+		resultStreamResource.setCacheTime(0);
+		
+		currentFileDownloader = new FileDownloader(resultStreamResource);
 		currentFileDownloader.extend(btDownloadResult);
 		
 		btDownloadResult.setVisible(true);
@@ -165,7 +168,6 @@ public class ConverterPanel extends VerticalLayout implements View {
 		logArea.setReadOnly(false);
 		logArea.setValue(logBuilder.toString());
 		logArea.setReadOnly(true);
-		UI.getCurrent().push();
 	}
 
 	private void initComponents() {

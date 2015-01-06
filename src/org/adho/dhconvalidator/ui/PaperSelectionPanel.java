@@ -71,14 +71,17 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		paperTable.setImmediate(true);
 		
 		btGenerate = new Button("Generate Templates");
-		new FileDownloader(new StreamResource(
-				new StreamSource() {
-			
-					@Override
-					public InputStream getStream() {
-						return createTemplates();
-					}
-				}, "your_personal_dh_templates.zip" )).extend(btGenerate);
+		StreamResource templateStreamResource = 
+				new StreamResource(
+						new StreamSource() {
+							@Override
+							public InputStream getStream() {
+								return createTemplates();
+							}
+						}, "your_personal_dh_templates.zip" );
+		
+		templateStreamResource.setCacheTime(0);
+		new FileDownloader(templateStreamResource).extend(btGenerate);
 		
 		addCenteredComponent(info);
 		addCenteredComponent(paperTable);
