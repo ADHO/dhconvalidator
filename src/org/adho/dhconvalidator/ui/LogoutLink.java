@@ -38,7 +38,8 @@ public class LogoutLink extends Button {
 					catch (Exception e) {
 						Logger.getLogger("");
 					}
-				}			}
+				}			
+			}
 		});
 	}
 

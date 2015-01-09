@@ -6,12 +6,14 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 
 import com.vaadin.annotations.PreserveOnRefresh;
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.Page;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.shared.communication.PushMode;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -21,6 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 
 @Theme("dhconvalidator")
 @PreserveOnRefresh
+@Push(value=PushMode.MANUAL)
 public class DHConvalidatorExample extends UI {
 
 	@Override
