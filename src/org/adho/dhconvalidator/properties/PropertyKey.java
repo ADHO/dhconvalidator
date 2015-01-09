@@ -6,14 +6,21 @@ public enum PropertyKey {
 	conftool_shared_pass,
 	conftool_url,
 	oxgarage_url,
-	tei_pictures_location,
-	tei_media_location,
+	tei_image_location,
 	publicationStmt, 
 	encodingDesc,
-	version, 
+	version,
+	image_min_resolution_width,
+	image_min_resolution_height, 
+	logConversionStepOutput, 
+	performSchemaValidation,
 	;
 	
 	public String getValue() {
 		return PropertyProvider.getProperties().getProperty(this.name());
+	}
+	
+	public boolean isTrue() {
+		return Boolean.valueOf(PropertyProvider.getProperties().getProperty(this.name()));
 	}
 }

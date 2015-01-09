@@ -10,7 +10,7 @@ import nu.xom.Elements;
 public class DocumentToPaperMapper {
 
 	public List<Paper> getPaperList(Document document) {
-		System.out.println(document.toXML());
+		
 		List<Paper> result = new ArrayList<>();
 		Elements paperElements =
 			document.getRootElement().getChildElements("paper");

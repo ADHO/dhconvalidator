@@ -1,6 +1,7 @@
 package org.adho.dhconvalidator.conversion.output;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import nu.xom.Attribute;
 import nu.xom.Document;
@@ -11,6 +12,8 @@ import nu.xom.Nodes;
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.TeiNamespace;
+import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
+import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentUtil;
 
 public class DocxOutputConverter extends CommonOutputConverter {
@@ -29,8 +32,25 @@ public class DocxOutputConverter extends CommonOutputConverter {
 		cleanupBoldAndItalicsRendition(document);
 		removeFrontSection(document);
 		makeQuotations(document);
+		renameImageDir(document);
 	}
 	
+	private void renameImageDir(Document document) {
+		Nodes searchResult = 
+				document.query(
+					"//tei:*[starts-with(@url, 'media/')]", 
+					xPathContext);
+		
+		for (int i=0; i<searchResult.size(); i++) {
+			Element element = (Element)searchResult.get(i);
+			Attribute urlAttr = element.getAttribute("url");
+			urlAttr.setValue(
+				urlAttr.getValue().replaceFirst(Pattern.quote("media/"),
+				PropertyKey.tei_image_location.getValue().substring(1) // skip leading slash
+						+ "/"));
+		}
+	}
+
 	private void makeQuotations(Document document) {
 		Nodes searchResult = 
 				document.query(
@@ -215,4 +235,11 @@ public class DocxOutputConverter extends CommonOutputConverter {
 			titleElement.appendChild(paper.getTitle());
 		}
 	}
+	
+	@Override
+	public void convert(ZipResult zipResult) throws IOException {
+		adjustImagePath(zipResult, "media", PropertyKey.tei_image_location.getValue().substring(1));
+		super.convert(zipResult);
+	}
+
 }

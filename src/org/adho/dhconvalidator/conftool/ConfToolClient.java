@@ -172,7 +172,6 @@ public class ConfToolClient {
 		try (InputStream resultStream = result.getStream()) {
 			Builder builder = new Builder();
 			Document resultDoc = builder.build(resultStream);
-			System.out.println(resultDoc.toXML());
 			if (getLoginResult(resultDoc) == LOGIN_SUCCESS) {
 				return getUser(resultDoc);
 			}
@@ -207,14 +206,5 @@ public class ConfToolClient {
 	private String getMessage(Document resultDoc) {
 		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/message");
 		return resultElement.getValue();
-	}
-	
-	public static void main(String[] args) {
-		try {
-			System.out.println(new ConfToolClient("https://www.conftool.net/demo/dh2015_26a/rest.php", "DHhed8QD15".toCharArray()).getExportData(ExportType.users, new User(979, "mpetris")).toXML());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }

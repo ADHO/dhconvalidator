@@ -74,11 +74,8 @@ public class OxGarageConversionClient {
 				conversion.appendChild(property);
 			}
 
-			printDocument(propertyDoc);
-			
 			uri += "?properties=" + propertyDoc.getRootElement().toXML();
 		}
-		System.out.println(uri);
 		
 		ClientResource client = new ClientResource(Context.getCurrent(), Method.POST, uri);
 
@@ -88,12 +85,6 @@ public class OxGarageConversionClient {
 		
 		Representation result = client.post(form);
 		return result.getStream();
-	}
-	
-	void printDocument(Document doc) throws IOException {
-		Serializer serializer = new Serializer(System.out);
-		serializer.setIndent(2);
-		serializer.write(doc);
 	}
 	
 	Document getInputDataTypes() throws IOException {
@@ -143,40 +134,4 @@ public class OxGarageConversionClient {
 		FileRepresentation fr = new FileRepresentation(file, MediaType.APPLICATION_ALL);
 		return convert(fr, conversionPath, properties);
 	}
-	
-	public static void main(String[] args) {
-		try {
-			OxGarageConversionClient oxclient = 
-				new OxGarageConversionClient("http://85.214.78.116:8080/ege-webservice/");
-			
-//			System.out.println(oxclient.convertToString(
-//					new File("testdata/odttest1.odt"),
-//					ConversionPath.ODT_TO_TEI));
-
-//			try (FileInputStream fis = new FileInputStream("testdata/bare_jnrl.html")) {
-//				new HTMLToXHTMLConverter().convert(fis, System.out);
-//			}
-//					
-//			
-//			System.out.println(oxclient.convertToString(
-//					new File("testdata/acl2014.xhtml"),
-//					ConversionPath.XHTML_TO_TEI,
-//					ConversionPath.XHTML_TO_TEI.getDefaultProperties()));
-//			
-//			System.out.println(oxclient.convertToString(
-//				new File("testdata/result_odt3.xml"),
-//				ConversionPath.TEI_TO_XHTML,
-//				ConversionPath.TEI_TO_XHTML.getDefaultProperties()));
-
-//			oxclient.printDocument(oxclient.getInputDataTypes());
-			oxclient.printDocument(oxclient.getConversions(Type.ODT));
-//			oxclient.printDocument(oxclient.getConversions(Type.XHTML));
-//			oxclient.printDocument(oxclient.getConversions(Type.TEI));
-			
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 }

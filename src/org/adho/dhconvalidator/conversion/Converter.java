@@ -1,9 +1,18 @@
 package org.adho.dhconvalidator.conversion;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.validation.SchemaFactory;
+
+import nu.xom.Builder;
 import nu.xom.Document;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
 import org.adho.dhconvalidator.conftool.Paper;
@@ -14,10 +23,13 @@ import org.adho.dhconvalidator.conversion.output.OutputConverter;
 import org.adho.dhconvalidator.conversion.output.OutputConverterFactory;
 import org.adho.dhconvalidator.conversion.oxgarage.OxGarageConversionClient;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
+import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.util.DocumentLog;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
-//TODO: logging, print statements
+//TODO: logging
 //TODO: validation: schema
-//TODO: validation: image resolution
 //TODO: validation: warning no titles
 //TODO: centerpanel about link/box
 public class Converter {
@@ -32,13 +44,15 @@ public class Converter {
 
 	public ZipResult convert(
 			byte[] sourceData, ConversionPath toTeiConversionPath, 
-			User user, String inputFilename) throws IOException {
+			User user, String inputFilename, ConversionProgressListener progressListener) throws IOException {
 
+		progressListener.setProgress("Getting the latest ConfTool data and preparing input...");
 		InputConverterFactory inputConverterFactory = toTeiConversionPath.getInputConverterFactory();
 		InputConverter	inputConverter = inputConverterFactory.createInputConverter();
 		sourceData = inputConverter.convert(sourceData, user);		
 		Paper paper = inputConverter.getPaper();
 		
+		progressListener.setProgress("Doing conversion via OxGarage...");
 		OxGarageConversionClient oxGarageConversionClient = new OxGarageConversionClient(baseURL);
 	
 		ZipResult zipResult = new ZipResult(oxGarageConversionClient.convert(
@@ -49,39 +63,65 @@ public class Converter {
 		
 		document = zipResult.getDocument();
 		
-		ByteArrayOutputStream pre = new ByteArrayOutputStream();
+		DocumentLog.logConversionStepOutput("pre output conversion:", document.toXML());
 		
-		Serializer serializerPre = new Serializer(pre);
-		serializerPre.setIndent(2);
-		serializerPre.write(document);
-		System.out.println(pre.toString("UTF-8"));
-		
+		progressListener.setProgress("Finalizing output format...");
 		OutputConverterFactory outputConverterFactory = 
 				toTeiConversionPath.getOutputConverterFactory(); 
 		OutputConverter outputConverter = outputConverterFactory.createOutputConverter();
 		outputConverter.convert(document, user, paper);
-
+		outputConverter.convert(zipResult);
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		
 		Serializer serializer = new Serializer(bos);
 		serializer.setIndent(2);
 		serializer.write(document);
-		System.out.println(bos.toString("UTF-8"));
+		
+		validateDocument(bos, progressListener);
+		
+		DocumentLog.logConversionStepOutput("post output conversion:", bos.toString("UTF-8"));
 
-//		try (FileOutputStream fos = new FileOutputStream("c://test/converted.xml")) {
-//			fos.write(bos.toByteArray());
-//		}
-
+		progressListener.setProgress("Converting output to HTML for visual feedback...");
 		contentAsXhtml = oxGarageConversionClient.convertToString(
 				bos.toByteArray(), 
 				ConversionPath.TEI_TO_XHTML,
 				ConversionPath.TEI_TO_XHTML.getDefaultProperties());
-		System.out.println(contentAsXhtml);
+
+		DocumentLog.logConversionStepOutput("post xhtml conversion", contentAsXhtml);
 	
 		return zipResult;
 	}
 	
+	private void validateDocument(ByteArrayOutputStream bos, ConversionProgressListener progressListener) throws IOException {
+		if (PropertyKey.performSchemaValidation.isTrue()) {
+			try {
+				progressListener.setProgress("Validating output...");
+				SAXParserFactory factory = SAXParserFactory.newInstance();
+				factory.setValidating(false);
+				factory.setNamespaceAware(true);
+	
+				URL xsdResource = 
+					Thread.currentThread().getContextClassLoader().getResource(
+							"/schema/dhconvalidator.xsd");
+				
+				SchemaFactory schemaFactory = 
+						SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+				factory.setSchema(schemaFactory.newSchema(xsdResource));
+
+				SAXParser parser = factory.newSAXParser();
+				XMLReader reader = parser.getXMLReader();
+				reader.setErrorHandler(new ValidateConversionErrorHandler());
+	
+				Builder builder = new Builder(reader);
+				builder.build(new ByteArrayInputStream(bos.toByteArray()));
+			}
+			catch (ParsingException | ParserConfigurationException | SAXException e) {
+				throw new IOException(e);
+			}
+		}
+	}
+
 	public Document getDocument() {
 		return document;
 	}

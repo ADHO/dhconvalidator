@@ -80,7 +80,7 @@ public class DHConvalidatorExample extends UI {
 				buffer);
 			
 			preview.setValue(buffer.toString("UTF-8"));
-			
+
 			Page.getCurrent().setTitle("DHConvalidator Example");
 		}
 		catch(Exception e) {

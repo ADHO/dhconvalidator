@@ -46,6 +46,10 @@ public class ZipFs {
 	public Document getDocument(String path) throws IOException {
 		Builder builder = new Builder();
 		try {
+			byte[] documentData = content.get(path);
+			if (documentData == null) {
+				throw new IOException("The document is invalid, cannot find " + path);
+			}
 			return builder.build(new ByteArrayInputStream(content.get(path)));
 		} catch (ParsingException e) {
 			throw new IOException(e);

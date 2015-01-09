@@ -1,6 +1,12 @@
 package org.adho.dhconvalidator.conversion.output;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import javax.imageio.ImageIO;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -13,6 +19,7 @@ import nu.xom.XPathContext;
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.TeiNamespace;
+import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentUtil;
 import org.adho.dhconvalidator.util.Pair;
@@ -200,5 +207,47 @@ public class CommonOutputConverter implements OutputConverter {
 		}
 		
 	}
+	
+	@Override
+	public void convert(ZipResult zipResult) throws IOException {
+		checkImages(zipResult);
+	}
 
+	private void checkImages(ZipResult zipResult) throws IOException {
+		
+		List<String> externalPicturesPaths = 
+			zipResult.getExternalResourcePathsStartsWith(
+					PropertyKey.tei_image_location.getValue().substring(1));//strip leading slash
+		if (!externalPicturesPaths.isEmpty()) {
+			int minWidth = 
+				Integer.valueOf(PropertyKey.image_min_resolution_width.getValue());
+			int minHeight = 
+				Integer.valueOf(PropertyKey.image_min_resolution_height.getValue());
+
+			for (String picturePath : externalPicturesPaths) {
+				byte[] pictureData = zipResult.getExternalResource(picturePath);
+				BufferedImage bimg = ImageIO.read(new ByteArrayInputStream(pictureData));
+				int width = bimg.getWidth();
+				int height = bimg.getHeight();
+				
+				if ((width < minWidth) || (height < minHeight)) {
+					throw new IOException(
+						"One or more images does not have the required min. resolution ("
+							+minWidth+"x"+minHeight
+							+")! Please use images with better quality.");
+				}
+			}
+		}
+		
+	}
+
+	protected void adjustImagePath(ZipResult zipResult, String oldPathPart, String newPathPart) {
+		if (!oldPathPart.equals(newPathPart)) {
+			List<String> externalResourceNames = zipResult.getExternalResourcePathsStartsWith(oldPathPart);
+			for (String oldName : externalResourceNames) {
+				zipResult.moveExternalResource(
+					oldName, oldName.replaceFirst(Pattern.quote(oldPathPart), newPathPart));
+			}
+		}
+	}
 }

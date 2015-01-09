@@ -1,6 +1,5 @@
 package org.adho.dhconvalidator.conversion.input.docx;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -8,7 +7,6 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Nodes;
-import nu.xom.Serializer;
 import nu.xom.XPathContext;
 
 import org.adho.dhconvalidator.conftool.ConfToolClient;
@@ -19,6 +17,7 @@ import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.conversion.input.docx.paragraphparser.ParagraphParser;
 import org.adho.dhconvalidator.util.DocumentUtil;
+import org.adho.dhconvalidator.util.DocumentLog;
 import org.adho.dhconvalidator.util.Pair;
 
 public class DocxInputConverter implements InputConverter {
@@ -70,13 +69,8 @@ public class DocxInputConverter implements InputConverter {
 		
 		zipFs.putDocument("word/document.xml", document);
 
-		ByteArrayOutputStream pre = new ByteArrayOutputStream();
-		
-		Serializer serializerPre = new Serializer(pre);
-		serializerPre.setIndent(2);
-		serializerPre.write(document);
-		System.out.println(pre.toString("UTF-8"));
-		
+		DocumentLog.logConversionStepOutput("post docx innput conversion", document.toXML());
+
 		Document customPropDoc = zipFs.getDocument("docProps/custom.xml");
 		Integer paperId = getPaperIdFromMeta(customPropDoc);
 		paper = new ConfToolClient().getPaper(user, paperId);

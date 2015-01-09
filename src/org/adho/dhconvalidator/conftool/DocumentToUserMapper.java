@@ -7,8 +7,6 @@ import nu.xom.Elements;
 public class DocumentToUserMapper {
 
 	public User getUser(Document document) {
-		System.out.println(document.toXML());
-		
 		Elements userElements = 
 				document.getRootElement().getChildElements("user");
 		

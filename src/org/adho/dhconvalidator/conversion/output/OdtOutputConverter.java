@@ -11,6 +11,8 @@ import nu.xom.Nodes;
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.TeiNamespace;
+import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
+import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentUtil;
 
 public class OdtOutputConverter extends CommonOutputConverter {
@@ -95,4 +97,9 @@ public class OdtOutputConverter extends CommonOutputConverter {
 		}
 	}
 
+	@Override
+	public void convert(ZipResult zipResult) throws IOException {
+		adjustImagePath(zipResult, "Pictures", PropertyKey.tei_image_location.getValue().substring(1));
+		super.convert(zipResult);
+	}
 }

@@ -4,8 +4,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -29,7 +31,6 @@ public class ZipResult {
 	}
 	
 	public ZipResult(InputStream is, String documentName) throws IOException {
-		this.documentName = documentName;
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		IOUtils.copy(is, buffer);
 		
@@ -40,6 +41,9 @@ public class ZipResult {
 		else {
 			externalResources = Collections.emptyMap();
 			buildDocument(buffer);
+		}
+		if (documentName != null) {
+			this.documentName = documentName;
 		}
 	}
 
@@ -88,6 +92,10 @@ public class ZipResult {
 		return externalResources.get(resourceKey);
 	}
 	
+	public void moveExternalResource(String oldResourceKey, String newResourceKey) {
+		externalResources.put(newResourceKey, externalResources.remove(oldResourceKey));
+	}
+
 	public byte[] toZipData() throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		
@@ -109,5 +117,15 @@ public class ZipResult {
 		}
 		
 		return bos.toByteArray();
+	}
+
+	public List<String> getExternalResourcePathsStartsWith(String pathPart) {
+		ArrayList<String> result = new ArrayList<>();
+		for (String path : externalResources.keySet()) {
+			if (path.startsWith(pathPart)) {
+				result.add(path);
+			}
+		}
+		return Collections.unmodifiableList(result);
 	}
 }

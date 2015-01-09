@@ -10,9 +10,11 @@ import java.util.logging.Logger;
 
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.ConversionPath;
+import org.adho.dhconvalidator.conversion.ConversionProgressListener;
 import org.adho.dhconvalidator.conversion.Converter;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.util.Pair;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -44,6 +46,10 @@ import com.vaadin.ui.Upload.SucceededListener;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
+import de.catma.backgroundservice.DefaultProgressCallable;
+import de.catma.backgroundservice.ExecutionListener;
+import de.catma.backgroundservice.ProgressListener;
+
 public class ConverterPanel extends VerticalLayout implements View {
 	
 	private static final Logger LOGGER = Logger.getLogger(ConverterPanel.class.getName());
@@ -72,7 +78,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 			@Override
 			public void uploadSucceeded(SucceededEvent event) {
 				try {
-					byte[] uploadData = uploadContent.toByteArray();
+					final byte[] uploadData = uploadContent.toByteArray();
 					if (uploadData.length == 0) {
 						Notification.show(
 							"Info", 
@@ -81,31 +87,75 @@ public class ConverterPanel extends VerticalLayout implements View {
 					}
 					else {
 						appendLogMessage("Starting conversion...");
-						Converter converter =
-								new Converter(
-									PropertyKey.oxgarage_url.getValue());
-						
-						ZipResult zipResult = converter.convert(
-							uploadData, 
-							ConversionPath.getConvertionPathByFilename(filename),
-							(User)VaadinSession.getCurrent().getAttribute(
-									SessionStorageKey.USER.name()),
-							filename);
-						appendLogMessage("Finished conversion.");
-						VaadinSession.getCurrent().setAttribute(
-								SessionStorageKey.ZIPRESULT.name(), zipResult);
-						System.out.println(converter.getContentAsXhtml());
-						appendLogMessage("Result rendered in preview");
-						
-						preview.setValue(converter.getContentAsXhtml());
-						resultCaption.setValue("Preview and Conversion log for " + filename );
-						prepareForResultDownload();
+						((DHConvalidatorServices)UI.getCurrent()).getBackgroundService().submit(
+							new DefaultProgressCallable<Pair<ZipResult, String>>() {
+								@Override
+								public Pair<ZipResult, String> call() throws Exception {
+									Converter converter =
+											new Converter(
+												PropertyKey.oxgarage_url.getValue());
+									
+									ZipResult zipResult = converter.convert(
+										uploadData, 
+										ConversionPath.getConvertionPathByFilename(filename),
+										(User)VaadinSession.getCurrent().getAttribute(
+												SessionStorageKey.USER.name()),
+										filename,
+										new ConversionProgressListener() {
+											
+											@Override
+											public void setProgress(String msg) {
+												getProgressListener().setProgress(msg);
+											}
+										});
+									
+									return new Pair<ZipResult, String>(
+										zipResult, converter.getContentAsXhtml());
+								}
+							},
+							new ExecutionListener<Pair<ZipResult, String>>() {
+								@Override
+								public void done(
+										Pair<ZipResult, String> result) {
+									VaadinSession.getCurrent().setAttribute(
+											SessionStorageKey.ZIPRESULT.name(), result.getFirst());
+									
+									appendLogMessage("Finished conversion.");
+									
+									preview.setValue(result.getSecond());
+									resultCaption.setValue("Preview and Conversion log for " + filename );
+									prepareForResultDownload();
+									progressBar.setVisible(false);
+								}
+								@Override
+								public void error(Throwable t) {
+									LOGGER.log(Level.SEVERE, "error converting document", t);
+									String message = t.getLocalizedMessage();
+									if (message == null) {
+										message = "There seems to be a problem with your document. "
+												+ "Are you sure you used one of our templates?";
+									}
+									appendLogMessage("ERROR: " + message);
+									progressBar.setVisible(false);
+								}
+							},
+							new ProgressListener() {
+								
+								@Override
+								public void setProgress(String value, Object... args) {
+									appendLogMessage(value);
+								}
+							});
 					}
 				} catch (Exception e) {
 					LOGGER.log(Level.SEVERE, "error converting document", e);
-					appendLogMessage("ERROR: " + e.getMessage());
+					String message = e.getLocalizedMessage();
+					if (message == null) {
+						message = "There seems to be a problem with your document. "
+								+ "Are you sure you used one of our templates?";
+					}
+					appendLogMessage("ERROR: " + message);
 				}
-				progressBar.setVisible(false);
 			}
 		});
 		upload.addStartedListener(new StartedListener() {
@@ -140,16 +190,15 @@ public class ConverterPanel extends VerticalLayout implements View {
 		}
 		
 		StreamResource resultStreamResource = 
-				new StreamResource(
-						new StreamSource() {
-					
-							@Override
-							public InputStream getStream() {
-								return createResultStream();
-							}
-						}, filename.substring(0, filename.lastIndexOf('.')) + ".dhc" ) {
-					
-				};
+			new StreamResource(
+				new StreamSource() {
+			
+					@Override
+					public InputStream getStream() {
+						return createResultStream();
+					}
+				}, filename.substring(0, filename.lastIndexOf('.')) + ".dhc" );
+		
 		resultStreamResource.setCacheTime(0);
 		
 		currentFileDownloader = new FileDownloader(resultStreamResource);
@@ -196,7 +245,8 @@ public class ConverterPanel extends VerticalLayout implements View {
 				public OutputStream receiveUpload(String filename,
 						String mimeType) {
 					ConverterPanel.this.filename = filename;
-					ConverterPanel.this.uploadContent = new ByteArrayOutputStream(); 
+					ConverterPanel.this.uploadContent = new ByteArrayOutputStream();
+					
 					return ConverterPanel.this.uploadContent;
 				}
 			});
@@ -237,7 +287,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 		
 		downloadInfo = new Label("If the preview looks like what you "
 				+ "meant hit the 'Download result' button "
-				+ "and upload the ZIP file to ConfTool:");
+				+ "and upload the .dhc result file to ConfTool:");
 		rightPanel.addComponent(downloadInfo);
 		downloadInfo.setVisible(false);
 		
