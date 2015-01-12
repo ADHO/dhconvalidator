@@ -15,6 +15,7 @@ import nu.xom.Document;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
@@ -28,10 +29,6 @@ import org.adho.dhconvalidator.util.DocumentLog;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-//TODO: logging
-//TODO: validation: schema
-//TODO: validation: warning no titles
-//TODO: centerpanel about link/box
 public class Converter {
 
 	private String contentAsXhtml;
@@ -46,26 +43,26 @@ public class Converter {
 			byte[] sourceData, ConversionPath toTeiConversionPath, 
 			User user, String inputFilename, ConversionProgressListener progressListener) throws IOException {
 
-		progressListener.setProgress("Getting the latest ConfTool data and preparing input...");
+		progressListener.setProgress(Messages.getString("Converter.progress1")); //$NON-NLS-1$
 		InputConverterFactory inputConverterFactory = toTeiConversionPath.getInputConverterFactory();
 		InputConverter	inputConverter = inputConverterFactory.createInputConverter();
 		sourceData = inputConverter.convert(sourceData, user);		
 		Paper paper = inputConverter.getPaper();
 		
-		progressListener.setProgress("Doing conversion via OxGarage...");
+		progressListener.setProgress(Messages.getString("Converter.progress2")); //$NON-NLS-1$
 		OxGarageConversionClient oxGarageConversionClient = new OxGarageConversionClient(baseURL);
 	
 		ZipResult zipResult = new ZipResult(oxGarageConversionClient.convert(
 				sourceData, 
 				toTeiConversionPath, 
 				toTeiConversionPath.getDefaultProperties()),
-				inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".xml");
+				inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".xml"); //$NON-NLS-1$
 		
 		document = zipResult.getDocument();
 		
-		DocumentLog.logConversionStepOutput("pre output conversion:", document.toXML());
+		DocumentLog.logConversionStepOutput(Messages.getString("Converter.log1"), document.toXML()); //$NON-NLS-1$
 		
-		progressListener.setProgress("Finalizing output format...");
+		progressListener.setProgress(Messages.getString("Converter.progress3")); //$NON-NLS-1$
 		OutputConverterFactory outputConverterFactory = 
 				toTeiConversionPath.getOutputConverterFactory(); 
 		OutputConverter outputConverter = outputConverterFactory.createOutputConverter();
@@ -80,33 +77,37 @@ public class Converter {
 		
 		validateDocument(bos, progressListener);
 		
-		DocumentLog.logConversionStepOutput("post output conversion:", bos.toString("UTF-8"));
+		DocumentLog.logConversionStepOutput(Messages.getString("Converter.log2"), bos.toString("UTF-8")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		progressListener.setProgress("Converting output to HTML for visual feedback...");
+		progressListener.setProgress(Messages.getString("Converter.progress4")); //$NON-NLS-1$
 		contentAsXhtml = oxGarageConversionClient.convertToString(
 				bos.toByteArray(), 
 				ConversionPath.TEI_TO_XHTML,
 				ConversionPath.TEI_TO_XHTML.getDefaultProperties());
 
-		DocumentLog.logConversionStepOutput("post xhtml conversion", contentAsXhtml);
-	
+		DocumentLog.logConversionStepOutput(Messages.getString("Converter.log3"), contentAsXhtml); //$NON-NLS-1$
+		
+		zipResult.putResource(
+			inputFilename.substring(0, inputFilename.lastIndexOf('.')) + ".html", 
+			contentAsXhtml.getBytes("UTF-8"));
+		
 		return zipResult;
 	}
 	
 	private void validateDocument(ByteArrayOutputStream bos, ConversionProgressListener progressListener) throws IOException {
 		if (PropertyKey.performSchemaValidation.isTrue()) {
 			try {
-				progressListener.setProgress("Validating output...");
+				progressListener.setProgress(Messages.getString("Converter.progress5")); //$NON-NLS-1$
 				SAXParserFactory factory = SAXParserFactory.newInstance();
 				factory.setValidating(false);
 				factory.setNamespaceAware(true);
 	
 				URL xsdResource = 
 					Thread.currentThread().getContextClassLoader().getResource(
-							"/schema/dhconvalidator.xsd");
+							"/schema/dhconvalidator.xsd"); //$NON-NLS-1$
 				
 				SchemaFactory schemaFactory = 
-						SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+						SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema"); //$NON-NLS-1$
 				factory.setSchema(schemaFactory.newSchema(xsdResource));
 
 				SAXParser parser = factory.newSAXParser();

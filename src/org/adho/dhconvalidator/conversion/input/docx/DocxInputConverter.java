@@ -9,6 +9,7 @@ import nu.xom.Elements;
 import nu.xom.Nodes;
 import nu.xom.XPathContext;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conftool.ConfToolClient;
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
@@ -22,8 +23,8 @@ import org.adho.dhconvalidator.util.Pair;
 
 public class DocxInputConverter implements InputConverter {
 	public enum Namespace {
-		MAIN("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"),
-		DOCPROPSVTYPES("vt", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"),
+		MAIN("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), //$NON-NLS-1$ //$NON-NLS-2$
+		DOCPROPSVTYPES("vt", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"), //$NON-NLS-1$ //$NON-NLS-2$
 		;
 		private String name;
 		private String uri;
@@ -42,7 +43,7 @@ public class DocxInputConverter implements InputConverter {
 		}
 	}
 
-	private static final String TEMPLATE = "template/DH_template_v3.docx";
+	private static final String TEMPLATE = "template/DH_template_v3.docx"; //$NON-NLS-1$
 	
 	private XPathContext xPathContext;
 	private Paper paper;
@@ -61,17 +62,17 @@ public class DocxInputConverter implements InputConverter {
 	public byte[] convert(byte[] sourceData, User user) throws IOException {
 		ZipFs zipFs = new ZipFs(sourceData);
 
-		Document document = zipFs.getDocument("word/document.xml");
+		Document document = zipFs.getDocument("word/document.xml"); //$NON-NLS-1$
 
 		cleanupParagraphStyles(document);
 		stripTemplateSections(document);
 		ensureNumberedHeading(document);
 		
-		zipFs.putDocument("word/document.xml", document);
+		zipFs.putDocument("word/document.xml", document); //$NON-NLS-1$
 
-		DocumentLog.logConversionStepOutput("post docx innput conversion", document.toXML());
+		DocumentLog.logConversionStepOutput(Messages.getString("DocxInputConverter.log1"), document.toXML()); //$NON-NLS-1$
 
-		Document customPropDoc = zipFs.getDocument("docProps/custom.xml");
+		Document customPropDoc = zipFs.getDocument("docProps/custom.xml"); //$NON-NLS-1$
 		Integer paperId = getPaperIdFromMeta(customPropDoc);
 		paper = new ConfToolClient().getPaper(user, paperId);
 
@@ -79,10 +80,10 @@ public class DocxInputConverter implements InputConverter {
 	}
 
 	private void ensureNumberedHeading(Document document) {
-		Nodes searchResult = document.query("//w:pStyle[@w:val='DH-Heading']", xPathContext);
+		Nodes searchResult = document.query("//w:pStyle[@w:val='DH-Heading']", xPathContext); //$NON-NLS-1$
 		for (int i=0; i<searchResult.size(); i++) {
 			Element styleElement = (Element) searchResult.get(i);
-			styleElement.getAttribute("val", Namespace.MAIN.toUri()).setValue("DH-Heading1");
+			styleElement.getAttribute("val", Namespace.MAIN.toUri()).setValue("DH-Heading1"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -92,7 +93,7 @@ public class DocxInputConverter implements InputConverter {
 		
 		Element subtitleStyleElement =
 			DocumentUtil.tryFirstMatch(
-				document, "/w:document/w:body/w:p/w:pPr/w:pStyle[@w:val='DH-Subtitle']", 
+				document, "/w:document/w:body/w:p/w:pPr/w:pStyle[@w:val='DH-Subtitle']",  //$NON-NLS-1$
 				xPathContext);
 
 		if (subtitleStyleElement != null) {
@@ -100,29 +101,29 @@ public class DocxInputConverter implements InputConverter {
 			//we put the subtitle as a preliminary title and handle the 
 			// title stuff later when merging with the ConfTool data
 			subtitleStyleElement.getAttribute(
-					"val", 
-					DocxInputConverter.Namespace.MAIN.toUri()).setValue("Title");
+					"val",  //$NON-NLS-1$
+					DocxInputConverter.Namespace.MAIN.toUri()).setValue("Title"); //$NON-NLS-1$
 		}
 	}
 
 	private void cleanupParagraphStyles(Document document) {
 		Nodes searchResult = 
-				document.query("//w:pPr/w:rPr", xPathContext);
+				document.query("//w:pPr/w:rPr", xPathContext); //$NON-NLS-1$
 		// remove region properties from paragraphs, they are not supported 
 		for (int i=0; i<searchResult.size(); i++) {
 			Element element = (Element) searchResult.get(i);
 			element.getParent().removeChild(element);
 		}
 
-		searchResult = document.query("//w:p", xPathContext);
+		searchResult = document.query("//w:p", xPathContext); //$NON-NLS-1$
 		
 		for (int i=0; i<searchResult.size(); i++) {
 			Element paragraphElement = (Element) searchResult.get(i);
-			Elements regions = paragraphElement.getChildElements("r", Namespace.MAIN.toUri());
+			Elements regions = paragraphElement.getChildElements("r", Namespace.MAIN.toUri()); //$NON-NLS-1$
 			// there is only one region...
 			if (regions.size() == 1) {
 				Element region = regions.get(0);
-				Element regionProps = region.getFirstChildElement("rPr", Namespace.MAIN.toUri());
+				Element regionProps = region.getFirstChildElement("rPr", Namespace.MAIN.toUri()); //$NON-NLS-1$
 				if (regionProps != null) {
 					// ... and it contains region properties. This looks like a trick to avoid proper head styles
 					// so we remove the properties.
@@ -137,16 +138,16 @@ public class DocxInputConverter implements InputConverter {
 		Element propertyElement = 
 				DocumentUtil.tryFirstMatch(
 					customPropDoc, 
-					"//*[@name='ConfToolPaperID']/vt:lpwstr", 
+					"//*[@name='ConfToolPaperID']/vt:lpwstr",  //$NON-NLS-1$
 					xPathContext);
 		if (propertyElement == null) {
-			throw new IOException("document property ConfToolPaperID not found");
+			throw new IOException("DocxInputConverter.confToolPaperIDNotFound"); //$NON-NLS-1$
 		}
 		try {
 			return Integer.valueOf(propertyElement.getValue());
 		}
 		catch (NumberFormatException nfe) {
-			throw new IOException("invalid ConfToolPaperID", nfe);
+			throw new IOException(Messages.getString("DocxInputConverter.invalidConvToolPaperID"), nfe); //$NON-NLS-1$
 
 		}
 	}
@@ -156,19 +157,19 @@ public class DocxInputConverter implements InputConverter {
 		ZipFs zipFs = 
 			new ZipFs(
 				Thread.currentThread().getContextClassLoader().getResourceAsStream(TEMPLATE));
-		Document document = zipFs.getDocument("word/document.xml");
+		Document document = zipFs.getDocument("word/document.xml"); //$NON-NLS-1$
 		
 		injectTitleIntoContent(document, paper.getTitle());
 		injectAuthorsIntoContent(document, paper.getAuthorsAndAffiliations());
 		
-		zipFs.putDocument("word/document.xml", document);
+		zipFs.putDocument("word/document.xml", document); //$NON-NLS-1$
 
 		
-		Document customPropDoc = zipFs.getDocument("docProps/custom.xml");
+		Document customPropDoc = zipFs.getDocument("docProps/custom.xml"); //$NON-NLS-1$
 		
 		injectPaperIdIntoMeta(customPropDoc, paper.getPaperId());
 		
-		zipFs.putDocument("docProps/custom.xml", customPropDoc);
+		zipFs.putDocument("docProps/custom.xml", customPropDoc); //$NON-NLS-1$
 		
 		return zipFs.toZipData();
 	}
@@ -177,7 +178,7 @@ public class DocxInputConverter implements InputConverter {
 		Element propertyElement = 
 			DocumentUtil.getFirstMatch(
 				customPropDoc, 
-				"//*[@name='ConfToolPaperID']/vt:lpwstr", 
+				"//*[@name='ConfToolPaperID']/vt:lpwstr",  //$NON-NLS-1$
 				xPathContext);
 
 		propertyElement.removeChildren();
@@ -187,12 +188,13 @@ public class DocxInputConverter implements InputConverter {
 	private void injectAuthorsIntoContent(Document document,
 			List<Pair<String, String>> authorsAndAffiliations) throws IOException {
 		Nodes searchResult = 
-				document.query("//w:pStyle[@w:val='DH-AuthorAffiliation']", xPathContext);
+				document.query("//w:pStyle[@w:val='DH-AuthorAffiliation']", xPathContext); //$NON-NLS-1$
 		
 		if (searchResult.size() != 1) {
 			throw new IOException(
-				"template error, could not find exactly one author/affiliation style element, "
-				+ "found " + searchResult.size());
+				Messages.getString(
+						"DocxInputConverter.templateerror1", //$NON-NLS-1$
+						searchResult.size())); 
 		}
 		
 		Element authorStyleElement = (Element) searchResult.get(0);
@@ -204,11 +206,11 @@ public class DocxInputConverter implements InputConverter {
 			Element curAuthorParagraphElement = (Element) authorParagraphElement.copy();
 			
 			Element authorElement = DocumentUtil.getFirstMatch(
-					curAuthorParagraphElement, "w:r/w:t", xPathContext);
+					curAuthorParagraphElement, "w:r/w:t", xPathContext); //$NON-NLS-1$
 			
 			authorElement.removeChildren();
 			authorElement.appendChild(
-				authorAffiliation.getFirst() + ", " + authorAffiliation.getSecond());
+				authorAffiliation.getFirst() + ", " + authorAffiliation.getSecond()); //$NON-NLS-1$
 			paragraphParent.insertChild(curAuthorParagraphElement, insertPosition);
 			insertPosition++;
 		}
@@ -218,19 +220,20 @@ public class DocxInputConverter implements InputConverter {
 	}
 
 	private void injectTitleIntoContent(Document document, String title) throws IOException {
-		Nodes searchResult = document.query("//w:pStyle[@w:val='DH-Title']", xPathContext);
+		Nodes searchResult = document.query("//w:pStyle[@w:val='DH-Title']", xPathContext); //$NON-NLS-1$
 		
 		if (searchResult.size() != 2) {
 			throw new IOException(
-				"template error, could not find 2 title style elements, found " 
-						+ searchResult.size());
+				Messages.getString(
+					"DocxInputConverter.templateerror2",  //$NON-NLS-1$
+					searchResult.size()));
 		}
 		
 		Element titleStyleElement = (Element) searchResult.get(1);// we want the second hit
 		Element titlParagraphElement = (Element) titleStyleElement.getParent().getParent();
 		
 		Element titleElement = DocumentUtil.getFirstMatch(
-				titlParagraphElement, "w:r/w:t", xPathContext);
+				titlParagraphElement, "w:r/w:t", xPathContext); //$NON-NLS-1$
 		
 		titleElement.removeChildren();
 		titleElement.appendChild(title);

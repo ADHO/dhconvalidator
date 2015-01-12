@@ -16,6 +16,7 @@ import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.XPathContext;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.TeiNamespace;
@@ -45,54 +46,54 @@ public class CommonOutputConverter implements OutputConverter {
 	private void makeProfileDesc(Document document, Paper paper) {
 		Element headerElement = DocumentUtil.getFirstMatch(
 				document, 
-				"/tei:TEI/tei:teiHeader", 
+				"/tei:TEI/tei:teiHeader",  //$NON-NLS-1$
 				xPathContext);
 		
 		Element oldProfileDescElement = 
-				headerElement.getFirstChildElement("profileDesc", TeiNamespace.TEI.toUri());
+				headerElement.getFirstChildElement("profileDesc", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 
-		Element profileDescElement = new Element("profileDesc", TeiNamespace.TEI.toUri());
+		Element profileDescElement = new Element("profileDesc", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 		
-		Element textClassElement = new Element("textClass", TeiNamespace.TEI.toUri());
+		Element textClassElement = new Element("textClass", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 		profileDescElement.appendChild(textClassElement);
 		
-		Element keywordsCategoryElement = new Element("keywords", TeiNamespace.TEI.toUri());
-		keywordsCategoryElement.addAttribute(new Attribute("scheme", "ConfTool"));
-		keywordsCategoryElement.addAttribute(new Attribute("n", "category"));
-		Element paperTermElement = new Element("term", TeiNamespace.TEI.toUri());
-		paperTermElement.appendChild("Paper");
+		Element keywordsCategoryElement = new Element("keywords", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+		keywordsCategoryElement.addAttribute(new Attribute("scheme", "ConfTool")); //$NON-NLS-1$ //$NON-NLS-2$
+		keywordsCategoryElement.addAttribute(new Attribute("n", "category")); //$NON-NLS-1$ //$NON-NLS-2$
+		Element paperTermElement = new Element("term", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+		paperTermElement.appendChild("Paper"); //$NON-NLS-1$
 		keywordsCategoryElement.appendChild(paperTermElement);
 		textClassElement.appendChild(keywordsCategoryElement);
 		
-		Element keywordsSubcategoryElement = new Element("keywords", TeiNamespace.TEI.toUri());
-		keywordsSubcategoryElement.addAttribute(new Attribute("scheme", "ConfTool"));
-		keywordsSubcategoryElement.addAttribute(new Attribute("n", "subcategory"));
-		Element confToolTypeTermElement = new Element("term", TeiNamespace.TEI.toUri());
+		Element keywordsSubcategoryElement = new Element("keywords", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+		keywordsSubcategoryElement.addAttribute(new Attribute("scheme", "ConfTool")); //$NON-NLS-1$ //$NON-NLS-2$
+		keywordsSubcategoryElement.addAttribute(new Attribute("n", "subcategory")); //$NON-NLS-1$ //$NON-NLS-2$
+		Element confToolTypeTermElement = new Element("term", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 		confToolTypeTermElement.appendChild(paper.getContributionType());
 		keywordsSubcategoryElement.appendChild(confToolTypeTermElement);
 		textClassElement.appendChild(keywordsSubcategoryElement);
 
 		if (paper.getKeywords().size() > 0) {
-			Element confToolKeywordsElement = new Element("keywords", TeiNamespace.TEI.toUri());
-			confToolKeywordsElement.addAttribute(new Attribute("scheme", "ConfTool"));
-			confToolKeywordsElement.addAttribute(new Attribute("n", "keywords"));
+			Element confToolKeywordsElement = new Element("keywords", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+			confToolKeywordsElement.addAttribute(new Attribute("scheme", "ConfTool")); //$NON-NLS-1$ //$NON-NLS-2$
+			confToolKeywordsElement.addAttribute(new Attribute("n", "keywords")); //$NON-NLS-1$ //$NON-NLS-2$
 			textClassElement.appendChild(confToolKeywordsElement);
 	
 			for (String keyword : paper.getKeywords()) {
-				Element confToolKeywordsTermElement = new Element("term", TeiNamespace.TEI.toUri());
+				Element confToolKeywordsTermElement = new Element("term", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 				confToolKeywordsTermElement.appendChild(keyword);
 				confToolKeywordsElement.appendChild(confToolKeywordsTermElement);
 			}
 		}	
 		
 		if (paper.getTopics().size() > 0) {
-			Element confToolTopicsElement = new Element("keywords", TeiNamespace.TEI.toUri());
-			confToolTopicsElement.addAttribute(new Attribute("scheme", "ConfTool"));
-			confToolTopicsElement.addAttribute(new Attribute("n", "topics"));
+			Element confToolTopicsElement = new Element("keywords", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+			confToolTopicsElement.addAttribute(new Attribute("scheme", "ConfTool")); //$NON-NLS-1$ //$NON-NLS-2$
+			confToolTopicsElement.addAttribute(new Attribute("n", "topics")); //$NON-NLS-1$ //$NON-NLS-2$
 			textClassElement.appendChild(confToolTopicsElement);
 	
 			for (String topic : paper.getTopics()) {
-				Element confToolTopicsTermElement = new Element("term", TeiNamespace.TEI.toUri());
+				Element confToolTopicsTermElement = new Element("term", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 				confToolTopicsTermElement.appendChild(topic);
 				confToolTopicsElement.appendChild(confToolTopicsTermElement);
 			}
@@ -112,16 +113,16 @@ public class CommonOutputConverter implements OutputConverter {
 		
 		Element headerElement = DocumentUtil.getFirstMatch(
 				document, 
-				"/tei:TEI/tei:teiHeader", 
+				"/tei:TEI/tei:teiHeader",  //$NON-NLS-1$
 				xPathContext);
 		
 		Element oldEncodingDesc = 
-				headerElement.getFirstChildElement("encodingDesc", TeiNamespace.TEI.toUri());
+				headerElement.getFirstChildElement("encodingDesc", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 		
 		try {
 			Document encodingDescDoc = 
 				new Builder().build(
-					PropertyKey.encodingDesc.getValue().replace("{VERSION}", version),
+					PropertyKey.encodingDesc.getValue().replace("{VERSION}", version), //$NON-NLS-1$
 					TeiNamespace.TEI.toUri());
 			if (oldEncodingDesc != null) {
 				headerElement.replaceChild(
@@ -139,7 +140,7 @@ public class CommonOutputConverter implements OutputConverter {
 
 	private void removeRevisions(Document document) {
 		Nodes searchResult = document.query(
-				"/tei:TEI/tei:teiHeader/tei:revisionDesc", 
+				"/tei:TEI/tei:teiHeader/tei:revisionDesc",  //$NON-NLS-1$
 				xPathContext);
 		
 		if (searchResult.size() > 0) {
@@ -151,7 +152,7 @@ public class CommonOutputConverter implements OutputConverter {
 		
 		Element publicationStmtElement = DocumentUtil.getFirstMatch(
 				document, 
-				"/tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt", 
+				"/tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt",  //$NON-NLS-1$
 				xPathContext);
 		
 		publicationStmtElement.removeChildren();
@@ -170,35 +171,35 @@ public class CommonOutputConverter implements OutputConverter {
 	private void makeAuthorStatement(Document document, Paper paper) throws IOException {
 		Element titleStmtElement = DocumentUtil.getFirstMatch(
 				document, 
-				"/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt", 
+				"/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt",  //$NON-NLS-1$
 				xPathContext);
 		
 		Element oldAuthor = 
 				titleStmtElement.getFirstChildElement(
-						"author", TeiNamespace.TEI.toUri());
+						"author", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 		if (oldAuthor != null) {
 			oldAuthor.getParent().removeChild(oldAuthor);
 		}
 		
 		for (Pair<String,String> authorAffiliation : paper.getAuthorsAndAffiliations()) {
 			String author = authorAffiliation.getFirst();
-			if (author.contains(",")) {
-				int splitPos = author.indexOf(",");
+			if (author.contains(",")) { //$NON-NLS-1$
+				int splitPos = author.indexOf(","); //$NON-NLS-1$
 				String surname = author.substring(0, splitPos).trim();
 				String forename = author.substring(splitPos+1, author.length());
 				
-				Element authorElement = new Element("author", TeiNamespace.TEI.toUri());
-				Element persNameElement = new Element("persName", TeiNamespace.TEI.toUri());
+				Element authorElement = new Element("author", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+				Element persNameElement = new Element("persName", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 				authorElement.appendChild(persNameElement);
 				
-				Element surnameElement = new Element("surname", TeiNamespace.TEI.toUri());
+				Element surnameElement = new Element("surname", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 				surnameElement.appendChild(surname);
 				persNameElement.appendChild(surnameElement);
-				Element forenameElement = new Element("forename", TeiNamespace.TEI.toUri());
+				Element forenameElement = new Element("forename", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 				forenameElement.appendChild(forename);
 				persNameElement.appendChild(forenameElement);
 				
-				Element affiliationElement = new Element("affiliation", TeiNamespace.TEI.toUri());
+				Element affiliationElement = new Element("affiliation", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 				affiliationElement.appendChild(authorAffiliation.getSecond());
 				authorElement.appendChild(affiliationElement);
 				
@@ -232,9 +233,10 @@ public class CommonOutputConverter implements OutputConverter {
 				
 				if ((width < minWidth) || (height < minHeight)) {
 					throw new IOException(
-						"One or more images does not have the required min. resolution ("
-							+minWidth+"x"+minHeight
-							+")! Please use images with better quality.");
+						Messages.getString(
+							"CommonOutputConverter.imageerror", //$NON-NLS-1$
+							minWidth, minHeight));
+							
 				}
 			}
 		}

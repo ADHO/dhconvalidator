@@ -75,6 +75,6 @@ public class Pair<V,T> {
     
     @Override
     public String toString() {
-    	return "[" + getFirst() + "," + getSecond() + "]";
+    	return "[" + getFirst() + "," + getSecond() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

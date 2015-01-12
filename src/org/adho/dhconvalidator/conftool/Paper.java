@@ -9,13 +9,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.util.Pair;
 
 public class Paper {
 	
-	private static final String AUTHOR_PATTERN = "([^;]+)|((.*?\\((\\d+)\\);)+(.*?\\((\\d+)\\)))";
-	private static final String FIND_AUTHOR_PATTERN = "((.*?)\\((\\d+)\\));?";
-	private static final String FIND_ORGANIZATION_PATTERN = "\\s*((\\d+):)?([^;]+);?";
+	private static final String AUTHOR_PATTERN = "([^;]+)|((.*?\\((\\d+)\\);)+(.*?\\((\\d+)\\)))"; //$NON-NLS-1$
+	private static final String FIND_AUTHOR_PATTERN = "((.*?)\\((\\d+)\\));?"; //$NON-NLS-1$
+	private static final String FIND_ORGANIZATION_PATTERN = "\\s*((\\d+):)?([^;]+);?"; //$NON-NLS-1$
 
 	private Integer paperId;
 	private String title;
@@ -49,7 +50,7 @@ public class Paper {
 	
 	@Override
 	public String toString() {
-		return "#"+paperId + "["+title+"]";
+		return "#"+paperId + "["+title+"]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	public List<Pair<String, String>> getAuthorsAndAffiliations() throws IOException {
@@ -84,10 +85,9 @@ public class Paper {
 				
 				if (result.isEmpty()) {
 					throw new IOException(
-							"Unknown author/affiliation pattern: " 
-									+ authors
-									+ "/"
-									+ organisations);
+						Messages.getString(
+							"Paper.unknownAuthorAffiliationPattern", //$NON-NLS-1$
+							authors, organisations));  
 				}
 				
 				return result;
@@ -95,10 +95,9 @@ public class Paper {
 		}
 		
 		throw new IOException(
-			"Unknown author/affiliation pattern: " 
-					+ authors
-					+ "/"
-					+ organisations);
+			Messages.getString(
+				"Paper.unknownAuthorAffiliationPattern", //$NON-NLS-1$
+				authors, organisations));
 	}
 	
 	public String getContributionType() {
@@ -110,7 +109,7 @@ public class Paper {
 			return Collections.emptyList();
 		}
 		ArrayList<String> result = new ArrayList<>();
-		for (String item : items.split(",")) {
+		for (String item : items.split(",")) { //$NON-NLS-1$
 			result.add(item.trim());
 		}
 		return result;

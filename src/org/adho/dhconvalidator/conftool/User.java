@@ -39,7 +39,7 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "#"+userId+"["+userName+","+firstName+","+lastName+"]";
+		return "#"+userId+"["+userName+","+firstName+","+lastName+"]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
 
 	public void setFirstName(String firstName) {

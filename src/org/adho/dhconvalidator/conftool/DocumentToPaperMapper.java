@@ -13,25 +13,25 @@ public class DocumentToPaperMapper {
 		
 		List<Paper> result = new ArrayList<>();
 		Elements paperElements =
-			document.getRootElement().getChildElements("paper");
+			document.getRootElement().getChildElements("paper"); //$NON-NLS-1$
 		
 		for (int i=0; i<paperElements.size(); i++) {
 			Element paperElement = paperElements.get(i);
 			Integer paperId = 
-				Integer.valueOf(paperElement.getFirstChildElement("paperID").getValue());
+				Integer.valueOf(paperElement.getFirstChildElement("paperID").getValue()); //$NON-NLS-1$
 			
 			String authors = 
-					paperElement.getFirstChildElement("authors").getValue();
+					paperElement.getFirstChildElement("authors").getValue(); //$NON-NLS-1$
 			String organisations = 
-					paperElement.getFirstChildElement("organisations").getValue();
+					paperElement.getFirstChildElement("organisations").getValue(); //$NON-NLS-1$
 			String title = 
-					paperElement.getFirstChildElement("title").getValue();
+					paperElement.getFirstChildElement("title").getValue(); //$NON-NLS-1$
 			String keywords =
-					paperElement.getFirstChildElement("keywords").getValue();
+					paperElement.getFirstChildElement("keywords").getValue(); //$NON-NLS-1$
 			String topics =
-					paperElement.getFirstChildElement("topics").getValue();
+					paperElement.getFirstChildElement("topics").getValue(); //$NON-NLS-1$
 			String contributionType =
-					paperElement.getFirstChildElement("contribution_type").getValue();
+					paperElement.getFirstChildElement("contribution_type").getValue(); //$NON-NLS-1$
 			
 			result.add(
 				new Paper(

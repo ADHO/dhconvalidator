@@ -2,6 +2,7 @@ package org.adho.dhconvalidator.conversion;
 
 import java.util.Properties;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.conversion.input.InputConverterFactory;
 import org.adho.dhconvalidator.conversion.input.docx.DocxInputConverter;
@@ -17,7 +18,7 @@ public enum ConversionPath {
 
 	ODT_TO_TEI( 
 		Type.ODT.getIdentifier()+Type.TEI.getIdentifier(), 
-		"odt",
+		"odt", //$NON-NLS-1$
 		new InputConverterFactory() {
 			public InputConverter createInputConverter() {
 				return new OdtInputConverter();
@@ -30,22 +31,22 @@ public enum ConversionPath {
 				return new OdtOutputConverter();
 			}
 		},
-		new Pair<>("oxgarage.textOnly", "false"), 
-		new Pair<>("oxgarage.getImages", "true"),
-		new Pair<>("oxgarage.getOnlineImages", "true"),
-		new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator")
+		new Pair<>("oxgarage.textOnly", "false"),  //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("oxgarage.getImages", "true"), //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("oxgarage.getOnlineImages", "true"), //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator") //$NON-NLS-1$ //$NON-NLS-2$
 	),
 	XHTML_TO_TEI( 
 		Type.XHTML.getIdentifier()+Type.TEI.getIdentifier(), 
-		"xhtml",
-		new Pair<>("oxgarage.textOnly", "false"), 
-		new Pair<>("oxgarage.getImages", "false"),
-		new Pair<>("oxgarage.getOnlineImages", "false"),
-		new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator")
+		"xhtml", //$NON-NLS-1$
+		new Pair<>("oxgarage.textOnly", "false"),  //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("oxgarage.getImages", "false"), //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("oxgarage.getOnlineImages", "false"), //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator") //$NON-NLS-1$ //$NON-NLS-2$
 	),
 	DOCX_TO_TEI( 
 		Type.DOCX.getIdentifier()+Type.TEI.getIdentifier(),
-		"docx",
+		"docx", //$NON-NLS-1$
 		new InputConverterFactory() {
 			public InputConverter createInputConverter() {
 				return new DocxInputConverter();
@@ -58,18 +59,18 @@ public enum ConversionPath {
 				return new DocxOutputConverter();
 			}
 		},
-		new Pair<>("oxgarage.textOnly", "false"), 
-		new Pair<>("oxgarage.getImages", "true"),
-		new Pair<>("oxgarage.getOnlineImages", "true"),
-		new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator")
+		new Pair<>("oxgarage.textOnly", "false"),  //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("oxgarage.getImages", "true"), //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("oxgarage.getOnlineImages", "true"), //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator") //$NON-NLS-1$ //$NON-NLS-2$
 	),
 	TEI_TO_XHTML(
 		Type.TEI.getIdentifier()+Type.XHTML.getIdentifier(),
-		"tei",
-		new Pair<>("oxgarage.textOnly", "false"), 
-		new Pair<>("oxgarage.getImages", "false"),
-		new Pair<>("oxgarage.getOnlineImages", "false"),
-		new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator")
+		"tei", //$NON-NLS-1$
+		new Pair<>("oxgarage.textOnly", "false"),  //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("oxgarage.getImages", "false"), //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("oxgarage.getOnlineImages", "false"), //$NON-NLS-1$ //$NON-NLS-2$
+		new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator") //$NON-NLS-1$ //$NON-NLS-2$
 	),
 	;
 	
@@ -129,7 +130,9 @@ public enum ConversionPath {
 			}
 		}
 		
-		throw new IllegalArgumentException("no conversion path found for " + filename);
+		throw new IllegalArgumentException(
+			Messages.getString(
+				"ConversionPath.noConversionPathFound", filename)); //$NON-NLS-1$
 	}
 	
 	public InputConverterFactory getInputConverterFactory() {

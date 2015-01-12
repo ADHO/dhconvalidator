@@ -10,7 +10,7 @@ public class InPermHandler implements StateHandler {
 	public State handleParagraph(Element matchElement, Document document,
 			XPathContext xPathContext) {
 		
-		if (matchElement.getLocalName().equals("permEnd")) {
+		if (matchElement.getLocalName().equals("permEnd")) { //$NON-NLS-1$
 			return State.SEEKPERMSTART;
 		}
 		

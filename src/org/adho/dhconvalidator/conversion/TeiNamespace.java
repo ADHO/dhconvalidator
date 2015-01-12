@@ -1,7 +1,7 @@
 package org.adho.dhconvalidator.conversion;
 
 public enum TeiNamespace {
-	TEI("tei", "http://www.tei-c.org/ns/1.0"),
+	TEI("tei", "http://www.tei-c.org/ns/1.0"), //$NON-NLS-1$ //$NON-NLS-2$
 	;
 	private String name;
 	private String uri;

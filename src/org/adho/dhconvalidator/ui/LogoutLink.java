@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.adho.dhconvalidator.Messages;
+
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
@@ -13,9 +15,9 @@ import com.vaadin.ui.themes.BaseTheme;
 public class LogoutLink extends Button {
 	
 	public LogoutLink() {
-		super("Logout");
+		super(Messages.getString("LogoutLink.title")); //$NON-NLS-1$
 		setStyleName(BaseTheme.BUTTON_LINK);
-		addStyleName("logout-link");
+		addStyleName("plain-link"); //$NON-NLS-1$
 		addClickListener(new ClickListener() {
 			
 			@Override
@@ -36,7 +38,7 @@ public class LogoutLink extends Button {
 						p.reload();
 					}
 					catch (Exception e) {
-						Logger.getLogger("");
+						Logger.getLogger(""); //$NON-NLS-1$
 					}
 				}			
 			}

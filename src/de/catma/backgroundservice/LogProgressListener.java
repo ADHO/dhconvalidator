@@ -29,11 +29,11 @@ public class LogProgressListener implements ProgressListener {
 
 	public void setProgress(String value, Object... args) {
 		logger.info(
-			value + ((args != null)? (" " +Arrays.toString(args)):""));
+			value + ((args != null)? (" " +Arrays.toString(args)):"")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void setException(Throwable t) {
-		logger.log(Level.SEVERE, "error during job execution", t);
+		logger.log(Level.SEVERE, "error during job execution", t); //$NON-NLS-1$
 	}
 
 }

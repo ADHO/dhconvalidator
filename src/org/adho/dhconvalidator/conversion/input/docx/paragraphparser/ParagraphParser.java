@@ -9,7 +9,7 @@ public class ParagraphParser {
 
 	public void stripTemplateSections(Document document, XPathContext xPathContext) {
 		Nodes searchResult = 
-				document.query("/w:document/w:body/w:p | /w:document/w:body/w:permEnd", xPathContext);
+				document.query("/w:document/w:body/w:p | /w:document/w:body/w:permEnd", xPathContext); //$NON-NLS-1$
 		State currentState = State.SEEKPERMSTART;
 		
 		for (int i=0; i<searchResult.size(); i++) {

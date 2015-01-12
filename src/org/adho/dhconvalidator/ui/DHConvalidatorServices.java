@@ -2,6 +2,7 @@ package org.adho.dhconvalidator.ui;
 
 import java.io.IOException;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conversion.input.docx.DocxInputConverter;
 import org.adho.dhconvalidator.conversion.input.odt.OdtInputConverter;
 import org.adho.dhconvalidator.properties.PropertyKey;
@@ -31,12 +32,12 @@ public class DHConvalidatorServices extends UI {
 		
 		if ((VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name())) == null) {
 			setContent(new LoginPanel());
-			Page.getCurrent().setTitle("DHConvalidator Login");
+			Page.getCurrent().setTitle(Messages.getString("DHConvalidatorServices.loginTitle")); //$NON-NLS-1$
 		}
 		else {
 			Navigator navigator = new Navigator(this, this);
 			navigator.addView(
-				"", 
+				"",  //$NON-NLS-1$
 				new ServiceSelectionPanel());
 			navigator.addView(
 				ServicesViewName.odt.name(), 
@@ -53,9 +54,9 @@ public class DHConvalidatorServices extends UI {
 				        new ExternalResourceRequestHandler(
 				        		PropertyKey.tei_image_location.getValue()));
 			} catch (IOException e) {
-				throw new IllegalStateException("cannot find example files", e);
+				throw new IllegalStateException(Messages.getString("DHConvalidatorServices.errorExampleFiles"), e); //$NON-NLS-1$
 			}
-			Page.getCurrent().setTitle("DHConvalidator Services");
+			Page.getCurrent().setTitle(Messages.getString("DHConvalidatorServices.servicesTitle")); //$NON-NLS-1$
 		}
 	}
 

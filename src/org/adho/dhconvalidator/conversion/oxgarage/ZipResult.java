@@ -64,7 +64,7 @@ public class ZipResult {
 		while ((entry = zipInputStream.getNextEntry()) !=null) {
 			ByteArrayOutputStream entryBuffer = new ByteArrayOutputStream();
 			IOUtils.copy(zipInputStream, entryBuffer);
-			if (entry.getName().contains("/")) {
+			if (entry.getName().contains("/")) { //$NON-NLS-1$
 				externalResources.put(entry.getName(), entryBuffer.toByteArray());
 			}
 			else {
@@ -127,5 +127,9 @@ public class ZipResult {
 			}
 		}
 		return Collections.unmodifiableList(result);
+	}
+	
+	public void putResource(String path, byte[] data) {
+		externalResources.put(path, data);
 	}
 }

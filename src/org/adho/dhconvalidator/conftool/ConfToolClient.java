@@ -55,14 +55,14 @@ public class ConfToolClient {
 		String nonce = getNonce();
 		
 		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
-		urlBuilder.append("?page=remoteLogin");
-		urlBuilder.append("&nonce=");
+		urlBuilder.append("?page=remoteLogin"); //$NON-NLS-1$
+		urlBuilder.append("&nonce="); //$NON-NLS-1$
 		urlBuilder.append(nonce);
-		urlBuilder.append("&passhash=");
+		urlBuilder.append("&passhash="); //$NON-NLS-1$
 		urlBuilder.append(getPassHash(nonce));
-		urlBuilder.append("&user=");
+		urlBuilder.append("&user="); //$NON-NLS-1$
 		urlBuilder.append(user);
-		urlBuilder.append("&command=request");
+		urlBuilder.append("&command=request"); //$NON-NLS-1$
 		
 		ClientResource client = 
 				new ClientResource(Context.getCurrent(), Method.GET, urlBuilder.toString());
@@ -116,20 +116,20 @@ public class ConfToolClient {
 		String nonce = getNonce();
 		
 		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
-		urlBuilder.append("?page=adminExport");
-		urlBuilder.append("&nonce=");
+		urlBuilder.append("?page=adminExport"); //$NON-NLS-1$
+		urlBuilder.append("&nonce="); //$NON-NLS-1$
 		urlBuilder.append(nonce);
-		urlBuilder.append("&passhash=");
+		urlBuilder.append("&passhash="); //$NON-NLS-1$
 		urlBuilder.append(getPassHash(nonce));
-		urlBuilder.append("&export_select=");
+		urlBuilder.append("&export_select="); //$NON-NLS-1$
 		urlBuilder.append(type.name());
-		urlBuilder.append("&form_include_deleted=0");
-		urlBuilder.append("&form_export_format=xml");
-		urlBuilder.append("&form_export_header=default");
-		urlBuilder.append("&cmd_create_export=true");
+		urlBuilder.append("&form_include_deleted=0"); //$NON-NLS-1$
+		urlBuilder.append("&form_export_format=xml"); //$NON-NLS-1$
+		urlBuilder.append("&form_export_header=default"); //$NON-NLS-1$
+		urlBuilder.append("&cmd_create_export=true"); //$NON-NLS-1$
 		
 		if (user != null) {
-			urlBuilder.append("&form_userID=");
+			urlBuilder.append("&form_userID="); //$NON-NLS-1$
 			urlBuilder.append(user.getUserId());
 		}
 		
@@ -153,15 +153,15 @@ public class ConfToolClient {
 		String nonce = getNonce();
 		
 		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
-		urlBuilder.append("?page=remoteLogin");
-		urlBuilder.append("&nonce=");
+		urlBuilder.append("?page=remoteLogin"); //$NON-NLS-1$
+		urlBuilder.append("&nonce="); //$NON-NLS-1$
 		urlBuilder.append(nonce);
-		urlBuilder.append("&passhash=");
+		urlBuilder.append("&passhash="); //$NON-NLS-1$
 		urlBuilder.append(getPassHash(nonce));
-		urlBuilder.append("&user=");
+		urlBuilder.append("&user="); //$NON-NLS-1$
 		urlBuilder.append(user);
-		urlBuilder.append("&command=login");
-		urlBuilder.append("&password=");
+		urlBuilder.append("&command=login"); //$NON-NLS-1$
+		urlBuilder.append("&password="); //$NON-NLS-1$
 		urlBuilder.append(pass);
 		
 		ClientResource client = 
@@ -185,12 +185,12 @@ public class ConfToolClient {
 	}
 	
 	private String getUserId(Document resultDoc) {
-		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/id");
+		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/id"); //$NON-NLS-1$
 		return resultElement.getValue();
 	}	
 	
 	private String getUserName(Document resultDoc) {
-		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/username");
+		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/username"); //$NON-NLS-1$
 		return resultElement.getValue();
 	}
 	
@@ -199,12 +199,12 @@ public class ConfToolClient {
 	}
 	
 	private boolean getLoginResult(Document resultDoc) {
-		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/result");
+		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/result"); //$NON-NLS-1$
 		return Boolean.valueOf(resultElement.getValue());
 	}
 	
 	private String getMessage(Document resultDoc) {
-		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/message");
+		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/message"); //$NON-NLS-1$
 		return resultElement.getValue();
 	}
 }

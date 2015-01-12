@@ -5,6 +5,8 @@ import nu.xom.Element;
 import nu.xom.Nodes;
 import nu.xom.XPathContext;
 
+import org.adho.dhconvalidator.Messages;
+
 public class DocumentUtil {
 	public static Element getFirstMatch(Document document, String query) {
 		return getFirstMatch(document, query, null);
@@ -17,7 +19,8 @@ public class DocumentUtil {
 			return (Element)nodes.get(0);
 		}
 		
-		throw new IllegalStateException("unexpected result");
+		throw new IllegalStateException(
+			Messages.getString("DocumentUtil.unexpectedResult")); //$NON-NLS-1$
 	}
 	
 	public static Element getFirstMatch(Element subtreeRoot, String query,
@@ -27,7 +30,8 @@ public class DocumentUtil {
 			return (Element)nodes.get(0);
 		}
 		
-		throw new IllegalStateException("unexpected result");
+		throw new IllegalStateException(
+			Messages.getString("DocumentUtil.unexpectedResult")); //$NON-NLS-1$
 	}
 	
 	public static Element tryFirstMatch(Document document, String query,

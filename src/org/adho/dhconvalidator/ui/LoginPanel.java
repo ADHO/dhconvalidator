@@ -2,6 +2,7 @@ package org.adho.dhconvalidator.ui;
 
 import java.io.IOException;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conftool.ConfToolClient;
 import org.adho.dhconvalidator.conftool.ConfToolClient.AuthenticationException;
 import org.adho.dhconvalidator.conftool.User;
@@ -63,15 +64,15 @@ public class LoginPanel extends CenterPanel {
 
 	private void initComponents() {
 	
-		userNameInput = new TextField("E-mail or user name", "");
+		userNameInput = new TextField(Messages.getString("LoginPanel.userName"), ""); //$NON-NLS-1$ //$NON-NLS-2$
 		userNameInput.focus();
-		passwordInput = new PasswordField("Password", "");
+		passwordInput = new PasswordField(Messages.getString("LoginPanel.password"), ""); //$NON-NLS-1$ //$NON-NLS-2$
 		
-		btLogin = new Button("Login");
+		btLogin = new Button(Messages.getString("LoginPanel.login")); //$NON-NLS-1$
 		btLogin.setClickShortcut(KeyCode.ENTER);
 
-		Label caption = new Label("DHConvalidator<br>ConfTool Authentication", ContentMode.HTML);
-		caption.addStyleName("login-caption");
+		Label caption = new Label(Messages.getString("LoginPanel.title"), ContentMode.HTML); //$NON-NLS-1$
+		caption.addStyleName("login-caption"); //$NON-NLS-1$
 		addCenteredComponent(caption);
 		addCenteredComponent(userNameInput);
 		addCenteredComponent(passwordInput);

@@ -29,7 +29,7 @@ import org.restlet.resource.ClientResource;
 
 public class OxGarageConversionClient {
 	
-	private static final String CONVERSION_OPERATION = "Conversions/";
+	private static final String CONVERSION_OPERATION = "Conversions/"; //$NON-NLS-1$
 	
 	private String baseURL;
 	
@@ -37,16 +37,23 @@ public class OxGarageConversionClient {
 		this.baseURL = baseURL;
 	}
 	
-	public String convertToString(byte[] sourceStream, ConversionPath conversionPath, Properties properties) throws IOException {
+	public String convertToString(
+			byte[] sourceStream, 
+			ConversionPath conversionPath, 
+			Properties properties) throws IOException {
+		
 		ZipResult zipResult = new ZipResult(convert(sourceStream, conversionPath, properties));
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		Serializer serializer = new Serializer(buffer);
 		serializer.setIndent(2);
 		serializer.write(zipResult.getDocument());
-		return buffer.toString("UTF-8");
+		return buffer.toString("UTF-8"); //$NON-NLS-1$
 	}
 	
-	public InputStream convert(final byte[] sourceStream, ConversionPath conversionPath, Properties properties) throws IOException {
+	public InputStream convert(
+			final byte[] sourceStream, 
+			ConversionPath conversionPath, 
+			Properties properties) throws IOException {
 		StreamRepresentation sr = new ByteArrayStreamRepresentation(sourceStream);
 		return convert(sr, conversionPath, properties);
 	}
@@ -59,29 +66,29 @@ public class OxGarageConversionClient {
 		
 		String uri = baseURL + CONVERSION_OPERATION + conversionPath.getPath();
 		if (!properties.isEmpty()) {
-			Document propertyDoc = new Document(new Element("conversions"));
-			Element conversion = new Element("conversion");
-			conversion.addAttribute(new Attribute("index", "0"));
+			Document propertyDoc = new Document(new Element("conversions")); //$NON-NLS-1$
+			Element conversion = new Element("conversion"); //$NON-NLS-1$
+			conversion.addAttribute(new Attribute("index", "0")); //$NON-NLS-1$ //$NON-NLS-2$
 			propertyDoc.getRootElement().appendChild(conversion);
 			
 			Enumeration<?> propertyNames = properties.propertyNames(); 
 			
 			while (propertyNames.hasMoreElements()) {
 				String key = propertyNames.nextElement().toString();
-				Element property = new Element("property");
-				property.addAttribute(new Attribute("id", key));
+				Element property = new Element("property"); //$NON-NLS-1$
+				property.addAttribute(new Attribute("id", key)); //$NON-NLS-1$
 				property.appendChild(properties.getProperty(key));
 				conversion.appendChild(property);
 			}
 
-			uri += "?properties=" + propertyDoc.getRootElement().toXML();
+			uri += "?properties=" + propertyDoc.getRootElement().toXML(); //$NON-NLS-1$
 		}
 		
 		ClientResource client = new ClientResource(Context.getCurrent(), Method.POST, uri);
 
 		FormDataSet form = new FormDataSet();
 		form.setMultipart(true);
-		form.getEntries().add(new FormData("upload", sourceRep));
+		form.getEntries().add(new FormData("upload", sourceRep)); //$NON-NLS-1$
 		
 		Representation result = client.post(form);
 		return result.getStream();
@@ -120,17 +127,19 @@ public class OxGarageConversionClient {
 	
 	
 	@SuppressWarnings("unused")
-	private String convertToString(File file, ConversionPath conversionPath, Properties properties) throws IOException {
+	private String convertToString(
+			File file, ConversionPath conversionPath, Properties properties) throws IOException {
 		
 		ZipResult zipResult = new ZipResult(convert(file, conversionPath, properties));
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		Serializer serializer = new Serializer(buffer);
 		serializer.setIndent(2);
 		serializer.write(zipResult.getDocument());
-		return buffer.toString("UTF-8");
+		return buffer.toString("UTF-8"); //$NON-NLS-1$
 	}
 
-	private InputStream convert(File file, ConversionPath conversionPath, Properties properties) throws IOException {
+	private InputStream convert(
+			File file, ConversionPath conversionPath, Properties properties) throws IOException {
 		FileRepresentation fr = new FileRepresentation(file, MediaType.APPLICATION_ALL);
 		return convert(fr, conversionPath, properties);
 	}

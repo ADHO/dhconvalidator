@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conftool.ConfToolClient;
 import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
@@ -50,7 +51,10 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		catch (IOException e) {
 			e.printStackTrace();
 			Notification.show(
-				"Error", "Unable to load papers from ConfTool: " + e.getLocalizedMessage(), 
+				Messages.getString("PaperSelectionPanel.error1Title"),  //$NON-NLS-1$
+				Messages.getString(
+						"PaperSelectionPanel.conftoolerrormsg",//$NON-NLS-1$
+						 e.getLocalizedMessage()),
 				Type.ERROR_MESSAGE);
 		}
 		
@@ -58,19 +62,23 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 
 	private void initComponents() {
 		Label info = new Label(
-			"Please select one or more "
-			+ "submissions to generate the templates:", ContentMode.HTML);
+			Messages.getString("PaperSelectionPanel.hintMsg"), //$NON-NLS-1$
+			ContentMode.HTML); 
 		
-		paperTable = new Table("Your submissions");
+		paperTable = new Table(Messages.getString("PaperSelectionPanel.tableTitle")); //$NON-NLS-1$
 		paperTable.setSelectable(true);
 		paperTable.setMultiSelect(true);
 		paperTable.setPageLength(4);
-		paperTable.addContainerProperty("title", String.class, null);
-		paperTable.setColumnHeader("title", "Title");
-		paperTable.setWidth("100%");
+		paperTable.addContainerProperty("title", String.class, null); //$NON-NLS-1$
+		paperTable.setColumnHeader(
+			"title", 
+			Messages.getString("PaperSelectionPanel.titleColumnTitle")); //$NON-NLS-1$ //$NON-NLS-2$
+		paperTable.setWidth("100%"); //$NON-NLS-1$
 		paperTable.setImmediate(true);
 		
-		btGenerate = new Button("Generate Templates");
+		btGenerate = new Button(
+			Messages.getString(
+				"PaperSelectionPanel.generateButtonCaption")); //$NON-NLS-1$
 		StreamResource templateStreamResource = 
 				new StreamResource(
 						new StreamSource() {
@@ -78,7 +86,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 							public InputStream getStream() {
 								return createTemplates();
 							}
-						}, "your_personal_dh_templates.zip" );
+						}, "your_personal_dh_templates.zip" ); //$NON-NLS-1$
 		
 		templateStreamResource.setCacheTime(0);
 		new FileDownloader(templateStreamResource).extend(btGenerate);
@@ -94,8 +102,8 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		
 		if (selection.isEmpty()) {
 			Notification.show(
-				"Info", 
-				"Please select a submission first!", 
+				Messages.getString("PaperSelectionPanel.selectSubmissionTitle"),  //$NON-NLS-1$
+				Messages.getString("PaperSelectionPanel.selectSubmissionMsg"),  //$NON-NLS-1$
 				Type.HUMANIZED_MESSAGE);
 			return null;
 		}
@@ -105,8 +113,8 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 				int idx = 1;
 				for (Paper paper : selection) {
 					zipFs.putDocument(
-						idx + "_" + paper.getTitle().replaceAll("[^0-9a-zA-Z]", "_")
-							+ "." +inputConverter.getFileExtension(), 
+						idx + "_" + paper.getTitle().replaceAll("[^0-9a-zA-Z]", "_") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							+ "." +inputConverter.getFileExtension(),  //$NON-NLS-1$
 						inputConverter.getPersonalizedTemplate(paper));
 					idx++;
 				}
@@ -115,8 +123,8 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 			} catch (IOException e) {
 				e.printStackTrace();
 				Notification.show(
-						"Error", 
-						"template creation failed",
+						Messages.getString("PaperSelectionPanel.templateCreationErrorTitle"),  //$NON-NLS-1$
+						Messages.getString("PaperSelectionPanel.templateCreationErrorMsg"), //$NON-NLS-1$
 						Type.ERROR_MESSAGE);
 				return null;
 			}
@@ -127,6 +135,6 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 		initData();
-		Page.getCurrent().setTitle("DHConvalidator Template Generation Service");
+		Page.getCurrent().setTitle(Messages.getString("PaperSelectionPanel.title")); //$NON-NLS-1$
 	}
 }

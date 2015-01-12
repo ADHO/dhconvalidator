@@ -2,6 +2,7 @@ package org.adho.dhconvalidator.ui;
 
 import java.io.IOException;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 import org.adho.dhconvalidator.properties.PropertyKey;
 
@@ -23,13 +24,12 @@ final class ExternalResourceRequestHandler implements
 		this.exampleZipResult = 
 			new ZipResult(
 				Thread.currentThread().getContextClassLoader().getResourceAsStream(
-					"/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.dhc"));
+					"/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.dhc")); //$NON-NLS-1$
 		this.examplePictureName = 
 			exampleZipResult.getExternalResourcePathsStartsWith(
 				PropertyKey.tei_image_location.getValue().substring(1)) // skip leading slash
 				.get(0) // there has to be exactly one image
 				.substring(PropertyKey.tei_image_location.getValue().length()); // skip path information
-		//10000000000000DC000000A53B7BF588.jpg
 	}
 
 	@Override
@@ -38,7 +38,7 @@ final class ExternalResourceRequestHandler implements
 	                             VaadinResponse response)
 	        throws IOException {
 
-		if (request.getPathInfo().startsWith("/popup"+imagePath)) {
+		if (request.getPathInfo().startsWith("/popup"+imagePath)) { //$NON-NLS-1$
 			ZipResult zipResult =
 				(ZipResult) VaadinSession.getCurrent().getAttribute(
 						SessionStorageKey.ZIPRESULT.name());
@@ -55,8 +55,10 @@ final class ExternalResourceRequestHandler implements
 					return true;
 				}
 				else {
-					throw new IOException("external resource not found: " 
-							+ request.getPathInfo().substring(PATH_PREFIX_LENGTH));
+					throw new IOException(
+						Messages.getString(
+							"ExternalResourceRequestHandler.resourceNotFound",  //$NON-NLS-1$
+							request.getPathInfo().substring(PATH_PREFIX_LENGTH)));
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 package org.adho.dhconvalidator.ui;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conftool.User;
 
 import com.vaadin.server.BrowserWindowOpener;
@@ -45,23 +46,25 @@ public class LoginResultPanel extends CenterPanel {
 		User user = 
 			(User)VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name());
 		
-		btContinue = new Button("Continue");
+		btContinue = new Button(Messages.getString("LoginResultPanel.continue")); //$NON-NLS-1$
 		new BrowserWindowOpener(DHConvalidatorServices.class).extend(btContinue);
 		
-		btRetry = new Button("Retry");
+		btRetry = new Button(Messages.getString("LoginResultPanel.retry")); //$NON-NLS-1$
 		btRetry.setVisible(false);
 		
 		Label infoLabel = new Label("", ContentMode.HTML);
 		if (errorMessage != null) {
 			infoLabel.setValue(
-				"Authentication failed!<br>Reason:<br>" + errorMessage);
+				Messages.getString("LoginResultPanel.authenticationFailure", errorMessage)); //$NON-NLS-1$
 			btContinue.setVisible(false);
 			btRetry.setVisible(true);
 		}
 		else {
 			infoLabel.setValue(
-				"Hi " + user.getFirstName() + " " + user.getLastName() + ",<br>"
-				+ "the authentication was successful, please continue to the DHConvalidator!");
+				Messages.getString(
+						"LoginResultPanel.greeting", //$NON-NLS-1$
+						user.getFirstName(), 
+						user.getLastName())); 
 			logoutLink.setVisible(true);
 		}
 		

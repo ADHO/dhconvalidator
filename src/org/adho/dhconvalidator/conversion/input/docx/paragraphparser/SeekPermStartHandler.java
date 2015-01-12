@@ -13,11 +13,11 @@ public class SeekPermStartHandler implements StateHandler {
 	public State handleParagraph(Element matchElement, Document document,
 			XPathContext xPathContext) {
 		
-		if (matchElement.getFirstChildElement("permStart", Namespace.MAIN.toUri()) != null) {
+		if (matchElement.getFirstChildElement("permStart", Namespace.MAIN.toUri()) != null) { //$NON-NLS-1$
 			return State.INPERM;
 		}
-		else if (DocumentUtil.hasMatch(matchElement, "w:pPr/w:pStyle[@w:val='DH-BibliographyHeading']", xPathContext)
-				&& (DocumentUtil.hasMatch(matchElement, "w:r", xPathContext))) {
+		else if (DocumentUtil.hasMatch(matchElement, "w:pPr/w:pStyle[@w:val='DH-BibliographyHeading']", xPathContext) //$NON-NLS-1$
+				&& (DocumentUtil.hasMatch(matchElement, "w:r", xPathContext))) { //$NON-NLS-1$
 			return State.SEEKPERMSTART;
 		}
 		else {

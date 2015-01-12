@@ -1,15 +1,16 @@
 package org.adho.dhconvalidator.ui;
 
+import org.adho.dhconvalidator.Messages;
+
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 public class CenterPanel extends VerticalLayout {
 	
 	private VerticalLayout center;
-	protected BackLink backLink;
+	private HeaderPanel headerPanel;
 
 	public CenterPanel(boolean showHeader) {
 		initComponents(showHeader);
@@ -23,18 +24,10 @@ public class CenterPanel extends VerticalLayout {
 		center.setSizeUndefined();
 		setComponentAlignment(center, Alignment.MIDDLE_CENTER);
 		if (showHeader) {
-			HorizontalLayout headerPanel = new HorizontalLayout();
-			headerPanel.setWidth("100%");
-			this.backLink = new BackLink();
-			headerPanel.addComponent(backLink);
-			headerPanel.setComponentAlignment(backLink, Alignment.TOP_LEFT);
-			
-			LogoutLink logoutLink = new LogoutLink();
-			headerPanel.addComponent(logoutLink);
-			headerPanel.setComponentAlignment(logoutLink, Alignment.TOP_RIGHT);
+			headerPanel = new HeaderPanel();
 			center.addComponent(headerPanel);
-			Label title = new Label("DHConvalidator");
-			title.addStyleName("title-caption");
+			Label title = new Label(Messages.getString("CenterPanel.title")); //$NON-NLS-1$
+			title.addStyleName("title-caption"); //$NON-NLS-1$
 			center.addComponent(title);
 			center.setComponentAlignment(title, Alignment.TOP_LEFT);
 		}
@@ -49,4 +42,9 @@ public class CenterPanel extends VerticalLayout {
 		center.setComponentAlignment(c, alignment);
 	}
 
+	public BackLink getBackLink() {
+		return headerPanel.getBackLink();
+	}
+
+	
 }

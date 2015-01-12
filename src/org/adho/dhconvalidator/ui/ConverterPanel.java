@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.ConversionPath;
 import org.adho.dhconvalidator.conversion.ConversionProgressListener;
@@ -81,12 +82,12 @@ public class ConverterPanel extends VerticalLayout implements View {
 					final byte[] uploadData = uploadContent.toByteArray();
 					if (uploadData.length == 0) {
 						Notification.show(
-							"Info", 
-							"Please select a file first!", 
+							Messages.getString("ConverterPanel.fileSelectionTitle"),  //$NON-NLS-1$
+							Messages.getString("ConverterPanel.fileSelectionMsg"),  //$NON-NLS-1$
 							Type.TRAY_NOTIFICATION);
 					}
 					else {
-						appendLogMessage("Starting conversion...");
+						appendLogMessage(Messages.getString("ConverterPanel.progress1")); //$NON-NLS-1$
 						((DHConvalidatorServices)UI.getCurrent()).getBackgroundService().submit(
 							new DefaultProgressCallable<Pair<ZipResult, String>>() {
 								@Override
@@ -120,22 +121,28 @@ public class ConverterPanel extends VerticalLayout implements View {
 									VaadinSession.getCurrent().setAttribute(
 											SessionStorageKey.ZIPRESULT.name(), result.getFirst());
 									
-									appendLogMessage("Finished conversion.");
+									appendLogMessage(
+										Messages.getString(
+											"ConverterPanel.progress2")); //$NON-NLS-1$
 									
 									preview.setValue(result.getSecond());
-									resultCaption.setValue("Preview and Conversion log for " + filename );
+									resultCaption.setValue(
+										Messages.getString(
+											"ConverterPanel.previewTitle",  filename )); //$NON-NLS-1$
 									prepareForResultDownload();
 									progressBar.setVisible(false);
 								}
 								@Override
 								public void error(Throwable t) {
-									LOGGER.log(Level.SEVERE, "error converting document", t);
+									LOGGER.log(Level.SEVERE, Messages.getString(
+										"ConverterPanel.conversionErrorMsg"), t); //$NON-NLS-1$
 									String message = t.getLocalizedMessage();
 									if (message == null) {
-										message = "There seems to be a problem with your document. "
-												+ "Are you sure you used one of our templates?";
+										message = Messages.getString(
+											"ConverterPanel.conversionErrorNullReplacement"); //$NON-NLS-1$
 									}
-									appendLogMessage("ERROR: " + message);
+									appendLogMessage(Messages.getString(
+										"ConverterPanel.errorLogMsg", message)); //$NON-NLS-1$
 									progressBar.setVisible(false);
 								}
 							},
@@ -148,13 +155,15 @@ public class ConverterPanel extends VerticalLayout implements View {
 							});
 					}
 				} catch (Exception e) {
-					LOGGER.log(Level.SEVERE, "error converting document", e);
+					LOGGER.log(Level.SEVERE,
+						Messages.getString("ConverterPanel.syncErrorMsg"), e); //$NON-NLS-1$
 					String message = e.getLocalizedMessage();
 					if (message == null) {
-						message = "There seems to be a problem with your document. "
-								+ "Are you sure you used one of our templates?";
+						message = Messages.getString(
+							"ConverterPanel.conversionErrorNullReplacement"); //$NON-NLS-1$
 					}
-					appendLogMessage("ERROR: " + message);
+					appendLogMessage(Messages.getString(
+							"ConverterPanel.errorLogMsg", message)); //$NON-NLS-1$
 				}
 			}
 		});
@@ -162,8 +171,8 @@ public class ConverterPanel extends VerticalLayout implements View {
 			
 			@Override
 			public void uploadStarted(StartedEvent event) {
-				preview.setValue("");
-				logArea.setValue("");
+				preview.setValue(""); //$NON-NLS-1$
+				logArea.setValue(""); //$NON-NLS-1$
 				btDownloadResult.setVisible(false);
 				downloadInfo.setVisible(false);
 				
@@ -176,7 +185,8 @@ public class ConverterPanel extends VerticalLayout implements View {
 			
 			@Override
 			public void uploadFailed(FailedEvent event) {
-				resultCaption.setValue("Preview and Conversion log for file " + filename );
+				resultCaption.setValue(Messages.getString(
+					"ConverterPanel.previewTitle",  filename )); //$NON-NLS-1$
 				progressBar.setVisible(false);
 			}
 		});
@@ -197,7 +207,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 					public InputStream getStream() {
 						return createResultStream();
 					}
-				}, filename.substring(0, filename.lastIndexOf('.')) + ".dhc" );
+				}, filename.substring(0, filename.lastIndexOf('.')) + ".dhc" ); //$NON-NLS-1$
 		
 		resultStreamResource.setCacheTime(0);
 		
@@ -210,9 +220,9 @@ public class ConverterPanel extends VerticalLayout implements View {
 	private void appendLogMessage(String logmesssage) {
 		StringBuilder logBuilder = 
 			new StringBuilder(
-				(logArea.getValue()==null)?"":logArea.getValue());
+				(logArea.getValue()==null)?"":logArea.getValue()); //$NON-NLS-1$
 		
-		logBuilder.append("<br>");
+		logBuilder.append("<br>"); //$NON-NLS-1$
 		logBuilder.append(logmesssage);
 		logArea.setReadOnly(false);
 		logArea.setValue(logBuilder.toString());
@@ -223,17 +233,11 @@ public class ConverterPanel extends VerticalLayout implements View {
 		setMargin(true);
 		setSizeFull();
 		setSpacing(true);
-		HorizontalLayout headerPanel = new HorizontalLayout();
-		headerPanel.setWidth("100%");
-		BackLink backLink = new BackLink();
-		headerPanel.addComponent(backLink);
-		headerPanel.setComponentAlignment(backLink, Alignment.TOP_LEFT);
-		LogoutLink logoutLink = new LogoutLink();
-		headerPanel.addComponent(logoutLink);
-		headerPanel.setComponentAlignment(logoutLink, Alignment.TOP_RIGHT);
+		HeaderPanel headerPanel = new HeaderPanel();
 		addComponent(headerPanel);
-		Label title = new Label("DHConvalidator");
-		title.addStyleName("title-caption");
+		
+		Label title = new Label(Messages.getString("ConverterPanel.title")); //$NON-NLS-1$
+		title.addStyleName("title-caption"); //$NON-NLS-1$
 		addComponent(title);
 		setComponentAlignment(title, Alignment.TOP_LEFT);
 		
@@ -242,7 +246,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 		addComponent(inputPanel);
 		
 		upload = new Upload(
-			"Please upload your .docx or .odt file",
+			Messages.getString("ConverterPanel.uploadCaption"), //$NON-NLS-1$
 			new Receiver() {
 				@Override
 				public OutputStream receiveUpload(String filename,
@@ -261,11 +265,12 @@ public class ConverterPanel extends VerticalLayout implements View {
 		progressBar.setVisible(false);
 		inputPanel.addComponent(progressBar);
 		inputPanel.setComponentAlignment(progressBar, Alignment.MIDDLE_CENTER);
-		progressBar.addStyleName("converterpanel-progressbar");
+		progressBar.addStyleName("converterpanel-progressbar"); //$NON-NLS-1$
 	
-		resultCaption = new Label("Preview and Conversion log");
-		resultCaption.setWidth("100%");
-		resultCaption.addStyleName("converterpanel-resultcaption");
+		resultCaption = new Label(
+			Messages.getString("ConverterPanel.previewTitle2")); //$NON-NLS-1$
+		resultCaption.setWidth("100%"); //$NON-NLS-1$
+		resultCaption.addStyleName("converterpanel-resultcaption"); //$NON-NLS-1$
 		addComponent(resultCaption);
 		setComponentAlignment(resultCaption, Alignment.MIDDLE_CENTER);
 		
@@ -274,37 +279,35 @@ public class ConverterPanel extends VerticalLayout implements View {
 		resultPanel.setSizeFull();
 		setExpandRatio(resultPanel, 1.0f);
 		
-		preview = new Label("", ContentMode.HTML);
-		preview.addStyleName("tei-preview");
+		preview = new Label("", ContentMode.HTML); //$NON-NLS-1$
+		preview.addStyleName("tei-preview"); //$NON-NLS-1$
 		resultPanel.addComponent(preview);
 		VerticalLayout rightPanel = new VerticalLayout();
 		rightPanel.setMargin(new MarginInfo(false, false, true, true));
 		rightPanel.setSpacing(true);
 		resultPanel.addComponent(rightPanel);
 		
-		logArea = new Label("", ContentMode.HTML);
+		logArea = new Label("", ContentMode.HTML); //$NON-NLS-1$
 		logArea.setSizeFull();
 		logArea.setReadOnly(true);
 		rightPanel.addComponent(logArea);
 		
-		
-		downloadInfo = new Label("If the preview looks like what you "
-				+ "meant hit the 'Download result' button "
-				+ "and upload the .dhc result file to ConfTool:");
+		downloadInfo = new Label(Messages.getString("ConverterPanel.downloadMsg")); //$NON-NLS-1$
 		rightPanel.addComponent(downloadInfo);
 		downloadInfo.setVisible(false);
 		
-		btDownloadResult = new Button("Download result");
+		btDownloadResult = new Button(Messages.getString("ConverterPanel.downloadBtCaption")); //$NON-NLS-1$
 		btDownloadResult.setVisible(false);
 		rightPanel.addComponent(btDownloadResult);
 		rightPanel.setComponentAlignment(btDownloadResult, Alignment.BOTTOM_CENTER);
-		btDownloadResult.setHeight("50px");
+		btDownloadResult.setHeight("50px"); //$NON-NLS-1$
 		
-		rightPanel.addComponent(new Label("If you are unsure about what the preview "
-				+ "should look like have a look at our example submission: "));
-		Button btExample = new Button("Take me to the example!");
+		rightPanel.addComponent(
+			new Label(Messages.getString("ConverterPanel.exampleMsg"))); //$NON-NLS-1$
+		Button btExample = 
+			new Button(Messages.getString("ConverterPanel.exampleButtonCaption")); //$NON-NLS-1$
 		btExample.setStyleName(BaseTheme.BUTTON_LINK);
-		btExample.addStyleName("plain-link");
+		btExample.addStyleName("plain-link"); //$NON-NLS-1$
 		rightPanel.addComponent(btExample);
 
 		new BrowserWindowOpener(DHConvalidatorExample.class).extend(btExample);
@@ -318,8 +321,8 @@ public class ConverterPanel extends VerticalLayout implements View {
 		} catch (IOException e) {
 			e.printStackTrace();
 			Notification.show(
-					"Error", 
-					"result creation failed",
+					Messages.getString("ConverterPanel.resultCreationErrorTitle"),  //$NON-NLS-1$
+					Messages.getString("ConverterPanel.resultCreationErrorMsg"), //$NON-NLS-1$
 					Type.ERROR_MESSAGE);
 			return null;
 		}
@@ -331,10 +334,10 @@ public class ConverterPanel extends VerticalLayout implements View {
 				SessionStorageKey.ZIPRESULT.name(), null);	
 		btDownloadResult.setVisible(false);
 		downloadInfo.setVisible(false);
-		preview.setValue("");
-		logArea.setValue("");
-		resultCaption.setValue("Preview and Conversion log");
-		Page.getCurrent().setTitle("DHConvalidator Conversion and Validation");
+		preview.setValue(""); //$NON-NLS-1$
+		logArea.setValue(""); //$NON-NLS-1$
+		resultCaption.setValue(Messages.getString("ConverterPanel.previewTitle2")); //$NON-NLS-1$
+		Page.getCurrent().setTitle(Messages.getString("ConverterPanel.pageTitle")); //$NON-NLS-1$
 	}
 
 }

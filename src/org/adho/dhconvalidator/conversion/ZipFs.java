@@ -15,6 +15,7 @@ import nu.xom.Document;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
+import org.adho.dhconvalidator.Messages;
 import org.apache.commons.io.IOUtils;
 
 public class ZipFs {
@@ -48,7 +49,10 @@ public class ZipFs {
 		try {
 			byte[] documentData = content.get(path);
 			if (documentData == null) {
-				throw new IOException("The document is invalid, cannot find " + path);
+				throw new IOException(
+					Messages.getString(
+							"ZipFs.invalidDocument",//$NON-NLS-1$
+							path)); 
 			}
 			return builder.build(new ByteArrayInputStream(content.get(path)));
 		} catch (ParsingException e) {

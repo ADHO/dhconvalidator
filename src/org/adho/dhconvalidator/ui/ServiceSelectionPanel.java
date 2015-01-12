@@ -1,5 +1,7 @@
 package org.adho.dhconvalidator.ui;
 
+import org.adho.dhconvalidator.Messages;
+
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
@@ -56,18 +58,12 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 	private void initComponents() {
 		setHeightUndefined();
 		
-		backLink.setVisible(false);
+		getBackLink().setVisible(false);
 		
 		Label infoLabel = new Label(
-			"Please take the following steps to prepare the final version of your submission:<br>"
-			+ "<ol>"
-			+ "<li>Use the Template Generation Service below to generate a template for your submisson.</li>"
-			+ "<li>Fill the template with the content of your submission. Guidelines within the template will give you further advice on this.</li>"
-			+ "<li>Use the Conversion and Validation Service below to convert your edited template into a .dhc package.</li>"
-			+ "<li>Upload the .dhc package to ConfTool as the final version of your submission.</li>"
-			+ "</ol>",
+			Messages.getString("ServiceSelectionPanel.intro"), //$NON-NLS-1$
 			ContentMode.HTML);
-		infoLabel.setWidth("600px");
+		infoLabel.setWidth("600px"); //$NON-NLS-1$
 		addCenteredComponent(infoLabel);
 		
 		VerticalLayout templateGeneratorServiceContent = new VerticalLayout();
@@ -75,24 +71,22 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 		templateGeneratorServiceContent.setMargin(true);
 		
 		Panel templateGeneratorServicePanel = 
-			new Panel("Template Generation Service", templateGeneratorServiceContent);
-		templateGeneratorServicePanel.setWidth("500px");
+			new Panel(Messages.getString("ServiceSelectionPanel.templateGenerationService"), //$NON-NLS-1$
+					templateGeneratorServiceContent); 
+		templateGeneratorServicePanel.setWidth("500px"); //$NON-NLS-1$
 		templateGeneratorServiceContent.addComponent(
-				new Label("This service will generate a template for each of "
-						+ "your accepted submissions.<br>"
-				+ "Please use these templates to prepare your submissions for "
-				+ "the Conversion<br>and Validation Service.",
+				new Label(Messages.getString("ServiceSelectionPanel.templateGenerationServiceInfo"), //$NON-NLS-1$
 				ContentMode.HTML));
 		
-		btOdtTemplate = new Button("Open Document (odt)");
+		btOdtTemplate = new Button(Messages.getString("ServiceSelectionPanel.odtButtonCaption")); //$NON-NLS-1$
 		
 		btOdtTemplate.setDescription(
-			"If you want to use Libre Office, Open Office or similar choose the odt format.");
+			Messages.getString("ServiceSelectionPanel.odtButtonDescription")); //$NON-NLS-1$
 		templateGeneratorServiceContent.addComponent(btOdtTemplate);
 		
-		btDocxTemplate = new Button("Microsoft Office Document (docx)");
+		btDocxTemplate = new Button(Messages.getString("ServiceSelectionPanel.docxButtonCaption")); //$NON-NLS-1$
 		btDocxTemplate.setDescription(
-			"If you want to use Microsoft Office 2007 or later choose the docx format.");
+			Messages.getString("ServiceSelectionPanel.docxButtonDescription")); //$NON-NLS-1$
 		templateGeneratorServiceContent.addComponent(btDocxTemplate);
 		
 		VerticalLayout conversionAndValidationServiceContent = new VerticalLayout();
@@ -102,14 +96,14 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 
 		Panel conversionAndValidationServicePanel = 
 				new Panel(
-						"Conversion and Validation Service",
+						Messages.getString("ServiceSelectionPanel.conversionService"), //$NON-NLS-1$
 						conversionAndValidationServiceContent);
-		conversionAndValidationServicePanel.setWidth("500px");
+		conversionAndValidationServicePanel.setWidth("500px"); //$NON-NLS-1$
 		conversionAndValidationServiceContent.addComponent(
-			new Label("This service will convert your edited and template based documents<br>"
-					+ " to compressed TEI packages which can be uploaded to ConfTool.", 
-						ContentMode.HTML));
-		btConversionPanel = new Button("Continue");
+			new Label(
+				Messages.getString("ServiceSelectionPanel.conversionServiceInfo"), //$NON-NLS-1$
+				ContentMode.HTML));
+		btConversionPanel = new Button(Messages.getString("ServiceSelectionPanel.btContinue")); //$NON-NLS-1$
 		conversionAndValidationServiceContent.addComponent(btConversionPanel);
 		conversionAndValidationServiceContent.setComponentAlignment(
 				btConversionPanel, Alignment.MIDDLE_CENTER);
@@ -120,7 +114,7 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
-		Page.getCurrent().setTitle("DHConvalidator Service Selection");
+		Page.getCurrent().setTitle(Messages.getString("ServiceSelectionPanel.title")); //$NON-NLS-1$
 	}
 
 }

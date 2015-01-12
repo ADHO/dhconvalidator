@@ -55,7 +55,7 @@ public class DefaultBackgroundService implements BackgroundService {
                         try {
                         	Logger.getLogger(
                         			getClass().getName()).log(
-                        					Level.SEVERE, "error", t);
+                        					Level.SEVERE, "error", t); //$NON-NLS-1$
                             synchronized(lock) {
                             	listener.error(t);
                             }
@@ -76,7 +76,7 @@ public class DefaultBackgroundService implements BackgroundService {
             } catch (Throwable t) {
             	listener.error(t);
             	Logger.getLogger(getClass().getName()).log(
-            		Level.SEVERE, "error", t);  
+            		Level.SEVERE, "error", t);   //$NON-NLS-1$
             }
         }
 		

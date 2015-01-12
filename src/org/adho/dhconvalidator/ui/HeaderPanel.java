@@ -1,0 +1,38 @@
+package org.adho.dhconvalidator.ui;
+
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.HorizontalLayout;
+
+public class HeaderPanel extends HorizontalLayout {
+	
+	private BackLink backLink;
+
+	public HeaderPanel() {
+		initComponents();
+	}
+
+	private void initComponents() {
+		setSpacing(true);
+		
+		setWidth("100%"); //$NON-NLS-1$
+
+		backLink = new BackLink();
+		addComponent(backLink);
+		setComponentAlignment(backLink, Alignment.TOP_LEFT);
+		
+		AboutLink aboutLink = new AboutLink();
+		addComponent(aboutLink);
+		setComponentAlignment(aboutLink, Alignment.TOP_RIGHT);
+		setExpandRatio(aboutLink, 1.0f);
+
+		LogoutLink logoutLink = new LogoutLink();
+		addComponent(logoutLink);
+		setComponentAlignment(logoutLink, Alignment.TOP_RIGHT);
+				
+	}
+	
+	public BackLink getBackLink() {
+		return backLink;
+	}
+
+}

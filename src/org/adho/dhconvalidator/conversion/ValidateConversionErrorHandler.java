@@ -3,6 +3,7 @@ package org.adho.dhconvalidator.conversion;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.adho.dhconvalidator.Messages;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -22,7 +23,10 @@ public class ValidateConversionErrorHandler implements ErrorHandler {
 
 	@Override
 	public void warning(SAXParseException arg0) throws SAXException {
-		logger.log(Level.WARNING, "warning during doc validation", arg0);
+		logger.log(
+			Level.WARNING, 
+			Messages.getString("ValidateConversionErrorHandler.validationWarning"), //$NON-NLS-1$
+			arg0); 
 	}
 
 }
