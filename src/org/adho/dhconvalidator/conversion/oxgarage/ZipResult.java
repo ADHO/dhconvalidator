@@ -54,12 +54,11 @@ public class ZipResult {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		IOUtils.copy(is, buffer);
 		
+		externalResources = new HashMap<String, byte[]>();
 		if (isZipFile(buffer)) { // is the source a ZIP file or ...
-			externalResources = new HashMap<String, byte[]>();
 			extractZipFile(buffer);
 		}
 		else { //... do we have a single file?
-			externalResources = Collections.emptyMap();
 			buildDocument(buffer);
 		}
 		if (documentName != null) {

@@ -46,10 +46,11 @@ public class DHConvalidatorExample extends UI {
 			
 			setContent(content);
 			
-			LogoutLink logoutLink = new LogoutLink();
-			content.addComponent(logoutLink);
-			content.setComponentAlignment(logoutLink, Alignment.TOP_RIGHT);
-	
+			HeaderPanel headerPanel  = new HeaderPanel();
+			headerPanel.getBackLink().setVisible(false);
+
+			content.addComponent(headerPanel);
+
 			// prepare downloader for input file
 			Button btGetInputfile = 
 				new Button(

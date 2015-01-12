@@ -22,7 +22,12 @@ Edit the dhconvalidator.properties:
 - Edit settings for validation, min resolution, publication statemment and so on.
 
 Integration of the DHConvalidator is done via integrating an IFRAME into the host site:
-`<iframe src="http://mydomain/dhconvalidator/" height="230" width="250" frameborder="0"></iframe>`
+
+```
+<iframe src="http://mydomain/dhconvalidator/" height="230" width="250" frameborder="0">
+</iframe>`
+```
+
 To avoid cross site scripting issues the domain should be the same as the domain of the host site. 
 
 If you want to use a proxy to forward the dhconvalidator requests keep in mind that the proxy must support websockets as well.
