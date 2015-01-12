@@ -54,6 +54,22 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 	}
 
 	private void initComponents() {
+		setHeightUndefined();
+		
+		backLink.setVisible(false);
+		
+		Label infoLabel = new Label(
+			"Please take the following steps to prepare the final version of your submission:<br>"
+			+ "<ol>"
+			+ "<li>Use the Template Generation Service below to generate a template for your submisson.</li>"
+			+ "<li>Fill the template with the content of your submission. Guidelines within the template will give you further advice on this.</li>"
+			+ "<li>Use the Conversion and Validation Service below to convert your edited template into a .dhc package.</li>"
+			+ "<li>Upload the .dhc package to ConfTool as the final version of your submission.</li>"
+			+ "</ol>",
+			ContentMode.HTML);
+		infoLabel.setWidth("600px");
+		addCenteredComponent(infoLabel);
+		
 		VerticalLayout templateGeneratorServiceContent = new VerticalLayout();
 		templateGeneratorServiceContent.setSpacing(true);
 		templateGeneratorServiceContent.setMargin(true);
@@ -88,6 +104,7 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 				new Panel(
 						"Conversion and Validation Service",
 						conversionAndValidationServiceContent);
+		conversionAndValidationServicePanel.setWidth("500px");
 		conversionAndValidationServiceContent.addComponent(
 			new Label("This service will convert your edited and template based documents<br>"
 					+ " to compressed TEI packages which can be uploaded to ConfTool.", 

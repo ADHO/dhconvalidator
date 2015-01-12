@@ -9,6 +9,7 @@ import com.vaadin.ui.VerticalLayout;
 public class CenterPanel extends VerticalLayout {
 	
 	private VerticalLayout center;
+	protected BackLink backLink;
 
 	public CenterPanel(boolean showHeader) {
 		initComponents(showHeader);
@@ -24,14 +25,18 @@ public class CenterPanel extends VerticalLayout {
 		if (showHeader) {
 			HorizontalLayout headerPanel = new HorizontalLayout();
 			headerPanel.setWidth("100%");
-			Label title = new Label("DHConvalidator");
-			title.addStyleName("title-caption");
-			headerPanel.addComponent(title);
-			headerPanel.setComponentAlignment(title, Alignment.TOP_LEFT);
+			this.backLink = new BackLink();
+			headerPanel.addComponent(backLink);
+			headerPanel.setComponentAlignment(backLink, Alignment.TOP_LEFT);
+			
 			LogoutLink logoutLink = new LogoutLink();
 			headerPanel.addComponent(logoutLink);
 			headerPanel.setComponentAlignment(logoutLink, Alignment.TOP_RIGHT);
 			center.addComponent(headerPanel);
+			Label title = new Label("DHConvalidator");
+			title.addStyleName("title-caption");
+			center.addComponent(title);
+			center.setComponentAlignment(title, Alignment.TOP_LEFT);
 		}
 	}
 

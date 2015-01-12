@@ -35,7 +35,9 @@ public class DHConvalidatorServices extends UI {
 		}
 		else {
 			Navigator navigator = new Navigator(this, this);
-			navigator.addView("", new ServiceSelectionPanel());
+			navigator.addView(
+				"", 
+				new ServiceSelectionPanel());
 			navigator.addView(
 				ServicesViewName.odt.name(), 
 				new PaperSelectionPanel(new OdtInputConverter()));
@@ -45,7 +47,7 @@ public class DHConvalidatorServices extends UI {
 			navigator.addView(
 				ServicesViewName.converter.name(), 
 				new ConverterPanel());
-			
+
 			try {
 				VaadinSession.getCurrent().addRequestHandler(
 				        new ExternalResourceRequestHandler(
