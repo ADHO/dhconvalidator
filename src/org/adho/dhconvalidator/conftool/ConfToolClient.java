@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conftool;
 
 import java.io.IOException;
@@ -19,6 +23,12 @@ import org.restlet.resource.ClientResource;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 
+/**
+ * A client that talks to the ConfTool REST interface.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class ConfToolClient {
 	private static final boolean LOGIN_SUCCESS = true;
 	public static final class AuthenticationException extends Exception {
@@ -35,11 +45,18 @@ public class ConfToolClient {
 	private char[] restSharedPass;
 	private String confToolUrl;
 
+	/**
+	 * @param confToolUrl ConfTool REST interface
+	 * @param restSharedPass ConfTool REST shared pass
+	 */
 	public ConfToolClient(String confToolUrl, char[] restSharedPass) {
 		this.confToolUrl = confToolUrl;
 		this.restSharedPass = restSharedPass;
 	}
 	
+	/**
+	 * Loads arguments from properties via {@link PropertyKey}.
+	 */
 	public ConfToolClient() {
 		this(
 			PropertyKey.conftool_url.getValue(),
@@ -51,7 +68,8 @@ public class ConfToolClient {
 			nonce+new String(restSharedPass), Charsets.UTF_8).toString();
 	}
 	
-	public String getDetails(String user) throws IOException {
+	@SuppressWarnings("unused")
+	private String getDetails(String user) throws IOException {
 		String nonce = getNonce();
 		
 		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
@@ -79,6 +97,11 @@ public class ConfToolClient {
 		}
 	}
 	
+	/**
+	 * @param loginUser a User
+	 * @return a user enriched by first name and last name.
+	 * @throws IOException in case of any failure
+	 */
 	public User getDetailedUser(User loginUser) throws IOException {
 		User author = new DocumentToUserMapper().getUser(
 				getExportData(ExportType.users, loginUser));
@@ -89,11 +112,22 @@ public class ConfToolClient {
 		return loginUser;
 	}
 	
+	/**
+	 * @param user a User
+	 * @return a list of all submmissions of the given user
+	 * @throws IOException in case of any failure
+	 */
 	public List<Paper> getPapers(User user) throws IOException {
 		return new DocumentToPaperMapper().getPaperList(
 				getExportData(ExportType.papers, user));
 	}
 
+	/**
+	 * @param user a User
+	 * @param paperId the ConfTool paperID
+	 * @return the Paper with the given ID or <code>null</code>
+	 * @throws IOException  in case of any failure
+	 */
 	public Paper getPaper(User user, Integer paperId) throws IOException {
 		List<Paper> papers = getPapers(user);
 		if (papers != null) {
@@ -148,9 +182,18 @@ public class ConfToolClient {
 		}
 	}
 	
+	/**
+	 * @param user a username
+	 * @param pass a password
+	 * @return the User
+	 * @throws AuthenticationException in case of authentication failur
+	 * @throws IOException in case of any other failure
+	 */
 	public User authenticate(String user, char[] pass) 
 			throws IOException, AuthenticationException {
 		String nonce = getNonce();
+		
+		// see: ConfTool REST interface specification
 		
 		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
 		urlBuilder.append("?page=remoteLogin"); //$NON-NLS-1$

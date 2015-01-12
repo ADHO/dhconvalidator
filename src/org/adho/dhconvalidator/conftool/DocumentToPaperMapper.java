@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conftool;
 
 import java.util.ArrayList;
@@ -7,6 +11,12 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 
+/**
+ * Maps a ConfTool Paper result document to a {@link Paper}.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class DocumentToPaperMapper {
 
 	public List<Paper> getPaperList(Document document) {

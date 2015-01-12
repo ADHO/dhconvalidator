@@ -1,6 +1,16 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conftool;
 
 
+/**
+ * A User as delivered by ConfTool.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class User {
 	
 	private Integer userId;
@@ -8,12 +18,23 @@ public class User {
 	private String firstName;
 	private String lastName;
 	
+	/**
+	 * ConfTool user with id and username as delivered by authentication.
+	 * @param userId
+	 * @param userName
+	 */
 	public User(Integer userId, String userName) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
 	}
 
+	/**
+	 * Detailed user as delivered by {@link ExportType#users}.
+	 * @param userId
+	 * @param firstName
+	 * @param lastName
+	 */
 	public User(Integer userId, String firstName, String lastName) {
 		super();
 		this.userId = userId;

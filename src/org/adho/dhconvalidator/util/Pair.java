@@ -17,6 +17,10 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.util;
 
 /**

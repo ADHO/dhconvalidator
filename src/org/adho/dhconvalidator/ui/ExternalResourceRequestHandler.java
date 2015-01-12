@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import java.io.IOException;
@@ -11,6 +15,13 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinResponse;
 import com.vaadin.server.VaadinSession;
 
+/**
+ * This component serves external resources like images from the {@link ZipResult}
+ * of the conversion for the visual feedback.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 final class ExternalResourceRequestHandler implements
 		RequestHandler {
 	private static final int PATH_PREFIX_LENGTH = 7;
@@ -38,11 +49,12 @@ final class ExternalResourceRequestHandler implements
 	                             VaadinResponse response)
 	        throws IOException {
 
+		// does the request concern us?
 		if (request.getPathInfo().startsWith("/popup"+imagePath)) { //$NON-NLS-1$
 			ZipResult zipResult =
 				(ZipResult) VaadinSession.getCurrent().getAttribute(
 						SessionStorageKey.ZIPRESULT.name());
-			
+			// if this is about the example picture we use the example ZipResult
 			if (request.getPathInfo().endsWith(examplePictureName)) {
 				zipResult = exampleZipResult;
 			}

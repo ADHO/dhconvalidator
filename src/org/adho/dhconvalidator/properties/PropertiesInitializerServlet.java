@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.properties;
 
 import java.io.FileInputStream;
@@ -11,6 +15,12 @@ import javax.servlet.http.HttpServlet;
 
 import org.adho.dhconvalidator.ui.PropertyProvider;
 
+/**
+ * A servlet that loads the properties and makes them available via {@link PropertyKey#getValue()}
+ *  
+ * @author marco.petris@web.de
+ *
+ */
 public class PropertiesInitializerServlet extends HttpServlet {
 	
     @Override

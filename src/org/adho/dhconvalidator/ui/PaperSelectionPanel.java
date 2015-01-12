@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import java.io.ByteArrayInputStream;
@@ -27,18 +31,29 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Table;
 
+/**
+ * A panel that displays the available papers for template generation.
+ * @author marco.petris@web.de
+ *
+ */
 public class PaperSelectionPanel extends CenterPanel implements View {
 	
 	private Table paperTable;
 	private Button btGenerate;
 	private InputConverter inputConverter;
 
+	/**
+	 * @param inputConverter the InputConverter to be used for template generation
+	 */
 	public PaperSelectionPanel(InputConverter inputConverter) {
 		super(true);
 		this.inputConverter = inputConverter;
 		initComponents();
 	}
 
+	/**
+	 * Load and display the current papers.
+	 */
 	private void initData() {
 		paperTable.removeAllItems();
 		try {
@@ -60,6 +75,9 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		
 	}
 
+	/**
+	 * Setup UI.
+	 */
 	private void initComponents() {
 		Label info = new Label(
 			Messages.getString("PaperSelectionPanel.hintMsg"), //$NON-NLS-1$
@@ -96,7 +114,10 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		addCenteredComponent(btGenerate);
 	}
 
-	protected InputStream createTemplates() {
+	/**
+	 * @return a zipped container with all generated templates.
+	 */
+	private InputStream createTemplates() {
 		@SuppressWarnings("unchecked")
 		Set<Paper> selection = (Set<Paper>) paperTable.getValue();
 		
@@ -109,6 +130,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		}
 		else {
 			try {
+				// generate and add a template for each paper
 				ZipFs zipFs = new ZipFs();
 				int idx = 1;
 				for (Paper paper : selection) {
@@ -134,6 +156,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
+		// reload data
 		initData();
 		Page.getCurrent().setTitle(Messages.getString("PaperSelectionPanel.title")); //$NON-NLS-1$
 	}

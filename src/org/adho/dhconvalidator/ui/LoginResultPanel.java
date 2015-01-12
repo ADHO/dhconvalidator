@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import org.adho.dhconvalidator.Messages;
@@ -13,22 +17,37 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 
+/**
+ * A panel that displays the result of the Login. 
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class LoginResultPanel extends CenterPanel {
 
 	private Button btContinue;
 	private Button btRetry;
 	private Button logoutLink;
 
+	/**
+	 * Authentication succesfull
+	 */
 	public LoginResultPanel() {
 		this(null);
 	}
 	
+	/**
+	 * @param errorMessage authentication error
+	 */
 	public LoginResultPanel(String errorMessage) {
 		super(false);
 		initComponents(errorMessage);
 		initActions();
 	}
 
+	/**
+	 * Setup behaviour.
+	 */
 	private void initActions() {
 		btRetry.addClickListener(new ClickListener() {
 			
@@ -39,6 +58,10 @@ public class LoginResultPanel extends CenterPanel {
 		});
 	}
 
+	/**
+	 * Setup UI.
+	 * @param errorMessage
+	 */
 	private void initComponents(String errorMessage) {
 		logoutLink = new LogoutLink();
 		logoutLink.setVisible(false);
@@ -46,6 +69,7 @@ public class LoginResultPanel extends CenterPanel {
 		User user = 
 			(User)VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name());
 		
+		// if authencication has been successful we open up a new tab to show the DHConvalidator services
 		btContinue = new Button(Messages.getString("LoginResultPanel.continue")); //$NON-NLS-1$
 		new BrowserWindowOpener(DHConvalidatorServices.class).extend(btContinue);
 		

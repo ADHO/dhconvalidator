@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.properties;
 
 import java.io.IOException;
@@ -11,15 +15,25 @@ import java.util.Set;
 
 import org.adho.dhconvalidator.Messages;
 
+/**
+ * Read only {@link Properties}.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class NonModifiableProperties extends Properties {
 	
 	private Map<Object,Object> delegate;
 
+	/**
+	 * @param delegate the original properties
+	 */
 	public NonModifiableProperties(Map<Object, Object> delegate) {
 		super();
 		this.delegate = delegate;
 	}
 
+	// suppress modification
 	
 	@Override
 	public synchronized Object setProperty(String key, String value) {
@@ -42,6 +56,8 @@ public class NonModifiableProperties extends Properties {
 		throw new UnsupportedOperationException(Messages.getString("NonModifiableProperties.0")); //$NON-NLS-1$
 	}
 
+	// delegation
+	
 	@Override
 	public String getProperty(String key) {
         Object oval = get(key);

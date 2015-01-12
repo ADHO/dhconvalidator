@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conversion.output;
 
 import java.awt.image.BufferedImage;
@@ -25,6 +29,12 @@ import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentUtil;
 import org.adho.dhconvalidator.util.Pair;
 
+/**
+ * An OutputConverter that does modifications common to all supported formats (so far).
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class CommonOutputConverter implements OutputConverter {
 	
 	protected XPathContext xPathContext;
@@ -34,6 +44,9 @@ public class CommonOutputConverter implements OutputConverter {
 		xPathContext.addNamespace(TeiNamespace.TEI.getName(), TeiNamespace.TEI.toUri());
 	}
 
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.output.OutputConverter#convert(nu.xom.Document, org.adho.dhconvalidator.conftool.User, org.adho.dhconvalidator.conftool.Paper)
+	 */
 	@Override
 	public void convert(Document document, User user, Paper paper) throws IOException {
 		makeAuthorStatement(document, paper);
@@ -43,6 +56,11 @@ public class CommonOutputConverter implements OutputConverter {
 		removeRevisions(document);
 	}
 
+	/**
+	 * Make a &lt;profileDesc&gt;
+	 * @param document
+	 * @param paper
+	 */
 	private void makeProfileDesc(Document document, Paper paper) {
 		Element headerElement = DocumentUtil.getFirstMatch(
 				document, 
@@ -108,6 +126,11 @@ public class CommonOutputConverter implements OutputConverter {
 		}
 	}
 
+	/**
+	 * Make an &lt;encodingDesc&gt;
+	 * @param document
+	 * @throws IOException
+	 */
 	private void makeEncodingDesc(Document document) throws IOException {
 		String version = PropertyKey.version.getValue();
 		
@@ -138,6 +161,10 @@ public class CommonOutputConverter implements OutputConverter {
 		
 	}
 
+	/**
+	 * We do not support revisions.
+	 * @param document
+	 */
 	private void removeRevisions(Document document) {
 		Nodes searchResult = document.query(
 				"/tei:TEI/tei:teiHeader/tei:revisionDesc",  //$NON-NLS-1$
@@ -148,6 +175,11 @@ public class CommonOutputConverter implements OutputConverter {
 		}
 	}
 
+	/**
+	 * Make a &lt;publicationStmt&gt;
+	 * @param document
+	 * @throws IOException
+	 */
 	private void makePublicationStmt(Document document) throws IOException {
 		
 		Element publicationStmtElement = DocumentUtil.getFirstMatch(
@@ -168,6 +200,12 @@ public class CommonOutputConverter implements OutputConverter {
 		}
 	}
 
+	/**
+	 * Make an &lt;author&gt; statement.
+	 * @param document
+	 * @param paper
+	 * @throws IOException
+	 */
 	private void makeAuthorStatement(Document document, Paper paper) throws IOException {
 		Element titleStmtElement = DocumentUtil.getFirstMatch(
 				document, 
@@ -209,11 +247,19 @@ public class CommonOutputConverter implements OutputConverter {
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.output.OutputConverter#convert(org.adho.dhconvalidator.conversion.oxgarage.ZipResult)
+	 */
 	@Override
 	public void convert(ZipResult zipResult) throws IOException {
 		checkImages(zipResult);
 	}
 
+	/**
+	 * Checks image resolution.
+	 * @param zipResult
+	 * @throws IOException
+	 */
 	private void checkImages(ZipResult zipResult) throws IOException {
 		
 		List<String> externalPicturesPaths = 
@@ -243,6 +289,12 @@ public class CommonOutputConverter implements OutputConverter {
 		
 	}
 
+	/**
+	 * Moves images from one location to another.
+	 * @param zipResult
+	 * @param oldPathPart
+	 * @param newPathPart
+	 */
 	protected void adjustImagePath(ZipResult zipResult, String oldPathPart, String newPathPart) {
 		if (!oldPathPart.equals(newPathPart)) {
 			List<String> externalResourceNames = zipResult.getExternalResourcePathsStartsWith(oldPathPart);

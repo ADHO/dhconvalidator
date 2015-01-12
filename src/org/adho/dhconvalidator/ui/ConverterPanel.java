@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import java.io.ByteArrayInputStream;
@@ -51,6 +55,12 @@ import de.catma.backgroundservice.DefaultProgressCallable;
 import de.catma.backgroundservice.ExecutionListener;
 import de.catma.backgroundservice.ProgressListener;
 
+/**
+ * The Panel that lets the user perform the conversion.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class ConverterPanel extends VerticalLayout implements View {
 	
 	private static final Logger LOGGER = Logger.getLogger(ConverterPanel.class.getName());
@@ -73,13 +83,22 @@ public class ConverterPanel extends VerticalLayout implements View {
 		initActions();
 	}
 
+	/**
+	 * Setup behaviour.
+	 */
 	private void initActions() {
 		upload.addSucceededListener(new SucceededListener() {
 			
 			@Override
 			public void uploadSucceeded(SucceededEvent event) {
+				
+				// the upload has successfully been finished 
+				
 				try {
+					// uploadedContent has been filled by the Receiver of this upload component
+					// see initComponents below
 					final byte[] uploadData = uploadContent.toByteArray();
+					// do we have data?
 					if (uploadData.length == 0) {
 						Notification.show(
 							Messages.getString("ConverterPanel.fileSelectionTitle"),  //$NON-NLS-1$
@@ -88,10 +107,15 @@ public class ConverterPanel extends VerticalLayout implements View {
 					}
 					else {
 						appendLogMessage(Messages.getString("ConverterPanel.progress1")); //$NON-NLS-1$
+						
+						// ok, let's do the conversion in the background
 						((DHConvalidatorServices)UI.getCurrent()).getBackgroundService().submit(
 							new DefaultProgressCallable<Pair<ZipResult, String>>() {
 								@Override
 								public Pair<ZipResult, String> call() throws Exception {
+									// background execution!
+									
+									// do the actual conversion
 									Converter converter =
 											new Converter(
 												PropertyKey.oxgarage_url.getValue());
@@ -118,6 +142,9 @@ public class ConverterPanel extends VerticalLayout implements View {
 								@Override
 								public void done(
 										Pair<ZipResult, String> result) {
+									// back to GUI foreground at this point
+									
+									// we store the result in the session for the ExternalResourceRequestHandler
 									VaadinSession.getCurrent().setAttribute(
 											SessionStorageKey.ZIPRESULT.name(), result.getFirst());
 									
@@ -134,6 +161,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 								}
 								@Override
 								public void error(Throwable t) {
+									// an error during background conversion
 									LOGGER.log(Level.SEVERE, Messages.getString(
 										"ConverterPanel.conversionErrorMsg"), t); //$NON-NLS-1$
 									String message = t.getLocalizedMessage();
@@ -155,6 +183,8 @@ public class ConverterPanel extends VerticalLayout implements View {
 							});
 					}
 				} catch (Exception e) {
+					// we don't expect many problems at this point since the main work takes place in the background
+					// but just in case
 					LOGGER.log(Level.SEVERE,
 						Messages.getString("ConverterPanel.syncErrorMsg"), e); //$NON-NLS-1$
 					String message = e.getLocalizedMessage();
@@ -171,6 +201,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 			
 			@Override
 			public void uploadStarted(StartedEvent event) {
+				// clean everything for the new conversion
 				preview.setValue(""); //$NON-NLS-1$
 				logArea.setValue(""); //$NON-NLS-1$
 				btDownloadResult.setVisible(false);
@@ -192,9 +223,13 @@ public class ConverterPanel extends VerticalLayout implements View {
 		});
 	}
 	
+	/**
+	 * Provides a new FileDownloader with the conversion result.
+	 */
 	private void prepareForResultDownload() {
 		downloadInfo.setVisible(true);
 		
+		// detach the old file downloader
 		if (currentFileDownloader != null) {
 			currentFileDownloader.remove();
 		}
@@ -229,6 +264,9 @@ public class ConverterPanel extends VerticalLayout implements View {
 		logArea.setReadOnly(true);
 	}
 
+	/**
+	 * Setup GUI.
+	 */
 	private void initComponents() {
 		setMargin(true);
 		setSizeFull();
@@ -251,6 +289,8 @@ public class ConverterPanel extends VerticalLayout implements View {
 				@Override
 				public OutputStream receiveUpload(String filename,
 						String mimeType) {
+					// we store the uploaded content in the panel instance
+					
 					ConverterPanel.this.filename = filename;
 					ConverterPanel.this.uploadContent = new ByteArrayOutputStream();
 					
@@ -313,6 +353,9 @@ public class ConverterPanel extends VerticalLayout implements View {
 		new BrowserWindowOpener(DHConvalidatorExample.class).extend(btExample);
 	}
 	
+	/**
+	 * @return the download stream of the {@link ZipResult}-data.
+	 */
 	private InputStream createResultStream() {
 		try {
 			ZipResult result = (ZipResult) VaadinSession.getCurrent().getAttribute(
@@ -328,6 +371,9 @@ public class ConverterPanel extends VerticalLayout implements View {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.vaadin.navigator.View#enter(com.vaadin.navigator.ViewChangeListener.ViewChangeEvent)
+	 */
 	@Override
 	public void enter(ViewChangeEvent event) {
 		VaadinSession.getCurrent().setAttribute(

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conversion;
 
 import java.util.logging.Level;
@@ -8,6 +12,12 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+/**
+ * An error handler for the validation against the DHConvalidator schema.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class ValidateConversionErrorHandler implements ErrorHandler {
 	private Logger logger = Logger.getLogger(ValidateConversionErrorHandler.class.getName());
 

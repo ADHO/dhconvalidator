@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import java.io.IOException;
@@ -18,6 +22,12 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 
+/**
+ * The Login box.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class LoginPanel extends CenterPanel {
 
 	private TextField userNameInput;
@@ -30,6 +40,9 @@ public class LoginPanel extends CenterPanel {
 		initActions();
 	}
 
+	/**
+	 * Setup behaviour.
+	 */
 	private void initActions() {
 		btLogin.addClickListener(new ClickListener() {
 			@Override
@@ -42,6 +55,12 @@ public class LoginPanel extends CenterPanel {
 	}
 
 
+	/**
+	 * Authentication via ConfTool.
+	 * 
+	 * @param username
+	 * @param pass
+	 */
 	protected void authenticate(String username, char[] pass) {
 		ConfToolClient confToolClient = new ConfToolClient();
 		try {
@@ -62,6 +81,9 @@ public class LoginPanel extends CenterPanel {
 		}
 	}
 
+	/**
+	 * Setup UI.
+	 */
 	private void initComponents() {
 	
 		userNameInput = new TextField(Messages.getString("LoginPanel.userName"), ""); //$NON-NLS-1$ //$NON-NLS-2$

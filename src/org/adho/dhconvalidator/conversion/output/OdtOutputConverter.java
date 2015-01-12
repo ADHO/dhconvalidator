@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conversion.output;
 
 import java.io.IOException;
@@ -15,8 +19,17 @@ import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentUtil;
 
+/**
+ * Converts the TEI that results from odt conversion.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class OdtOutputConverter extends CommonOutputConverter {
 	
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.output.CommonOutputConverter#convert(nu.xom.Document, org.adho.dhconvalidator.conftool.User, org.adho.dhconvalidator.conftool.Paper)
+	 */
 	@Override
 	public void convert(Document document, User user, Paper paper) throws IOException {
 		super.convert(document, user, paper);
@@ -25,6 +38,10 @@ public class OdtOutputConverter extends CommonOutputConverter {
 		makeBibliography(document);
 	}
 
+	/**
+	 * Creates a proper back matter bibliography.
+	 * @param document
+	 */
 	private void makeBibliography(Document document) {
 		Nodes searchResult = 
 				document.query(
@@ -66,6 +83,10 @@ public class OdtOutputConverter extends CommonOutputConverter {
 		}
 	}
 
+	/**
+	 * Creates the title statement with optional subtitle
+	 * @param document
+	 */
 	private void makeComplexTitleStatement(Document document) {
 		Nodes searchResult = 
 				document.query("//tei:head[@type='subtitle']", xPathContext); //$NON-NLS-1$
@@ -97,6 +118,9 @@ public class OdtOutputConverter extends CommonOutputConverter {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.output.CommonOutputConverter#convert(org.adho.dhconvalidator.conversion.oxgarage.ZipResult)
+	 */
 	@Override
 	public void convert(ZipResult zipResult) throws IOException {
 		adjustImagePath(zipResult, "Pictures", PropertyKey.tei_image_location.getValue().substring(1)); //$NON-NLS-1$

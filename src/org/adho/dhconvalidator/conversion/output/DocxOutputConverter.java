@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conversion.output;
 
 import java.io.IOException;
@@ -16,6 +20,12 @@ import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentUtil;
 
+/**
+ * Converts the TEI that results from docx conversion.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class DocxOutputConverter extends CommonOutputConverter {
 
 	@Override
@@ -161,6 +171,10 @@ public class DocxOutputConverter extends CommonOutputConverter {
 	}
 
 
+	/**
+	 * We support only our styles.
+	 * @param document
+	 */
 	private void cleanupParagraphRendAttribute(Document document) {
 		Nodes searchResult = document.query("//tei:p[@rend='DH-Default']", xPathContext); //$NON-NLS-1$
 		
@@ -170,6 +184,10 @@ public class DocxOutputConverter extends CommonOutputConverter {
 		}
 	}
 
+	/**
+	 * We want numbered chapters.
+	 * @param document
+	 */
 	private void makeChapterAttributes(Document document) {
 		Element bodyElement = 
 			DocumentUtil.getFirstMatch(
@@ -236,6 +254,9 @@ public class DocxOutputConverter extends CommonOutputConverter {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.output.CommonOutputConverter#convert(org.adho.dhconvalidator.conversion.oxgarage.ZipResult)
+	 */
 	@Override
 	public void convert(ZipResult zipResult) throws IOException {
 		adjustImagePath(zipResult, "media", PropertyKey.tei_image_location.getValue().substring(1)); //$NON-NLS-1$

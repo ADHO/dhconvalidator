@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import org.adho.dhconvalidator.Messages;
@@ -15,6 +19,12 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * A panel that lets the user select the service to use.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class ServiceSelectionPanel extends CenterPanel implements View {
 	
 	private Button btOdtTemplate;
@@ -28,6 +38,9 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 		
 	}
 
+	/**
+	 * Setup behaviour.
+	 */
 	private void initActions() {
 		btOdtTemplate.addClickListener(new ClickListener() {
 			
@@ -55,6 +68,9 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 		});
 	}
 
+	/**
+	 * Setup UI.
+	 */
 	private void initComponents() {
 		setHeightUndefined();
 		

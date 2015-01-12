@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import java.util.ArrayList;
@@ -12,6 +16,12 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.BaseTheme;
 
+/**
+ * A logout link.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class LogoutLink extends Button {
 	
 	public LogoutLink() {
@@ -23,7 +33,7 @@ public class LogoutLink extends Button {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				List<Page> pages = new ArrayList<>();
-				
+				// keep the pages...
 				for (UI ui : VaadinSession.getCurrent().getUIs()) {
 					Page page = ui.getPage();
 					if (page != null){
@@ -33,6 +43,7 @@ public class LogoutLink extends Button {
 					
 				VaadinSession.getCurrent().close();
 
+				//... to notify them of the session close
 				for (Page p : pages) {
 					try {
 						p.reload();

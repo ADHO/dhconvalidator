@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import java.io.ByteArrayOutputStream;
@@ -22,6 +26,12 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * The UI that displays the expample files.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 @Theme("dhconvalidator")
 @PreserveOnRefresh
 @Push(value=PushMode.MANUAL)
@@ -40,6 +50,7 @@ public class DHConvalidatorExample extends UI {
 			content.addComponent(logoutLink);
 			content.setComponentAlignment(logoutLink, Alignment.TOP_RIGHT);
 	
+			// prepare downloader for input file
 			Button btGetInputfile = 
 				new Button(
 					Messages.getString("DHConvalidatorExample.btInputCaption")); //$NON-NLS-1$
@@ -56,6 +67,7 @@ public class DHConvalidatorExample extends UI {
 				}, "1_Digital_Humanities.odt")); //$NON-NLS-1$
 			inputFileDownloader.extend(btGetInputfile);
 			
+			// prepare downloader for output file
 			Button btGetOutputfile = 
 					new Button(
 						Messages.getString(
@@ -73,6 +85,7 @@ public class DHConvalidatorExample extends UI {
 				}, "1_Digital_Humanities.dhc")); //$NON-NLS-1$
 			outputFileDownloader.extend(btGetOutputfile);
 
+			// setup visual feedback
 			Label preview = new Label("", ContentMode.HTML); //$NON-NLS-1$
 			preview.addStyleName("tei-preview"); //$NON-NLS-1$
 			preview.setWidth("800px"); //$NON-NLS-1$

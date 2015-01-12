@@ -1,5 +1,15 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conversion;
 
+/**
+ * The TEI namespace.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public enum TeiNamespace {
 	TEI("tei", "http://www.tei-c.org/ns/1.0"), //$NON-NLS-1$ //$NON-NLS-2$
 	;

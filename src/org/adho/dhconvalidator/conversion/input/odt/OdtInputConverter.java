@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conversion.input.odt;
 
 import java.io.IOException;
@@ -21,7 +25,16 @@ import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.util.Pair;
 
+/**
+ * An InputConverter for the OASIS odt format.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class OdtInputConverter implements InputConverter {
+	/**
+	 * Namespaces used during conversion.
+	 */
 	private enum Namespace {
 		STYLE("style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0"), //$NON-NLS-1$ //$NON-NLS-2$
 		TEXT("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0"), //$NON-NLS-1$ //$NON-NLS-2$
@@ -52,9 +65,10 @@ public class OdtInputConverter implements InputConverter {
 	private static final String CONFTOOLPAPERID_ATTRIBUTENAME = "ConfToolPaperID"; //$NON-NLS-1$
 	
 	private XPathContext xPathContext;
-	private Paper paper;
+	private Paper paper; //holds the paper loaded during conversion
 	
 	public OdtInputConverter() {
+		// create xpathcontext with all the necessar namespaces
 		xPathContext = new XPathContext();
 		for (Namespace ns : Namespace.values()) {
 			xPathContext.addNamespace(
@@ -63,8 +77,12 @@ public class OdtInputConverter implements InputConverter {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#convert(byte[], org.adho.dhconvalidator.conftool.User)
+	 */
 	@Override
 	public byte[] convert(byte[] sourceData, User user) throws IOException {
+		// unzip data
 		ZipFs zipFs = new ZipFs(sourceData);
 		Document contentDoc = zipFs.getDocument("content.xml"); //$NON-NLS-1$
 		
@@ -85,6 +103,12 @@ public class OdtInputConverter implements InputConverter {
 		return zipFs.toZipData();
 	}
 
+	/**
+	 * Formulae that are kept externally are getting embedded into the content.xml.
+	 * @param contentDoc
+	 * @param zipFs
+	 * @throws IOException
+	 */
 	private void embedExternalFormulae(Document contentDoc, ZipFs zipFs) throws IOException {
 		Nodes searchResult = 
 				contentDoc.query("//draw:object", xPathContext); //$NON-NLS-1$
@@ -121,6 +145,12 @@ public class OdtInputConverter implements InputConverter {
 		}
 	}
 
+	/**
+	 * Removes empty References section or makes non empty References section a proper 
+	 * chapter.
+	 * @param contentDoc
+	 * @throws IOException
+	 */
 	private void makeReferencesChapter(Document contentDoc) throws IOException {
 		Nodes searchResult = 
 				contentDoc.query(
@@ -130,10 +160,11 @@ public class OdtInputConverter implements InputConverter {
 			Element referencesSectionElement = (Element) searchResult.get(0);
 			Element parent = (Element) referencesSectionElement.getParent();
 			int position = parent.indexOf(referencesSectionElement);
+			// remove empty references section
 			if (position == parent.getChildCount()-1) {
 				parent.removeChild(referencesSectionElement);
 			}
-			else {
+			else { // or make it a proper chapter 
 				Element headElement = new Element("text:h", Namespace.TEXT.toUri()); //$NON-NLS-1$
 				headElement.addAttribute(
 					new Attribute("text:outline-level", Namespace.TEXT.toUri(), "1")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -175,6 +206,10 @@ public class OdtInputConverter implements InputConverter {
 		
 	}
 
+	/**
+	 * Removes all template sections 
+	 * @param contentDoc
+	 */
 	private void stripTemplateSections(Document contentDoc) {
 		Nodes searchResult = 
 				contentDoc.query(
@@ -227,6 +262,11 @@ public class OdtInputConverter implements InputConverter {
 		}
 	}
 
+	/**
+	 * We remove all adhoc paragraph styles as they are not supported
+	 * and might be used to create fake chapter titles.
+	 * @param contentDoc
+	 */
 	private void cleanupParagraphStyles(Document contentDoc) {
 		Map<String,String> paragraphStyleMapping = new HashMap<>();
 		
@@ -257,6 +297,9 @@ public class OdtInputConverter implements InputConverter {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#getPersonalizedTemplate(org.adho.dhconvalidator.conftool.Paper)
+	 */
 	public byte[] getPersonalizedTemplate(Paper paper) throws IOException {
 		ZipFs zipFs = 
 			new ZipFs(
@@ -278,6 +321,11 @@ public class OdtInputConverter implements InputConverter {
 		return zipFs.toZipData();
 	}
 
+	/**
+	 * Injects the ConfTool paperId into the meta data of the template.
+	 * @param metaDoc
+	 * @param paperId
+	 */
 	private void injectPaperIdIntoMeta(Document metaDoc, Integer paperId) {
 		Nodes searchResult = 
 			metaDoc.query(
@@ -304,6 +352,11 @@ public class OdtInputConverter implements InputConverter {
 		
 	}
 
+	/**
+	 * Injects the authors of the paper into the meta data.
+	 * @param metaDoc
+	 * @param authorsAndAffiliations
+	 */
 	private void injectAuthorsIntoMeta(Document metaDoc,
 			List<Pair<String,String>> authorsAndAffiliations) {
 		Nodes searchResult = 
@@ -344,6 +397,11 @@ public class OdtInputConverter implements InputConverter {
 		}
 	}
 
+	/**
+	 * Injects the title of the paper into the metadata
+	 * @param metaDoc
+	 * @param title
+	 */
 	private void injectTitleIntoMeta(Document metaDoc, String title) {
 		Nodes searchResult = 
 				metaDoc.query(
@@ -364,6 +422,12 @@ public class OdtInputConverter implements InputConverter {
 		titleElement.appendChild(title);
 	}
 
+	/**
+	 * Injects authors into the readonly authors section.
+	 * @param contentDoc
+	 * @param authorsAndAffiliations
+	 * @throws IOException
+	 */
 	private void injectAuthorsIntoContent(Document contentDoc,
 			List<Pair<String,String>> authorsAndAffiliations) throws IOException {
 		Nodes searchResult = 
@@ -399,6 +463,12 @@ public class OdtInputConverter implements InputConverter {
 		}
 	}
 
+	/**
+	 * Injects title into the read only title section.
+	 * @param contentDoc
+	 * @param title
+	 * @throws IOException
+	 */
 	private void injectTitleIntoContent(Document contentDoc, String title) throws IOException {
 		Nodes searchResult = 
 			contentDoc.query(
@@ -428,11 +498,17 @@ public class OdtInputConverter implements InputConverter {
 
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#getFileExtension()
+	 */
 	@Override
 	public String getFileExtension() {
 		return Type.ODT.getExtension();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#getPaper()
+	 */
 	@Override
 	public Paper getPaper() {
 		return paper;

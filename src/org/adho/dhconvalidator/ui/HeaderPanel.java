@@ -1,8 +1,18 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 
+/**
+ * A header with logout-, back- and about-links.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class HeaderPanel extends HorizontalLayout {
 	
 	private BackLink backLink;
@@ -11,6 +21,9 @@ public class HeaderPanel extends HorizontalLayout {
 		initComponents();
 	}
 
+	/**
+	 * Setup UI.
+	 */
 	private void initComponents() {
 		setSpacing(true);
 		

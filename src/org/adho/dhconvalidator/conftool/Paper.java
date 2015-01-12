@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conftool;
 
 import java.io.IOException;
@@ -12,6 +16,12 @@ import java.util.regex.Pattern;
 import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.util.Pair;
 
+/**
+ * A paper as delivered by ConfTool.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class Paper {
 	
 	private static final String AUTHOR_PATTERN = "([^;]+)|((.*?\\((\\d+)\\);)+(.*?\\((\\d+)\\)))"; //$NON-NLS-1$
@@ -40,10 +50,16 @@ public class Paper {
 	}
 	
 
+	/**
+	 * @return the title of the paper
+	 */
 	public String getTitle() {
 		return title;
 	}
 	
+	/**
+	 * @return the ConfTool paperID.
+	 */
 	public Integer getPaperId() {
 		return paperId;
 	}
@@ -53,18 +69,23 @@ public class Paper {
 		return "#"+paperId + "["+title+"]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
+	/**
+	 * @return a list of authors and their affiliation as pairs.
+	 * @throws IOException in case of any failure
+	 */
 	public List<Pair<String, String>> getAuthorsAndAffiliations() throws IOException {
 		Matcher fullAuthorMatcher = Pattern.compile(AUTHOR_PATTERN).matcher(authors);
-		if (fullAuthorMatcher.matches()) {
-			if (fullAuthorMatcher.group(1) != null) {
+		if (fullAuthorMatcher.matches()) { // do we have a valid auther and affiliation statement?
+			if (fullAuthorMatcher.group(1) != null) { // a single author
 				return Collections.singletonList(
 						new Pair<>(
 							fullAuthorMatcher.group(1).trim(),
 							organisations.trim()));
 			}
-			else {
+			else { // a list of authors and organizations
 				List<Pair<String,String>> result = new ArrayList<>();
 				
+				// create mapping index->organization
 				Matcher findOrganizationsMatcher = 
 					Pattern.compile(FIND_ORGANIZATION_PATTERN).matcher(organisations);
 				Map<Integer, String> organizationsByIndex = new HashMap<>();
@@ -74,6 +95,7 @@ public class Paper {
 						findOrganizationsMatcher.group(3).trim());
 				}
 
+				// find authors and assign their organization
 				Matcher findAuthorMatcher = 
 						Pattern.compile(FIND_AUTHOR_PATTERN).matcher(authors);
 				while (findAuthorMatcher.find()) {
@@ -100,11 +122,14 @@ public class Paper {
 				authors, organisations));
 	}
 	
+	/**
+	 * @return the type of the submission
+	 */
 	public String getContributionType() {
 		return contributionType;
 	}
 
-	public List<String> makeCollection(String items) {
+	private List<String> makeCollection(String items) {
 		if ((items == null) || items.trim().isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -115,10 +140,16 @@ public class Paper {
 		return result;
 	}
 
+	/**
+	 * @return ConfTool keywords
+	 */
 	public List<String> getKeywords() {
 		return keywords;
 	}
 	
+	/**
+	 * @return ConfTool topics
+	 */
 	public List<String> getTopics() {
 		return topics;
 	}

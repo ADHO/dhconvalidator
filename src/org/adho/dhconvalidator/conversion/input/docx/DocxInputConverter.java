@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conversion.input.docx;
 
 import java.io.IOException;
@@ -21,7 +25,16 @@ import org.adho.dhconvalidator.util.DocumentUtil;
 import org.adho.dhconvalidator.util.DocumentLog;
 import org.adho.dhconvalidator.util.Pair;
 
+/**
+ * A converter for Microsoft docx format.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class DocxInputConverter implements InputConverter {
+	/**
+	 * Namespaces used during conversion. public only as an implementation side effect.
+	 */
 	public enum Namespace {
 		MAIN("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), //$NON-NLS-1$ //$NON-NLS-2$
 		DOCPROPSVTYPES("vt", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"), //$NON-NLS-1$ //$NON-NLS-2$
@@ -58,6 +71,9 @@ public class DocxInputConverter implements InputConverter {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#convert(byte[], org.adho.dhconvalidator.conftool.User)
+	 */
 	@Override
 	public byte[] convert(byte[] sourceData, User user) throws IOException {
 		ZipFs zipFs = new ZipFs(sourceData);
@@ -70,7 +86,8 @@ public class DocxInputConverter implements InputConverter {
 		
 		zipFs.putDocument("word/document.xml", document); //$NON-NLS-1$
 
-		DocumentLog.logConversionStepOutput(Messages.getString("DocxInputConverter.log1"), document.toXML()); //$NON-NLS-1$
+		DocumentLog.logConversionStepOutput(
+				Messages.getString("DocxInputConverter.log1"), document.toXML()); //$NON-NLS-1$
 
 		Document customPropDoc = zipFs.getDocument("docProps/custom.xml"); //$NON-NLS-1$
 		Integer paperId = getPaperIdFromMeta(customPropDoc);
@@ -79,6 +96,11 @@ public class DocxInputConverter implements InputConverter {
 		return zipFs.toZipData();
 	}
 
+	/**
+	 * We always want numbered headings.
+	 * 
+	 * @param document
+	 */
 	private void ensureNumberedHeading(Document document) {
 		Nodes searchResult = document.query("//w:pStyle[@w:val='DH-Heading']", xPathContext); //$NON-NLS-1$
 		for (int i=0; i<searchResult.size(); i++) {
@@ -87,7 +109,13 @@ public class DocxInputConverter implements InputConverter {
 		}
 	}
 
+	/**
+	 * Strips the template sections.
+	 * 
+	 * @param document 
+	 */
 	private void stripTemplateSections(Document document) {
+		// strip the template sections
 		ParagraphParser paragraphParser = new ParagraphParser();
 		paragraphParser.stripTemplateSections(document, xPathContext);
 		
@@ -106,6 +134,11 @@ public class DocxInputConverter implements InputConverter {
 		}
 	}
 
+	/**
+	 * Removes paragraph styles that are not supported.
+	 * 
+	 * @param document
+	 */
 	private void cleanupParagraphStyles(Document document) {
 		Nodes searchResult = 
 				document.query("//w:pPr/w:rPr", xPathContext); //$NON-NLS-1$
@@ -152,6 +185,9 @@ public class DocxInputConverter implements InputConverter {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#getPersonalizedTemplate(org.adho.dhconvalidator.conftool.Paper)
+	 */
 	@Override
 	public byte[] getPersonalizedTemplate(Paper paper) throws IOException {
 		ZipFs zipFs = 
@@ -174,6 +210,11 @@ public class DocxInputConverter implements InputConverter {
 		return zipFs.toZipData();
 	}
 
+	/**
+	 * Injects the paperID into the meta data.
+	 * @param customPropDoc
+	 * @param paperId
+	 */
 	private void injectPaperIdIntoMeta(Document customPropDoc, Integer paperId) {
 		Element propertyElement = 
 			DocumentUtil.getFirstMatch(
@@ -185,6 +226,12 @@ public class DocxInputConverter implements InputConverter {
 		propertyElement.appendChild(String.valueOf(paperId));
 	}
 
+	/**
+	 * Injects authors into the readonly authors section. 
+	 * @param document
+	 * @param authorsAndAffiliations
+	 * @throws IOException
+	 */
 	private void injectAuthorsIntoContent(Document document,
 			List<Pair<String, String>> authorsAndAffiliations) throws IOException {
 		Nodes searchResult = 
@@ -219,6 +266,12 @@ public class DocxInputConverter implements InputConverter {
 		
 	}
 
+	/**
+	 * Injects the title into the readonly title section.
+	 * @param document
+	 * @param title
+	 * @throws IOException
+	 */
 	private void injectTitleIntoContent(Document document, String title) throws IOException {
 		Nodes searchResult = document.query("//w:pStyle[@w:val='DH-Title']", xPathContext); //$NON-NLS-1$
 		
@@ -240,11 +293,17 @@ public class DocxInputConverter implements InputConverter {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#getFileExtension()
+	 */
 	@Override
 	public String getFileExtension() {
 		return Type.DOCX.getExtension();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#getPaper()
+	 */
 	@Override
 	public Paper getPaper() {
 		return paper;

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import org.adho.dhconvalidator.Messages;
@@ -9,6 +13,11 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+/**
+ * The About box.
+ * @author marco.petris@web.de
+ *
+ */
 public class AboutWindow extends Window {
 	
 	public AboutWindow() {

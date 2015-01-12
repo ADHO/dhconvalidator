@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import org.adho.dhconvalidator.Messages;
@@ -7,11 +11,20 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * A panel that displays its components centered and has an optional 
+ * {@link HeaderPanel}.
+ * @author marco.petris@web.de
+ *
+ */
 public class CenterPanel extends VerticalLayout {
 	
 	private VerticalLayout center;
 	private HeaderPanel headerPanel;
 
+	/**
+	 * @param showHeader <code>true</code>->display the {@link HeaderPanel}.
+	 */
 	public CenterPanel(boolean showHeader) {
 		initComponents(showHeader);
 	}
@@ -42,7 +55,13 @@ public class CenterPanel extends VerticalLayout {
 		center.setComponentAlignment(c, alignment);
 	}
 
+	/**
+	 * @return the backlink instance or <code>null</code>
+	 */
 	public BackLink getBackLink() {
+		if (headerPanel == null) {
+			return null;
+		}
 		return headerPanel.getBackLink();
 	}
 

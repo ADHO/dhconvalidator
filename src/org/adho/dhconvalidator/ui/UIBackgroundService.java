@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.ui;
 
 import java.util.concurrent.ExecutorService;
@@ -12,8 +16,17 @@ import de.catma.backgroundservice.ExecutionListener;
 import de.catma.backgroundservice.ProgressCallable;
 import de.catma.backgroundservice.ProgressListener;
 
+/**
+ * A background service that works with Vaadin {@link UI}s.
+ * @author marco.petris@web.de
+ *
+ */
 public class UIBackgroundService implements BackgroundService {
 	
+	/**
+	 * a listener that delegates progress updates in a thread safe way.
+	 *
+	 */
 	private static class UIProgressListener implements ProgressListener {
 		private ProgressListener delegate;
 		
@@ -46,6 +59,9 @@ public class UIBackgroundService implements BackgroundService {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see de.catma.backgroundservice.BackgroundService#submit(de.catma.backgroundservice.ProgressCallable, de.catma.backgroundservice.ExecutionListener, de.catma.backgroundservice.ProgressListener)
+	 */
 	@Override
 	public <T> void submit(final ProgressCallable<T> callable,
 			final ExecutionListener<T> listener, final ProgressListener progressListener) {

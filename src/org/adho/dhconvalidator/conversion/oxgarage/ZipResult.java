@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 http://www.adho.org/
+ * License: see LICENSE file
+ */
 package org.adho.dhconvalidator.conversion.oxgarage;
 
 import java.io.ByteArrayInputStream;
@@ -20,25 +24,41 @@ import nu.xom.Serializer;
 
 import org.apache.commons.io.IOUtils;
 
+/**
+ * A container for the result files to be returned to the user as a ZIP file with
+ * .dhc extension.
+ * 
+ * @author marco.petris@web.de
+ *
+ */
 public class ZipResult {
 	
 	private Document document;
 	private Map<String, byte[]> externalResources;
 	private String documentName;
 	
+	/**
+	 * @param is the source to read from (zipped input stream)
+	 * @throws IOException in case of any failure
+	 */
 	public ZipResult(InputStream is) throws IOException {
 		this(is, null);
 	}
 	
+	/**
+	 * @param is the source to read from (zipped input stream)
+	 * @param documentName the name that should be used for the TEI file.
+	 * @throws IOException in case of any failure
+	 */
 	public ZipResult(InputStream is, String documentName) throws IOException {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		IOUtils.copy(is, buffer);
 		
-		if (isZipFile(buffer)) {
+		if (isZipFile(buffer)) { // is the source a ZIP file or ...
 			externalResources = new HashMap<String, byte[]>();
 			extractZipFile(buffer);
 		}
-		else {
+		else { //... do we have a single file?
 			externalResources = Collections.emptyMap();
 			buildDocument(buffer);
 		}
@@ -47,6 +67,10 @@ public class ZipResult {
 		}
 	}
 
+	/**
+	 * @param buffer the source for the TEI file
+	 * @throws IOException in case of any failure
+	 */
 	private void buildDocument(ByteArrayOutputStream buffer) throws IOException {
 		Builder builder = new Builder();
 		try {
@@ -56,6 +80,11 @@ public class ZipResult {
 		}		
 	}
 
+	/**
+	 * Decompress content.
+	 * @param buffer zipped source
+	 * @throws IOException in case of any failure
+	 */
 	private void extractZipFile(ByteArrayOutputStream buffer) throws IOException {
 		ZipInputStream zipInputStream = 
 				new ZipInputStream(new ByteArrayInputStream(buffer.toByteArray()));
@@ -75,6 +104,10 @@ public class ZipResult {
 		
 	}
 
+	/**
+	 * @param buffer
+	 * @return <code>true</code> if the given buffer contains a ZIP file
+	 */
 	private boolean isZipFile(ByteArrayOutputStream buffer) {
 		if (buffer.size() > 4) {
 			byte[] testArray = buffer.toByteArray();
@@ -84,18 +117,34 @@ public class ZipResult {
 		return false;
 	}
 
+	/**
+	 * @return the TEI document
+	 */
 	public Document getDocument() {
 		return document;
 	}
 
+	/**
+	 * @param resourceKey path+name of the external resource
+	 * @return the resource data
+	 */
 	public byte[] getExternalResource(String resourceKey) {
 		return externalResources.get(resourceKey);
 	}
 	
+	/**
+	 * Moves the resource that can be found at oldResourceKey to newResourceKey
+	 * @param oldResourceKey
+	 * @param newResourceKey
+	 */
 	public void moveExternalResource(String oldResourceKey, String newResourceKey) {
 		externalResources.put(newResourceKey, externalResources.remove(oldResourceKey));
 	}
 
+	/**
+	 * @return this container as compressed data
+	 * @throws IOException in case of any failure
+	 */
 	public byte[] toZipData() throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		
@@ -119,6 +168,10 @@ public class ZipResult {
 		return bos.toByteArray();
 	}
 
+	/**
+	 * @param pathPart the beginning of the path
+	 * @return all resources that have a path that matches the given path part
+	 */
 	public List<String> getExternalResourcePathsStartsWith(String pathPart) {
 		ArrayList<String> result = new ArrayList<>();
 		for (String path : externalResources.keySet()) {
@@ -129,6 +182,11 @@ public class ZipResult {
 		return Collections.unmodifiableList(result);
 	}
 	
+	/**
+	 * Adds a resource with the given path and the given data.
+	 * @param path path+name
+	 * @param data
+	 */
 	public void putResource(String path, byte[] data) {
 		externalResources.put(path, data);
 	}
