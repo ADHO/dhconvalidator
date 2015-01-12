@@ -1,5 +1,4 @@
-DHConvalidator
-==============
+# DHConvalidator
 
 The goal of the DHConvalidator is a simplification of the creation of a consistent [TEI] (http://www.tei-c.org) text base of Digital Humanities (DH) conference abstracts for further processing like the generation of the book of abstracts. The idea was to offer the user the possibility to edit the final version of the submission with her tool of choice starting with two of the most popular systems Libre Office and Microsoft Word. 
 
@@ -7,15 +6,14 @@ The DHCovalidator works together with the conference management tool [ConfTool] 
 
 The submission of the final version is composed of four steps after logging in:
 
-- Generates a template for each of his submissions for one of the supported editing systems via the Template Generation Service.
-- Adding subtitle (optional), content, notes (optional) and references (optional) to the template.
-- Converting the template to a .dhc package via the Conversion and Validation Service
-- Uploading the .dhc package to ConfTool
+1. Generates a template for each of his submissions for one of the supported editing systems via the Template Generation Service.
+2. Adding subtitle (optional), content, notes (optional) and references (optional) to the template.
+3. Converting the template to a .dhc package via the Conversion and Validation Service
+4. Uploading the .dhc package to ConfTool
 
 The .dhc package contains the TEI version, integrated media files and a HTML version of the submission.
 
-Installation
-------------
+## Installation
 Take the latest WAR file release (or create a WAR file yourself) and extract it to a Servlet container that supports websockets (Jetty 7 or higher, Tomcat 8 or higher) and JNDI. 
 
 Edit the dhconvalidator.properties:
@@ -24,7 +22,7 @@ Edit the dhconvalidator.properties:
 - Edit settings for validation, min resolution, publication statemment and so on.
 
 Integration of the DHConvalidator is done via integrating an IFRAME into the host site:
-	<iframe src="http://mydomain/dhconvalidator/" height="230" width="250" frameborder="0"></iframe>
+`<iframe src="http://mydomain/dhconvalidator/" height="230" width="250" frameborder="0"></iframe>`
 To avoid cross site scripting issues the domain should be the same as the domain of the host site. 
 
 If you want to use a proxy to forward the dhconvalidator requests keep in mind that the proxy must support websockets as well.
