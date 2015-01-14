@@ -14,9 +14,9 @@ The submission of the final version is composed of four steps after logging in:
 The .dhc package contains the TEI version, integrated media files and a HTML version of the submission.
 
 ## Installation
-Take the latest WAR file release (or create a WAR file yourself) and extract it to a Servlet container that supports websockets (Jetty 7 or higher, Tomcat 8 or higher) and JNDI. 
+Take the latest [WAR file release] (https://github.com/mpetris/dhconvalidator/blob/master/release/) or create a WAR file yourself and extract it to a Servlet container that supports websockets (Jetty 7 or higher, Tomcat 8 or higher) and JNDI. 
 
-Edit the dhconvalidator.properties:
+Copy the dhconvalidator.properties.example to dhconvalidator.properties and edit it as needed:
 - Set the ConfTool REST interface settings like URL and shared password. 
 - Set the OxGarage webservice URL (Note that the dhconvalidator TEI/Stylesheets profile must be installed for the OxGarage webservice)
 - Edit settings for validation, min resolution, publication statemment and so on.
