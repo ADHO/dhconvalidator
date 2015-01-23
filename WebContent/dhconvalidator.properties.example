@@ -1,4 +1,4 @@
-version=1.0
+version=1.1
 logConversionStepOutput=false
 conftool_shared_pass=MyPass
 conftool_url=https://www.conftool.net/demo/dh2015_26a/rest.php
