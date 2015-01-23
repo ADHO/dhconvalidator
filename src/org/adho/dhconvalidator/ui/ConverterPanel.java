@@ -201,14 +201,16 @@ public class ConverterPanel extends VerticalLayout implements View {
 			
 			@Override
 			public void uploadStarted(StartedEvent event) {
-				// clean everything for the new conversion
-				preview.setValue(""); //$NON-NLS-1$
-				logArea.setValue(""); //$NON-NLS-1$
-				btDownloadResult.setVisible(false);
-				downloadInfo.setVisible(false);
-				
-				progressBar.setVisible(true);
-				UI.getCurrent().push();
+				if (!event.getFilename().isEmpty()) {
+					// clean everything for the new conversion
+					preview.setValue(""); //$NON-NLS-1$
+					logArea.setValue(""); //$NON-NLS-1$
+					btDownloadResult.setVisible(false);
+					downloadInfo.setVisible(false);
+					
+					progressBar.setVisible(true);
+					UI.getCurrent().push();
+				}
 			}
 		});
 
