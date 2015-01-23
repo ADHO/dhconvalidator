@@ -23,10 +23,18 @@ import org.adho.dhconvalidator.util.Pair;
  *
  */
 public class Paper {
+	private static final String AUTHOR_PATTERN = 
+			"([^;]+)|" // single author 1 
+			+ "(" // multiple authors 2
+				+ "([^()]+?(\\((\\d+)\\))?;)+" // author list 3-5
+				+ "([^()]+?(\\((\\d+)\\))?)" // last author 6-8
+			+ ")"; 
 	
-	private static final String AUTHOR_PATTERN = "([^;]+)|((.*?\\((\\d+)\\);)+(.*?\\((\\d+)\\)))"; //$NON-NLS-1$
-	private static final String FIND_AUTHOR_PATTERN = "((.*?)\\((\\d+)\\));?"; //$NON-NLS-1$
-	private static final String FIND_ORGANIZATION_PATTERN = "\\s*((\\d+):)?([^;]+);?"; //$NON-NLS-1$
+	private static final String FIND_AUTHOR_PATTERN = "(([^();]+)(\\((\\d+)\\))?);?"; //1 name, 3 index 4 index number
+
+	private static final String FIND_ORGANIZATION_PATTERN = 
+			"(\\s*+[^0-9].+)|" //single organization 1
+			+ "(\\s*(\\d+):([^;]+);?)"; //indexed list 3 index 4 name
 
 	private Integer paperId;
 	private String title;
@@ -89,17 +97,26 @@ public class Paper {
 				Matcher findOrganizationsMatcher = 
 					Pattern.compile(FIND_ORGANIZATION_PATTERN).matcher(organisations);
 				Map<Integer, String> organizationsByIndex = new HashMap<>();
+				
 				while (findOrganizationsMatcher.find()) {
-					organizationsByIndex.put(
-						Integer.valueOf(findOrganizationsMatcher.group(2).trim()), 
-						findOrganizationsMatcher.group(3).trim());
+					if (findOrganizationsMatcher.group(1) != null) {
+						organizationsByIndex.put(0, findOrganizationsMatcher.group(1));
+					}
+					else {
+						organizationsByIndex.put(
+							Integer.valueOf(findOrganizationsMatcher.group(3).trim()), 
+							findOrganizationsMatcher.group(4).trim());
+					}
 				}
-
+				
 				// find authors and assign their organization
 				Matcher findAuthorMatcher = 
 						Pattern.compile(FIND_AUTHOR_PATTERN).matcher(authors);
 				while (findAuthorMatcher.find()) {
-					int idx = Integer.valueOf(findAuthorMatcher.group(3).trim());
+					int idx = 0;
+					if (findAuthorMatcher.group(3) != null) {
+						idx = Integer.valueOf(findAuthorMatcher.group(4).trim());
+					}
 					String author = findAuthorMatcher.group(2).trim();
 					result.add(
 						new Pair<>(author, organizationsByIndex.get(idx)));
@@ -153,4 +170,5 @@ public class Paper {
 	public List<String> getTopics() {
 		return topics;
 	}
+
 }
