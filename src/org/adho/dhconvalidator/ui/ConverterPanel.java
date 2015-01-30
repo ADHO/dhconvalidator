@@ -77,6 +77,8 @@ public class ConverterPanel extends VerticalLayout implements View {
 	private Label downloadInfo;
 
 	private FileDownloader currentFileDownloader;
+
+	private Label confToolLabel;
 	
 	public ConverterPanel() {
 		initComponents();
@@ -203,11 +205,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 			public void uploadStarted(StartedEvent event) {
 				if (!event.getFilename().isEmpty()) {
 					// clean everything for the new conversion
-					preview.setValue(""); //$NON-NLS-1$
-					logArea.setValue(""); //$NON-NLS-1$
-					btDownloadResult.setVisible(false);
-					downloadInfo.setVisible(false);
-					
+					cleanUp();
 					progressBar.setVisible(true);
 					UI.getCurrent().push();
 				}
@@ -273,13 +271,18 @@ public class ConverterPanel extends VerticalLayout implements View {
 		setMargin(true);
 		setSizeFull();
 		setSpacing(true);
-		HeaderPanel headerPanel = new HeaderPanel();
+		HeaderPanel headerPanel = new HeaderPanel(null);
 		addComponent(headerPanel);
 		
 		Label title = new Label(Messages.getString("ConverterPanel.title")); //$NON-NLS-1$
 		title.addStyleName("title-caption"); //$NON-NLS-1$
 		addComponent(title);
 		setComponentAlignment(title, Alignment.TOP_LEFT);
+		
+		Label info = new Label(
+				Messages.getString("ConverterPanel.info"), //$NON-NLS-1$
+				ContentMode.HTML);
+		addComponent(info);
 		
 		HorizontalLayout inputPanel = new HorizontalLayout();
 		inputPanel.setSpacing(true);
@@ -351,7 +354,17 @@ public class ConverterPanel extends VerticalLayout implements View {
 		btExample.setStyleName(BaseTheme.BUTTON_LINK);
 		btExample.addStyleName("plain-link"); //$NON-NLS-1$
 		rightPanel.addComponent(btExample);
-
+		
+		confToolLabel = new Label(
+				Messages.getString(
+						"ConverterPanel.gotoConfToolMsg", //$NON-NLS-1$
+						PropertyKey.conftool_login_url.getValue()),
+				ContentMode.HTML);
+		confToolLabel.setVisible(false);
+		confToolLabel.addStyleName("postDownloadInfoRedAndBold");
+		
+		rightPanel.addComponent(confToolLabel);
+		
 		new BrowserWindowOpener(DHConvalidatorExample.class).extend(btExample);
 	}
 	
@@ -362,6 +375,9 @@ public class ConverterPanel extends VerticalLayout implements View {
 		try {
 			ZipResult result = (ZipResult) VaadinSession.getCurrent().getAttribute(
 					SessionStorageKey.ZIPRESULT.name());
+			logArea.setValue("");
+			confToolLabel.setVisible(true);
+			
 			return new ByteArrayInputStream(result.toZipData());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -380,12 +396,16 @@ public class ConverterPanel extends VerticalLayout implements View {
 	public void enter(ViewChangeEvent event) {
 		VaadinSession.getCurrent().setAttribute(
 				SessionStorageKey.ZIPRESULT.name(), null);	
-		btDownloadResult.setVisible(false);
-		downloadInfo.setVisible(false);
-		preview.setValue(""); //$NON-NLS-1$
-		logArea.setValue(""); //$NON-NLS-1$
+		cleanUp();
 		resultCaption.setValue(Messages.getString("ConverterPanel.previewTitle2")); //$NON-NLS-1$
 		Page.getCurrent().setTitle(Messages.getString("ConverterPanel.pageTitle")); //$NON-NLS-1$
 	}
 
+	private void cleanUp() {
+		btDownloadResult.setVisible(false);
+		downloadInfo.setVisible(false);
+		preview.setValue(""); //$NON-NLS-1$
+		logArea.setValue(""); //$NON-NLS-1$
+		confToolLabel.setVisible(false);
+	}
 }

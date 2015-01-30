@@ -41,5 +41,10 @@ public interface InputConverter {
 	 * or <code>null</code> if not yet available (prior to conversion)
 	 */
 	public Paper getPaper();
+	
+	/**
+	 * @return a short info about what Editing systems are support by the file type of this converter.
+	 */
+	public String getTextEditorDescription();
 
 }

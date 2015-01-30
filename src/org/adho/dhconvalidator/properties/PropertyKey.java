@@ -18,9 +18,13 @@ public enum PropertyKey {
 	 */
 	conftool_shared_pass,
 	/**
+	 * The ConfTool Login page URL. 
+	 */
+	conftool_login_url,
+	/**
 	 * The ConfTool REST web service URL
 	 */
-	conftool_url,
+	conftool_rest_url,
 	/**
 	 * The OxGarage REST web service URL.
 	 */
@@ -57,6 +61,10 @@ public enum PropertyKey {
 	 * <code>true</code>->perform a schema validation against the DHConvalidator schema.
 	 */
 	performSchemaValidation,
+	/**
+	 * the base url of the DHConvalidator, e. g. http://localhost/dhconvalidator/
+	 */
+	base_url,
 	;
 	
 	/**

@@ -17,7 +17,7 @@ import com.vaadin.ui.themes.BaseTheme;
  *
  */
 public class BackLink extends Button {
-	public BackLink() {
+	public BackLink(final ServicesViewName backstepService) {
 		super(Messages.getString("BackLink.title")); //$NON-NLS-1$
 		setStyleName(BaseTheme.BUTTON_LINK);
 		addStyleName("plain-link"); //$NON-NLS-1$
@@ -25,7 +25,7 @@ public class BackLink extends Button {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
-				UI.getCurrent().getNavigator().navigateTo(""); //$NON-NLS-1$
+				UI.getCurrent().getNavigator().navigateTo((backstepService==null)?"":backstepService.name()); //$NON-NLS-1$
 			}
 		});
 	}

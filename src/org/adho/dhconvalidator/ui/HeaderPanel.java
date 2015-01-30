@@ -17,19 +17,20 @@ public class HeaderPanel extends HorizontalLayout {
 	
 	private BackLink backLink;
 
-	public HeaderPanel() {
-		initComponents();
+	public HeaderPanel(ServicesViewName backstepService) {
+		initComponents(backstepService);
 	}
 
 	/**
 	 * Setup UI.
+	 * @param backstepService 
 	 */
-	private void initComponents() {
+	private void initComponents(ServicesViewName backstepService) {
 		setSpacing(true);
 		
 		setWidth("100%"); //$NON-NLS-1$
 
-		backLink = new BackLink();
+		backLink = new BackLink(backstepService);
 		addComponent(backLink);
 		setComponentAlignment(backLink, Alignment.TOP_LEFT);
 		

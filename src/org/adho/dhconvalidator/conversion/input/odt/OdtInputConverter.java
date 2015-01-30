@@ -23,6 +23,8 @@ import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.Type;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
+import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.util.DocumentUtil;
 import org.adho.dhconvalidator.util.Pair;
 
 /**
@@ -61,7 +63,7 @@ public class OdtInputConverter implements InputConverter {
 			return name;
 		}
 	}
-	private static final String TEMPLATE = "template/DH_template_v1.ott"; //$NON-NLS-1$
+	private static final String TEMPLATE = "template/DH_template_v2.ott"; //$NON-NLS-1$
 	private static final String CONFTOOLPAPERID_ATTRIBUTENAME = "ConfToolPaperID"; //$NON-NLS-1$
 	
 	private XPathContext xPathContext;
@@ -98,7 +100,7 @@ public class OdtInputConverter implements InputConverter {
 
 		injectTitleIntoMeta(metaDoc, paper.getTitle());
 		injectAuthorsIntoMeta(metaDoc, paper.getAuthorsAndAffiliations());
-
+		
 		zipFs.putDocument("content.xml", contentDoc); //$NON-NLS-1$
 		return zipFs.toZipData();
 	}
@@ -236,6 +238,52 @@ public class OdtInputConverter implements InputConverter {
 		if (searchResult.size() > 0) {
 			removeNodes(searchResult);
 		}
+		
+		searchResult = 
+				contentDoc.query(
+					"//text:section[@text:name='TitleInfoPre']",  //$NON-NLS-1$
+					xPathContext);
+		
+		if (searchResult.size() > 0) {
+			removeNodes(searchResult);
+		}
+		
+		
+		searchResult = 
+				contentDoc.query(
+					"//text:section[@text:name='TitleInfoPost']",  //$NON-NLS-1$
+					xPathContext);
+		
+		if (searchResult.size() > 0) {
+			removeNodes(searchResult);
+		}
+		
+		searchResult = 
+				contentDoc.query(
+						"//text:section[@text:name='AuthorsInfoPre']",  //$NON-NLS-1$
+						xPathContext);
+		
+		if (searchResult.size() > 0) {
+			removeNodes(searchResult);
+		}
+		
+		searchResult = 
+				contentDoc.query(
+						"//text:section[@text:name='AuthorsInfoPost']",  //$NON-NLS-1$
+						xPathContext);
+		
+		if (searchResult.size() > 0) {
+			removeNodes(searchResult);
+		}
+		
+		searchResult = 
+				contentDoc.query(
+						"//text:section[@text:name='EndOfDocInfo']",  //$NON-NLS-1$
+						xPathContext);
+		
+		if (searchResult.size() > 0) {
+			removeNodes(searchResult);
+		}
 	}
 
 	private void removeNodes(Nodes nodes) {
@@ -308,7 +356,8 @@ public class OdtInputConverter implements InputConverter {
 		
 		injectTitleIntoContent(contentDoc, paper.getTitle());
 		injectAuthorsIntoContent(contentDoc, paper.getAuthorsAndAffiliations());
-		
+		updateLinkToConverter(contentDoc, PropertyKey.base_url.getValue());
+
 		zipFs.putDocument("content.xml", contentDoc); //$NON-NLS-1$
 		
 		Document metaDoc = zipFs.getDocument("meta.xml"); //$NON-NLS-1$
@@ -319,6 +368,17 @@ public class OdtInputConverter implements InputConverter {
 		zipFs.putDocument("meta.xml", metaDoc); //$NON-NLS-1$
 		
 		return zipFs.toZipData();
+	}
+
+	private void updateLinkToConverter(Document contentDoc, String baseURL) {
+		Element converterLinkElement = 
+			DocumentUtil.getFirstMatch(
+					contentDoc, 
+					"//text:a[starts-with(@xlink:href, 'http://localhost:8080/dhconvalidator')]", 
+					xPathContext);
+		
+		Attribute targetAttr = converterLinkElement.getAttribute("href", Namespace.XLINK.toUri());  //$NON-NLS-1$
+		targetAttr.setValue(targetAttr.getValue().replace("http://localhost:8080/", baseURL));  //$NON-NLS-1$
 	}
 
 	/**
@@ -512,5 +572,10 @@ public class OdtInputConverter implements InputConverter {
 	@Override
 	public Paper getPaper() {
 		return paper;
+	}
+	
+	@Override
+	public String getTextEditorDescription() {
+		return Messages.getString("OdtInputConverter.editors");
 	}
 }

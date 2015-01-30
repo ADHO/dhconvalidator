@@ -9,13 +9,12 @@ import org.adho.dhconvalidator.Messages;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -27,9 +26,9 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class ServiceSelectionPanel extends CenterPanel implements View {
 	
-	private Button btOdtTemplate;
-	private Button btDocxTemplate;
-	private Button btConversionPanel;
+	private Button btTemplateGeneration;
+	private Button btConversion;
+	private Button btConfTool;
 
 	public ServiceSelectionPanel() {
 		super(true);
@@ -42,15 +41,7 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 	 * Setup behaviour.
 	 */
 	private void initActions() {
-		btOdtTemplate.addClickListener(new ClickListener() {
-			
-			@Override
-			public void buttonClick(ClickEvent event) {
-				UI.getCurrent().getNavigator().navigateTo(
-						ServicesViewName.odt.name());
-			}
-		});
-		btConversionPanel.addClickListener(new ClickListener() {
+		btConversion.addClickListener(new ClickListener() {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -58,12 +49,22 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 						ServicesViewName.converter.name());
 			}
 		});
-		btDocxTemplate.addClickListener(new ClickListener() {
+
+		btTemplateGeneration.addClickListener(new ClickListener() {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
 				UI.getCurrent().getNavigator().navigateTo(
-						ServicesViewName.docx.name());
+						ServicesViewName.templates.name());
+			}
+		});
+		
+		btConfTool.addClickListener(new ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				UI.getCurrent().getNavigator().navigateTo(
+						ServicesViewName.conftoolupload.name());
 			}
 		});
 	}
@@ -72,8 +73,6 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 	 * Setup UI.
 	 */
 	private void initComponents() {
-		setHeightUndefined();
-		
 		getBackLink().setVisible(false);
 		
 		Label infoLabel = new Label(
@@ -82,50 +81,43 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 		infoLabel.setWidth("600px"); //$NON-NLS-1$
 		addCenteredComponent(infoLabel);
 		
-		VerticalLayout templateGeneratorServiceContent = new VerticalLayout();
-		templateGeneratorServiceContent.setSpacing(true);
-		templateGeneratorServiceContent.setMargin(true);
+		VerticalLayout option1Panel = new VerticalLayout();
+		option1Panel.setSpacing(true);
+		option1Panel.setMargin(new MarginInfo(true, false, true, false));
+		addCenteredComponent(option1Panel);
 		
-		Panel templateGeneratorServicePanel = 
-			new Panel(Messages.getString("ServiceSelectionPanel.templateGenerationService"), //$NON-NLS-1$
-					templateGeneratorServiceContent); 
-		templateGeneratorServicePanel.setWidth("500px"); //$NON-NLS-1$
-		templateGeneratorServiceContent.addComponent(
-				new Label(Messages.getString("ServiceSelectionPanel.templateGenerationServiceInfo"), //$NON-NLS-1$
-				ContentMode.HTML));
+		Label option1Label = new Label(
+			Messages.getString("ServiceSelectionPanel.option1Info"),  //$NON-NLS-1$
+			ContentMode.HTML);
+		option1Panel.addComponent(option1Label);
 		
-		btOdtTemplate = new Button(Messages.getString("ServiceSelectionPanel.odtButtonCaption")); //$NON-NLS-1$
+		btTemplateGeneration = new Button(Messages.getString("ServiceSelectionPanel.option1"));  //$NON-NLS-1$
+		option1Panel.addComponent(btTemplateGeneration);
 		
-		btOdtTemplate.setDescription(
-			Messages.getString("ServiceSelectionPanel.odtButtonDescription")); //$NON-NLS-1$
-		templateGeneratorServiceContent.addComponent(btOdtTemplate);
+		VerticalLayout option2Panel = new VerticalLayout();
+		option2Panel.setSpacing(true);
+		addCenteredComponent(option2Panel);
 		
-		btDocxTemplate = new Button(Messages.getString("ServiceSelectionPanel.docxButtonCaption")); //$NON-NLS-1$
-		btDocxTemplate.setDescription(
-			Messages.getString("ServiceSelectionPanel.docxButtonDescription")); //$NON-NLS-1$
-		templateGeneratorServiceContent.addComponent(btDocxTemplate);
+		Label option2Label = new Label(
+			Messages.getString("ServiceSelectionPanel.option2Info"),  //$NON-NLS-1$
+			ContentMode.HTML);
+		option2Panel.addComponent(option2Label);
 		
-		VerticalLayout conversionAndValidationServiceContent = new VerticalLayout();
+		btConversion = new Button(Messages.getString("ServiceSelectionPanel.option2"));  //$NON-NLS-1$
+		option2Panel.addComponent(btConversion);	
 		
-		conversionAndValidationServiceContent.setSpacing(true);
-		conversionAndValidationServiceContent.setMargin(true);
-
-		Panel conversionAndValidationServicePanel = 
-				new Panel(
-						Messages.getString("ServiceSelectionPanel.conversionService"), //$NON-NLS-1$
-						conversionAndValidationServiceContent);
-		conversionAndValidationServicePanel.setWidth("500px"); //$NON-NLS-1$
-		conversionAndValidationServiceContent.addComponent(
-			new Label(
-				Messages.getString("ServiceSelectionPanel.conversionServiceInfo"), //$NON-NLS-1$
-				ContentMode.HTML));
-		btConversionPanel = new Button(Messages.getString("ServiceSelectionPanel.btContinue")); //$NON-NLS-1$
-		conversionAndValidationServiceContent.addComponent(btConversionPanel);
-		conversionAndValidationServiceContent.setComponentAlignment(
-				btConversionPanel, Alignment.MIDDLE_CENTER);
-
-		addCenteredComponent(templateGeneratorServicePanel); 
-		addCenteredComponent(conversionAndValidationServicePanel);
+		VerticalLayout option3Panel = new VerticalLayout();
+		option3Panel.setSpacing(true);
+		option3Panel.setMargin(new MarginInfo(true, false, true, false));
+		addCenteredComponent(option3Panel);
+		
+		Label option3Label = new Label(
+			Messages.getString("ServiceSelectionPanel.option3Info"),  //$NON-NLS-1$
+			ContentMode.HTML);
+		option3Panel.addComponent(option3Label);
+		
+		btConfTool = new Button(Messages.getString("ServiceSelectionPanel.option3"));  //$NON-NLS-1$
+		option3Panel.addComponent(btConfTool);	
 	}
 	
 	@Override

@@ -131,7 +131,7 @@ public class DocxOutputConverter extends CommonOutputConverter {
 			
 			Elements children = parent.getChildElements();
 			
-			if (children.size() >= startPosition) {
+			if (children.size() > startPosition) {
 				Element textElement = 
 						DocumentUtil.getFirstMatch(
 								document, "/tei:TEI/tei:text", xPathContext); //$NON-NLS-1$

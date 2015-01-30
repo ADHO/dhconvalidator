@@ -7,6 +7,7 @@ package org.adho.dhconvalidator.conversion.input.docx;
 import java.io.IOException;
 import java.util.List;
 
+import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -21,8 +22,9 @@ import org.adho.dhconvalidator.conversion.Type;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.conversion.input.docx.paragraphparser.ParagraphParser;
-import org.adho.dhconvalidator.util.DocumentUtil;
+import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentLog;
+import org.adho.dhconvalidator.util.DocumentUtil;
 import org.adho.dhconvalidator.util.Pair;
 
 /**
@@ -38,6 +40,7 @@ public class DocxInputConverter implements InputConverter {
 	public enum Namespace {
 		MAIN("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"), //$NON-NLS-1$ //$NON-NLS-2$
 		DOCPROPSVTYPES("vt", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"), //$NON-NLS-1$ //$NON-NLS-2$
+		RELS("rels", "http://schemas.openxmlformats.org/package/2006/relationships"),  //$NON-NLS-1$ //$NON-NLS-2$
 		;
 		private String name;
 		private String uri;
@@ -56,7 +59,7 @@ public class DocxInputConverter implements InputConverter {
 		}
 	}
 
-	private static final String TEMPLATE = "template/DH_template_v3.docx"; //$NON-NLS-1$
+	private static final String TEMPLATE = "template/DH_template_v4.docx"; //$NON-NLS-1$
 	
 	private XPathContext xPathContext;
 	private Paper paper;
@@ -201,6 +204,13 @@ public class DocxInputConverter implements InputConverter {
 		zipFs.putDocument("word/document.xml", document); //$NON-NLS-1$
 
 		
+		Document documentRelations = zipFs.getDocument("word/_rels/document.xml.rels"); //$NON-NLS-1$
+		
+		updateLinkToConverter(documentRelations, PropertyKey.base_url.getValue());
+		
+		zipFs.putDocument("word/_rels/document.xml.rels", documentRelations);
+		
+		
 		Document customPropDoc = zipFs.getDocument("docProps/custom.xml"); //$NON-NLS-1$
 		
 		injectPaperIdIntoMeta(customPropDoc, paper.getPaperId());
@@ -208,6 +218,22 @@ public class DocxInputConverter implements InputConverter {
 		zipFs.putDocument("docProps/custom.xml", customPropDoc); //$NON-NLS-1$
 		
 		return zipFs.toZipData();
+	}
+
+	/**
+	 * Updates the link to the Conversion service with the current base URL.
+	 * @param documentRelations
+	 * @param baseURL
+	 */
+	private void updateLinkToConverter(Document documentRelations,
+			String baseURL) {
+		Element converterRelElement = 
+				DocumentUtil.getFirstMatch(
+					documentRelations, 
+					"/rels:Relationships/rels:Relationship[starts-with(@Target,'http://localhost:8080/dhconvalidator')]",  //$NON-NLS-1$
+					xPathContext);
+		Attribute targetAttr = converterRelElement.getAttribute("Target");  //$NON-NLS-1$
+		targetAttr.setValue(targetAttr.getValue().replace("http://localhost:8080/", baseURL));  //$NON-NLS-1$
 	}
 
 	/**
@@ -307,6 +333,11 @@ public class DocxInputConverter implements InputConverter {
 	@Override
 	public Paper getPaper() {
 		return paper;
+	}
+	
+	@Override
+	public String getTextEditorDescription() {
+		return Messages.getString("DocxInputConverter.editors");
 	}
 
 }

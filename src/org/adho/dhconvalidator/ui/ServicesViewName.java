@@ -23,4 +23,12 @@ public enum ServicesViewName {
 	 * conversion service
 	 */
 	converter, 
+	/**
+	 * templates generation service
+	 */
+	templates, 
+	/**
+	 * info panel for ConfTool upload
+	 */
+	conftoolupload, 
 }

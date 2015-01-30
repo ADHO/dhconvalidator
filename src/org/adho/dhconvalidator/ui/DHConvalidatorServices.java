@@ -61,6 +61,13 @@ public class DHConvalidatorServices extends UI {
 			navigator.addView(
 				ServicesViewName.converter.name(), 
 				new ConverterPanel());
+			navigator.addView(
+				ServicesViewName.templates.name(), 
+				new TemplateGeneratorPanel());
+			navigator.addView(
+				ServicesViewName.conftoolupload.name(),
+				new ConfToolUploadPanel());
+
 
 			// the visual feedback may reference external resources like images
 			// the ExternalResourceRequestHandler serves those external resources from 

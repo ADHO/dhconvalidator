@@ -46,7 +46,7 @@ public class DHConvalidatorExample extends UI {
 			
 			setContent(content);
 			
-			HeaderPanel headerPanel  = new HeaderPanel();
+			HeaderPanel headerPanel  = new HeaderPanel(null);
 			headerPanel.getBackLink().setVisible(false);
 
 			content.addComponent(headerPanel);

@@ -41,12 +41,13 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 	private Table paperTable;
 	private Button btGenerate;
 	private InputConverter inputConverter;
+	private Label postDownloadLabel;
 
 	/**
 	 * @param inputConverter the InputConverter to be used for template generation
 	 */
 	public PaperSelectionPanel(InputConverter inputConverter) {
-		super(true);
+		super(true, ServicesViewName.templates);
 		this.inputConverter = inputConverter;
 		initComponents();
 	}
@@ -55,6 +56,8 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 	 * Load and display the current papers.
 	 */
 	private void initData() {
+		postDownloadLabel.setVisible(false);
+		
 		paperTable.removeAllItems();
 		try {
 			List<Paper> papers = new ConfToolClient().getPapers(
@@ -112,6 +115,17 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		addCenteredComponent(info);
 		addCenteredComponent(paperTable);
 		addCenteredComponent(btGenerate);
+		
+		postDownloadLabel = 
+				new Label(
+					Messages.getString("PaperSelectionPanel.postDownloadInfo",
+						inputConverter.getTextEditorDescription()),
+					ContentMode.HTML);
+		postDownloadLabel.addStyleName("postDownloadInfoRedAndBold");
+		postDownloadLabel.setVisible(false);
+		
+		addCenteredComponent(postDownloadLabel);
+		
 	}
 
 	/**
@@ -140,7 +154,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 						inputConverter.getPersonalizedTemplate(paper));
 					idx++;
 				}
-				
+				postDownloadLabel.setVisible(true);
 				return new ByteArrayInputStream(zipFs.toZipData());
 			} catch (IOException e) {
 				e.printStackTrace();

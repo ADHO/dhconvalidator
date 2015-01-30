@@ -24,12 +24,17 @@ public class CenterPanel extends VerticalLayout {
 
 	/**
 	 * @param showHeader <code>true</code>->display the {@link HeaderPanel}.
+	 * @param backstepService the service to navigate to via back link 
 	 */
+	public CenterPanel(boolean showHeader, ServicesViewName backstepService) {
+		initComponents(showHeader, backstepService);
+	}
+	
 	public CenterPanel(boolean showHeader) {
-		initComponents(showHeader);
+		this(showHeader, null);
 	}
 
-	private void initComponents(boolean showHeader) {
+	private void initComponents(boolean showHeader, ServicesViewName backstepService) {
 		center = new VerticalLayout();
 		center.setSpacing(true);
 		setSizeFull();
@@ -37,9 +42,9 @@ public class CenterPanel extends VerticalLayout {
 		center.setSizeUndefined();
 		setComponentAlignment(center, Alignment.MIDDLE_CENTER);
 		if (showHeader) {
-			headerPanel = new HeaderPanel();
+			headerPanel = new HeaderPanel(backstepService);
 			center.addComponent(headerPanel);
-			Label title = new Label(Messages.getString("CenterPanel.title")); //$NON-NLS-1$
+			Label title = new Label(getTitle());
 			title.addStyleName("title-caption"); //$NON-NLS-1$
 			center.addComponent(title);
 			center.setComponentAlignment(title, Alignment.TOP_LEFT);
@@ -65,5 +70,8 @@ public class CenterPanel extends VerticalLayout {
 		return headerPanel.getBackLink();
 	}
 
+	protected String getTitle() {
+		return Messages.getString("CenterPanel.title");  //$NON-NLS-1$
+	}
 	
 }

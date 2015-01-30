@@ -59,7 +59,7 @@ public class ConfToolClient {
 	 */
 	public ConfToolClient() {
 		this(
-			PropertyKey.conftool_url.getValue(),
+			PropertyKey.conftool_rest_url.getValue(),
 			PropertyKey.conftool_shared_pass.getValue().toCharArray());
 	}
 	

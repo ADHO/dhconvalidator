@@ -19,7 +19,7 @@ Take the latest [WAR file release] (https://github.com/mpetris/dhconvalidator/bl
 Copy the dhconvalidator.properties.example to dhconvalidator.properties and edit it as needed:
 - Set the ConfTool REST interface settings like URL and shared password. 
 - Set the OxGarage webservice URL (Note that the dhconvalidator TEI/Stylesheets profile must be installed for the OxGarage webservice)
-- Edit settings for validation, min resolution, publication statemment and so on.
+- Edit settings for validation, min resolution, publication statement and so on.
 
 Integration of the DHConvalidator is done via integrating an IFRAME into the host site:
 

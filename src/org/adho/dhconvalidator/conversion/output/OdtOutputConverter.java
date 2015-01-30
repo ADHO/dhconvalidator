@@ -53,32 +53,32 @@ public class OdtOutputConverter extends CommonOutputConverter {
 			
 			Elements bibParagrElements = 
 				bibDivContainerElement.getChildElements("p", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-			
-			Element textElement = 
-					DocumentUtil.getFirstMatch(
-							document, "/tei:TEI/tei:text", xPathContext); //$NON-NLS-1$
-			
-			Element backElement = new Element("back", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-			textElement.appendChild(backElement);
-			
-			Element divBibliogrElement = new Element("div", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-			divBibliogrElement.addAttribute(new Attribute("type", "bibliogr")); //$NON-NLS-1$ //$NON-NLS-2$
-			backElement.appendChild(divBibliogrElement);
-			
-			Element listBiblElement = new Element("listBibl", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-			divBibliogrElement.appendChild(listBiblElement);
-			
-			Element listBiblHeadElement = new Element("head", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-			listBiblHeadElement.appendChild("Bibliography"); //$NON-NLS-1$
-			listBiblElement.appendChild(listBiblHeadElement);
-			
-			for (int i=0; i<bibParagrElements.size(); i++) {
-				Element bibElement = bibParagrElements.get(i);
-				bibElement.getParent().removeChild(bibElement);
-				bibElement.setLocalName("bibl"); //$NON-NLS-1$
-				listBiblElement.appendChild(bibElement);
-			}
-			
+			if (bibParagrElements.size() > 0) {
+				Element textElement = 
+						DocumentUtil.getFirstMatch(
+								document, "/tei:TEI/tei:text", xPathContext); //$NON-NLS-1$
+				
+				Element backElement = new Element("back", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+				textElement.appendChild(backElement);
+				
+				Element divBibliogrElement = new Element("div", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+				divBibliogrElement.addAttribute(new Attribute("type", "bibliogr")); //$NON-NLS-1$ //$NON-NLS-2$
+				backElement.appendChild(divBibliogrElement);
+				
+				Element listBiblElement = new Element("listBibl", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+				divBibliogrElement.appendChild(listBiblElement);
+				
+				Element listBiblHeadElement = new Element("head", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+				listBiblHeadElement.appendChild("Bibliography"); //$NON-NLS-1$
+				listBiblElement.appendChild(listBiblHeadElement);
+				
+				for (int i=0; i<bibParagrElements.size(); i++) {
+					Element bibElement = bibParagrElements.get(i);
+					bibElement.getParent().removeChild(bibElement);
+					bibElement.setLocalName("bibl"); //$NON-NLS-1$
+					listBiblElement.appendChild(bibElement);
+				}
+			}			
 			bibDivContainerElement.getParent().removeChild(bibDivContainerElement);
 		}
 	}
