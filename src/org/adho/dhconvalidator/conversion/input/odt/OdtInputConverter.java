@@ -378,7 +378,7 @@ public class OdtInputConverter implements InputConverter {
 					xPathContext);
 		
 		Attribute targetAttr = converterLinkElement.getAttribute("href", Namespace.XLINK.toUri());  //$NON-NLS-1$
-		targetAttr.setValue(targetAttr.getValue().replace("http://localhost:8080/", baseURL));  //$NON-NLS-1$
+		targetAttr.setValue(targetAttr.getValue().replace("http://localhost:8080/dhconvalidator/", baseURL));  //$NON-NLS-1$
 	}
 
 	/**

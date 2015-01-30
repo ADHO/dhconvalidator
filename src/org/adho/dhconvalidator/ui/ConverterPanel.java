@@ -377,7 +377,8 @@ public class ConverterPanel extends VerticalLayout implements View {
 					SessionStorageKey.ZIPRESULT.name());
 			logArea.setValue("");
 			confToolLabel.setVisible(true);
-			
+			UI.getCurrent().push();
+
 			return new ByteArrayInputStream(result.toZipData());
 		} catch (IOException e) {
 			e.printStackTrace();

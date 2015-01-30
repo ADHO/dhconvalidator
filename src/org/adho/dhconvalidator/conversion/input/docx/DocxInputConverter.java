@@ -233,7 +233,7 @@ public class DocxInputConverter implements InputConverter {
 					"/rels:Relationships/rels:Relationship[starts-with(@Target,'http://localhost:8080/dhconvalidator')]",  //$NON-NLS-1$
 					xPathContext);
 		Attribute targetAttr = converterRelElement.getAttribute("Target");  //$NON-NLS-1$
-		targetAttr.setValue(targetAttr.getValue().replace("http://localhost:8080/", baseURL));  //$NON-NLS-1$
+		targetAttr.setValue(targetAttr.getValue().replace("http://localhost:8080/dhconvalidator/", baseURL));  //$NON-NLS-1$
 	}
 
 	/**

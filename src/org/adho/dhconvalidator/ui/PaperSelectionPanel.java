@@ -30,6 +30,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.UI;
 
 /**
  * A panel that displays the available papers for template generation.
@@ -155,6 +156,8 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 					idx++;
 				}
 				postDownloadLabel.setVisible(true);
+				UI.getCurrent().push();
+				
 				return new ByteArrayInputStream(zipFs.toZipData());
 			} catch (IOException e) {
 				e.printStackTrace();
