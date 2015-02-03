@@ -62,12 +62,27 @@ public class OxGarageConversionClient {
 			ConversionPath conversionPath, 
 			Properties properties) throws IOException {
 		
-		ZipResult zipResult = new ZipResult(convert(sourceData, conversionPath, properties));
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		Serializer serializer = new Serializer(buffer);
 		serializer.setIndent(2);
-		serializer.write(zipResult.getDocument());
+		serializer.write(convertToDocument(sourceData, conversionPath, properties));
 		return buffer.toString("UTF-8"); //$NON-NLS-1$
+	}
+
+	/**
+	 * @param sourceData the input document
+	 * @param conversionPath a path to convert from input format to output format.
+	 * @param properties the conversion properties
+	 * @return the conversion result as a Document
+	 * @throws IOException in case of any failure
+	 */
+	public Document convertToDocument(
+			byte[] sourceData, 
+			ConversionPath conversionPath, 
+			Properties properties) throws IOException {
+		
+		ZipResult zipResult = new ZipResult(convert(sourceData, conversionPath, properties));
+		return zipResult.getDocument();
 	}
 	
 	/**

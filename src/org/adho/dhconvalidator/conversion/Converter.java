@@ -14,10 +14,14 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.validation.SchemaFactory;
 
+import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
+import nu.xom.XPathContext;
 
 import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conftool.Paper;
@@ -41,6 +45,10 @@ import org.xml.sax.XMLReader;
  *
  */
 public class Converter {
+	
+	private static String XHTML_NAMESPACE_URI = "http://www.w3.org/1999/xhtml";
+	private static String XHTML_NAMESPACE = "xhtml";
+	private XPathContext xPathContext;
 
 	private String contentAsXhtml;
 	private Document document;
@@ -52,6 +60,7 @@ public class Converter {
 	 */
 	public Converter(String oxGarageBaseURL) throws IOException {
 		this.oxGarageBaseURL = oxGarageBaseURL;
+		xPathContext = new XPathContext(XHTML_NAMESPACE, XHTML_NAMESPACE_URI);
 	}
 
 	/**
@@ -96,25 +105,35 @@ public class Converter {
 		outputConverter.convert(document, user, paper);
 		outputConverter.convert(zipResult);
 		
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ByteArrayOutputStream conversionResultDocBuffer = new ByteArrayOutputStream();
 		
-		Serializer serializer = new Serializer(bos);
+		Serializer serializer = new Serializer(conversionResultDocBuffer);
 		serializer.setIndent(2);
 		serializer.write(document);
 		
-		validateDocument(bos, progressListener);
+		validateDocument(conversionResultDocBuffer, progressListener);
 		
-		DocumentLog.logConversionStepOutput(Messages.getString("Converter.log2"), bos.toString("UTF-8")); //$NON-NLS-1$ //$NON-NLS-2$
+		DocumentLog.logConversionStepOutput(
+			Messages.getString("Converter.log2"), conversionResultDocBuffer.toString("UTF-8")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		progressListener.setProgress(Messages.getString("Converter.progress4")); //$NON-NLS-1$
 		
 		// do the conversion to HTML via OxGarage
-		contentAsXhtml = oxGarageConversionClient.convertToString(
-				bos.toByteArray(), 
+		Document xHtmlDoc = oxGarageConversionClient.convertToDocument(
+				conversionResultDocBuffer.toByteArray(), 
 				ConversionPath.TEI_TO_XHTML,
 				ConversionPath.TEI_TO_XHTML.getDefaultProperties());
+		
+		setImageSizes(xHtmlDoc);
+		
+		ByteArrayOutputStream xHtmlBuffer = new ByteArrayOutputStream();
+		serializer = new Serializer(xHtmlBuffer);
+		serializer.setIndent(2);
+		serializer.write(xHtmlDoc);
+		this.contentAsXhtml = xHtmlBuffer.toString("UTF-8"); //$NON-NLS-1$
 
-		DocumentLog.logConversionStepOutput(Messages.getString("Converter.log3"), contentAsXhtml); //$NON-NLS-1$
+		DocumentLog.logConversionStepOutput(
+				Messages.getString("Converter.log3"), contentAsXhtml); //$NON-NLS-1$
 		
 		// add the HTML to the result
 		zipResult.putResource(
@@ -124,6 +143,16 @@ public class Converter {
 		return zipResult;
 	}
 	
+	private void setImageSizes(Document xHtmlDoc) {
+		Nodes imgElements = 
+				xHtmlDoc.query("//xhtml:img[@class='graphic']", xPathContext);
+		for (int i=0; i<imgElements.size(); i++) {
+			Element imgElement = (Element)imgElements.get(i);
+			imgElement.addAttribute(new Attribute("width", "100%"));
+			imgElement.addAttribute(new Attribute("height", "100%"));
+		}
+	}
+
 	/**
 	 * Validates the given data against the DHConvalidator schema.
 	 * @param bos the data to be validated
