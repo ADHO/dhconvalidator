@@ -16,8 +16,10 @@ import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ParsingException;
+import nu.xom.Text;
 import nu.xom.XPathContext;
 
 import org.adho.dhconvalidator.Messages;
@@ -53,7 +55,39 @@ public class CommonOutputConverter implements OutputConverter {
 		makePublicationStmt(document);
 		makeEncodingDesc(document);
 		makeProfileDesc(document, paper);
+		makeFigureHead(document);
 		removeRevisions(document);
+	}
+
+	/**
+	 * Puts all image descriptions in a head element.
+	 * @param document
+	 */
+	private void makeFigureHead(Document document) {
+		Nodes searchResult = document.query("//tei:figure", xPathContext); //$NON-NLS-1$
+		for (int i=0; i<searchResult.size(); i++) {
+			Element figureElement = (Element)searchResult.get(i);
+			StringBuilder descBuilder = new StringBuilder();
+			String conc = "";
+			for (int j=0; j<figureElement.getChildCount(); j++) {
+				Node child = figureElement.getChild(j);
+				if (child instanceof Text) {
+					descBuilder.append(conc);
+					descBuilder.append(((Text)child).getValue());
+					conc = " ";
+					child.getParent().removeChild(child);
+				}
+			}
+			
+			if (descBuilder.length() > 0) {
+				Element headElement = figureElement.getFirstChildElement("head", TeiNamespace.TEI.toUri());
+				if (headElement == null) {
+					headElement = new Element("head", TeiNamespace.TEI.toUri());
+					figureElement.appendChild(headElement);
+				}
+				headElement.appendChild(descBuilder.toString());
+			}
+		}
 	}
 
 	/**

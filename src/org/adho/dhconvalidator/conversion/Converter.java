@@ -143,6 +143,10 @@ public class Converter {
 		return zipResult;
 	}
 	
+	/**
+	 * Sets the size of the contained images to 100%.
+	 * @param xHtmlDoc 
+	 */
 	private void setImageSizes(Document xHtmlDoc) {
 		Nodes imgElements = 
 				xHtmlDoc.query("//xhtml:img[@class='graphic']", xPathContext);
