@@ -44,6 +44,7 @@ public class CommonOutputConverter implements OutputConverter {
 	public CommonOutputConverter() {
 		xPathContext = new XPathContext();
 		xPathContext.addNamespace(TeiNamespace.TEI.getName(), TeiNamespace.TEI.toUri());
+		xPathContext.addNamespace("mml", "http://www.w3.org/1998/Math/MathML");
 	}
 
 	/* (non-Javadoc)

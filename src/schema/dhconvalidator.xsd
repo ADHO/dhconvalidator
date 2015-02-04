@@ -1,14 +1,2014 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.tei-c.org/ns/1.0" xmlns:ns1="http://www.tei-c.org/ns/1.0">
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.tei-c.org/ns/1.0" xmlns:mathml="http://www.w3.org/1998/Math/MathML" xmlns:ns1="http://www.tei-c.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <xs:import namespace="http://www.w3.org/1998/Math/MathML" schemaLocation="mathml.xsd"/>
+  <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
   <!--
-    Schema generated from ODD source 2015-01-02T13:58:03Z. 
-    Edition: Version 2.7.0. Last updated on
+    Schema generated from ODD source 2015-02-04T19:14:35Z. .
+    TEI Edition: Version 2.7.0. Last updated on
     	16th September 2014, revision 13036
-    Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
+    TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
     
   -->
-  <!---->
+  <!--
+    This material is dual-licensed.
+    [http://creativecommons.org/licenses/by-sa/3.0/] Distributed under a Creative Commons Attribution-ShareAlike 3.0 Unported License [http://www.opensource.org/licenses/BSD-2-Clause] Copyright 2013 TEI Consortium.All rights reserved.Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.This software is provided by the copyright holders and contributors "as is" and any express or implied warranties, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose are disclaimed. In no event shall the copyright holder or contributors be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this software, even if advised of the possibility of such damage.TEI material can be licensed differently depending on the use you intend to make of it. Hence it is made available under both the CC+BY and BSD-2 licences. The CC+BY licence is generally appropriate for usages which treat TEI content as data or documentation. The BSD-2 licence is generally appropriate for usage of TEI content in a software environment. For further information or clarification, please contact the TEI Consortium.
+  -->
+  <xs:attributeGroup name="MATHML.Common.attrib">
+    <xs:attribute ref="xlink:href"/>
+    <xs:attribute ref="xlink:type"/>
+    <xs:attribute name="class"/>
+    <xs:attribute name="style"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="xref" type="xs:IDREF"/>
+    <xs:attribute name="other"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-fontsize">
+    <xs:attribute name="fontsize"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-fontweight">
+    <xs:attribute name="fontweight">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="bold"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-fontstyle">
+    <xs:attribute name="fontstyle">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="italic"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-fontfamily">
+    <xs:attribute name="fontfamily"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-color">
+    <xs:attribute name="color"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-mathvariant">
+    <xs:attribute name="mathvariant"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-mathsize">
+    <xs:attribute name="mathsize"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-mathcolor">
+    <xs:attribute name="mathcolor"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-mathbackground">
+    <xs:attribute name="mathbackground"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-fontinfo">
+    <xs:attributeGroup ref="ns1:mathml.att-fontsize"/>
+    <xs:attributeGroup ref="ns1:mathml.att-fontweight"/>
+    <xs:attributeGroup ref="ns1:mathml.att-fontstyle"/>
+    <xs:attributeGroup ref="ns1:mathml.att-fontfamily"/>
+    <xs:attributeGroup ref="ns1:mathml.att-color"/>
+    <xs:attributeGroup ref="ns1:mathml.att-mathvariant"/>
+    <xs:attributeGroup ref="ns1:mathml.att-mathsize"/>
+    <xs:attributeGroup ref="ns1:mathml.att-mathcolor"/>
+    <xs:attributeGroup ref="ns1:mathml.att-mathbackground"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-form">
+    <xs:attribute name="form">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="prefix"/>
+          <xs:enumeration value="infix"/>
+          <xs:enumeration value="postfix"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-fence">
+    <xs:attribute name="fence">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="true"/>
+          <xs:enumeration value="false"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-separator">
+    <xs:attribute name="separator">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="true"/>
+          <xs:enumeration value="false"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-lspace">
+    <xs:attribute name="lspace"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-rspace">
+    <xs:attribute name="rspace"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-stretchy">
+    <xs:attribute name="stretchy">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="true"/>
+          <xs:enumeration value="false"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-symmetric">
+    <xs:attribute name="symmetric">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="true"/>
+          <xs:enumeration value="false"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-maxsize">
+    <xs:attribute name="maxsize"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-minsize">
+    <xs:attribute name="minsize"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-largeop">
+    <xs:attribute name="largeop">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="true"/>
+          <xs:enumeration value="false"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-movablelimits">
+    <xs:attribute name="movablelimits">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="true"/>
+          <xs:enumeration value="false"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-accent">
+    <xs:attribute name="accent">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="true"/>
+          <xs:enumeration value="false"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-opinfo">
+    <xs:attributeGroup ref="ns1:mathml.att-form"/>
+    <xs:attributeGroup ref="ns1:mathml.att-fence"/>
+    <xs:attributeGroup ref="ns1:mathml.att-separator"/>
+    <xs:attributeGroup ref="ns1:mathml.att-lspace"/>
+    <xs:attributeGroup ref="ns1:mathml.att-rspace"/>
+    <xs:attributeGroup ref="ns1:mathml.att-stretchy"/>
+    <xs:attributeGroup ref="ns1:mathml.att-symmetric"/>
+    <xs:attributeGroup ref="ns1:mathml.att-maxsize"/>
+    <xs:attributeGroup ref="ns1:mathml.att-minsize"/>
+    <xs:attributeGroup ref="ns1:mathml.att-largeop"/>
+    <xs:attributeGroup ref="ns1:mathml.att-movablelimits"/>
+    <xs:attributeGroup ref="ns1:mathml.att-accent"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-width">
+    <xs:attribute name="width"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-height">
+    <xs:attribute name="height"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-depth">
+    <xs:attribute name="depth"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-linebreak">
+    <xs:attribute name="linebreak"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-sizeinfo">
+    <xs:attributeGroup ref="ns1:mathml.att-width"/>
+    <xs:attributeGroup ref="ns1:mathml.att-height"/>
+    <xs:attributeGroup ref="ns1:mathml.att-depth"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-lquote">
+    <xs:attribute name="lquote"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-rquote">
+    <xs:attribute name="rquote"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-linethickness">
+    <xs:attribute name="linethickness"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-scriptlevel">
+    <xs:attribute name="scriptlevel"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-displaystyle">
+    <xs:attribute name="displaystyle">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="true"/>
+          <xs:enumeration value="false"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-scriptsizemultiplier">
+    <xs:attribute name="scriptsizemultiplier"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-scriptminsize">
+    <xs:attribute name="scriptminsize"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-background">
+    <xs:attribute name="background"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-veryverythinmathspace">
+    <xs:attribute name="veryverythinmathspace"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-verythinmathspace">
+    <xs:attribute name="verythinmathspace"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-thinmathspace">
+    <xs:attribute name="thinmathspace"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-mediummathspace">
+    <xs:attribute name="mediummathspace"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-thickmathspace">
+    <xs:attribute name="thickmathspace"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-verythickmathspace">
+    <xs:attribute name="verythickmathspace"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-veryverythickmathspace">
+    <xs:attribute name="veryverythickmathspace"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-open">
+    <xs:attribute name="open"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-close">
+    <xs:attribute name="close"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-separators">
+    <xs:attribute name="separators"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-subscriptshift">
+    <xs:attribute name="subscriptshift"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-superscriptshift">
+    <xs:attribute name="superscriptshift"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-accentunder">
+    <xs:attribute name="accentunder">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="true"/>
+          <xs:enumeration value="false"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-align">
+    <xs:attribute name="align"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-numalign">
+    <xs:attribute name="numalign"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-denomalign">
+    <xs:attribute name="denomalign"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-rowalign">
+    <xs:attribute name="rowalign"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-columnalign">
+    <xs:attribute name="columnalign"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-columnwidth">
+    <xs:attribute name="columnwidth"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-groupalign">
+    <xs:attribute name="groupalign"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-alignmentscope">
+    <xs:attribute name="alignmentscope"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-rowspacing">
+    <xs:attribute name="rowspacing"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-columnspacing">
+    <xs:attribute name="columnspacing"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-rowlines">
+    <xs:attribute name="rowlines"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-columnlines">
+    <xs:attribute name="columnlines"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-frame">
+    <xs:attribute name="frame">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="none"/>
+          <xs:enumeration value="solid"/>
+          <xs:enumeration value="dashed"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-side">
+    <xs:attribute name="side">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="left"/>
+          <xs:enumeration value="right"/>
+          <xs:enumeration value="leftoverlap"/>
+          <xs:enumeration value="rightoverlap"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-framespacing">
+    <xs:attribute name="framespacing"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-equalrows">
+    <xs:attribute name="equalrows"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-equalcolumns">
+    <xs:attribute name="equalcolumns"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-tableinfo">
+    <xs:attributeGroup ref="ns1:mathml.att-align"/>
+    <xs:attributeGroup ref="ns1:mathml.att-rowalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-columnalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-columnwidth"/>
+    <xs:attributeGroup ref="ns1:mathml.att-groupalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-alignmentscope"/>
+    <xs:attributeGroup ref="ns1:mathml.att-side"/>
+    <xs:attributeGroup ref="ns1:mathml.att-rowspacing"/>
+    <xs:attributeGroup ref="ns1:mathml.att-columnspacing"/>
+    <xs:attributeGroup ref="ns1:mathml.att-rowlines"/>
+    <xs:attributeGroup ref="ns1:mathml.att-columnlines"/>
+    <xs:attributeGroup ref="ns1:mathml.att-width"/>
+    <xs:attributeGroup ref="ns1:mathml.att-frame"/>
+    <xs:attributeGroup ref="ns1:mathml.att-framespacing"/>
+    <xs:attributeGroup ref="ns1:mathml.att-equalrows"/>
+    <xs:attributeGroup ref="ns1:mathml.att-equalcolumns"/>
+    <xs:attributeGroup ref="ns1:mathml.att-displaystyle"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-rowspan">
+    <xs:attribute name="rowspan"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-columnspan">
+    <xs:attribute name="columnspan"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-edge">
+    <xs:attribute name="edge">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="left"/>
+          <xs:enumeration value="right"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-actiontype">
+    <xs:attribute name="actiontype"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-selection">
+    <xs:attribute name="selection"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-name">
+    <xs:attribute name="name"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-alt">
+    <xs:attribute name="alt"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-index">
+    <xs:attribute name="index"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-bevelled">
+    <xs:attribute name="bevelled"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.ptoken">
+    <xs:choice>
+      <xs:element ref="mathml:mi"/>
+      <xs:element ref="mathml:mn"/>
+      <xs:element ref="mathml:mo"/>
+      <xs:element ref="mathml:mtext"/>
+      <xs:element ref="mathml:ms"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-mi">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-fontinfo"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mn">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-fontinfo"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mo">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-fontinfo"/>
+    <xs:attributeGroup ref="ns1:mathml.att-opinfo"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mtext">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-fontinfo"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-ms">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-fontinfo"/>
+    <xs:attributeGroup ref="ns1:mathml.att-lquote"/>
+    <xs:attributeGroup ref="ns1:mathml.att-rquote"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.petoken">
+    <xs:sequence>
+      <xs:element ref="mathml:mspace"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:complexType name="mathml.any" mixed="true">
+    <xs:choice minOccurs="0">
+      <xs:element ref="mathml:mspace"/>
+      <xs:element ref="mathml:mprescripts"/>
+      <xs:element ref="mathml:none"/>
+      <xs:element ref="mathml:malignmark"/>
+      <xs:element ref="mathml:maligngroup"/>
+      <xs:element ref="mathml:mglyph"/>
+      <xs:element ref="mathml:sep"/>
+      <xs:element ref="mathml:integers"/>
+      <xs:element ref="mathml:reals"/>
+      <xs:element ref="mathml:rationals"/>
+      <xs:element ref="mathml:naturalnumbers"/>
+      <xs:element ref="mathml:complexes"/>
+      <xs:element ref="mathml:primes"/>
+      <xs:element ref="mathml:exponentiale"/>
+      <xs:element ref="mathml:imaginaryi"/>
+      <xs:element ref="mathml:notanumber"/>
+      <xs:element ref="mathml:true"/>
+      <xs:element ref="mathml:false"/>
+      <xs:element ref="mathml:emptyset"/>
+      <xs:element ref="mathml:pi"/>
+      <xs:element ref="mathml:eulergamma"/>
+      <xs:element ref="mathml:infinity"/>
+      <xs:element ref="mathml:inverse"/>
+      <xs:element ref="mathml:domain"/>
+      <xs:element ref="mathml:codomain"/>
+      <xs:element ref="mathml:image"/>
+      <xs:element ref="mathml:ident"/>
+      <xs:element ref="mathml:compose"/>
+      <xs:element ref="mathml:exp"/>
+      <xs:element ref="mathml:abs"/>
+      <xs:element ref="mathml:arg"/>
+      <xs:element ref="mathml:real"/>
+      <xs:element ref="mathml:imaginary"/>
+      <xs:element ref="mathml:conjugate"/>
+      <xs:element ref="mathml:factorial"/>
+      <xs:element ref="mathml:floor"/>
+      <xs:element ref="mathml:ceiling"/>
+      <xs:element ref="mathml:minus"/>
+      <xs:element ref="mathml:quotient"/>
+      <xs:element ref="mathml:divide"/>
+      <xs:element ref="mathml:power"/>
+      <xs:element ref="mathml:rem"/>
+      <xs:element ref="mathml:plus"/>
+      <xs:element ref="mathml:max"/>
+      <xs:element ref="mathml:min"/>
+      <xs:element ref="mathml:times"/>
+      <xs:element ref="mathml:gcd"/>
+      <xs:element ref="mathml:lcm"/>
+      <xs:element ref="mathml:root"/>
+      <xs:element ref="mathml:exists"/>
+      <xs:element ref="mathml:forall"/>
+      <xs:element ref="mathml:and"/>
+      <xs:element ref="mathml:or"/>
+      <xs:element ref="mathml:xor"/>
+      <xs:element ref="mathml:not"/>
+      <xs:element ref="mathml:implies"/>
+      <xs:element ref="mathml:divergence"/>
+      <xs:element ref="mathml:grad"/>
+      <xs:element ref="mathml:curl"/>
+      <xs:element ref="mathml:laplacian"/>
+      <xs:element ref="mathml:log"/>
+      <xs:element ref="mathml:int"/>
+      <xs:element ref="mathml:diff"/>
+      <xs:element ref="mathml:partialdiff"/>
+      <xs:element ref="mathml:ln"/>
+      <xs:element ref="mathml:card"/>
+      <xs:element ref="mathml:setdiff"/>
+      <xs:element ref="mathml:union"/>
+      <xs:element ref="mathml:intersect"/>
+      <xs:element ref="mathml:cartesianproduct"/>
+      <xs:element ref="mathml:sum"/>
+      <xs:element ref="mathml:product"/>
+      <xs:element ref="mathml:limit"/>
+      <xs:element ref="mathml:sin"/>
+      <xs:element ref="mathml:cos"/>
+      <xs:element ref="mathml:tan"/>
+      <xs:element ref="mathml:sec"/>
+      <xs:element ref="mathml:csc"/>
+      <xs:element ref="mathml:cot"/>
+      <xs:element ref="mathml:sinh"/>
+      <xs:element ref="mathml:cosh"/>
+      <xs:element ref="mathml:tanh"/>
+      <xs:element ref="mathml:sech"/>
+      <xs:element ref="mathml:csch"/>
+      <xs:element ref="mathml:coth"/>
+      <xs:element ref="mathml:arcsin"/>
+      <xs:element ref="mathml:arccos"/>
+      <xs:element ref="mathml:arctan"/>
+      <xs:element ref="mathml:arccosh"/>
+      <xs:element ref="mathml:arccot"/>
+      <xs:element ref="mathml:arccoth"/>
+      <xs:element ref="mathml:arccsc"/>
+      <xs:element ref="mathml:arccsch"/>
+      <xs:element ref="mathml:arcsec"/>
+      <xs:element ref="mathml:arcsech"/>
+      <xs:element ref="mathml:arcsinh"/>
+      <xs:element ref="mathml:arctanh"/>
+      <xs:element ref="mathml:mean"/>
+      <xs:element ref="mathml:sdev"/>
+      <xs:element ref="mathml:variance"/>
+      <xs:element ref="mathml:median"/>
+      <xs:element ref="mathml:mode"/>
+      <xs:element ref="mathml:moment"/>
+      <xs:element ref="mathml:determinant"/>
+      <xs:element ref="mathml:transpose"/>
+      <xs:element ref="mathml:vectorproduct"/>
+      <xs:element ref="mathml:scalarproduct"/>
+      <xs:element ref="mathml:outerproduct"/>
+      <xs:element ref="mathml:selector"/>
+      <xs:element ref="mathml:neq"/>
+      <xs:element ref="mathml:factorof"/>
+      <xs:element ref="mathml:eq"/>
+      <xs:element ref="mathml:equivalent"/>
+      <xs:element ref="mathml:approx"/>
+      <xs:element ref="mathml:gt"/>
+      <xs:element ref="mathml:lt"/>
+      <xs:element ref="mathml:geq"/>
+      <xs:element ref="mathml:leq"/>
+      <xs:element ref="mathml:in"/>
+      <xs:element ref="mathml:notin"/>
+      <xs:element ref="mathml:notsubset"/>
+      <xs:element ref="mathml:notprsubset"/>
+      <xs:element ref="mathml:subset"/>
+      <xs:element ref="mathml:prsubset"/>
+      <xs:element ref="mathml:tendsto"/>
+      <xs:element ref="mathml:ci"/>
+      <xs:element ref="mathml:csymbol"/>
+      <xs:element ref="mathml:cn"/>
+      <xs:element ref="mathml:apply"/>
+      <xs:element ref="mathml:reln"/>
+      <xs:element ref="mathml:lambda"/>
+      <xs:element ref="mathml:condition"/>
+      <xs:element ref="mathml:declare"/>
+      <xs:element ref="mathml:semantics"/>
+      <xs:element ref="mathml:annotation"/>
+      <xs:element ref="mathml:annotation-xml"/>
+      <xs:element ref="mathml:interval"/>
+      <xs:element ref="mathml:set"/>
+      <xs:element ref="mathml:list"/>
+      <xs:element ref="mathml:vector"/>
+      <xs:element ref="mathml:matrix"/>
+      <xs:element ref="mathml:matrixrow"/>
+      <xs:element ref="mathml:piecewise"/>
+      <xs:element ref="mathml:piece"/>
+      <xs:element ref="mathml:otherwise"/>
+      <xs:element ref="mathml:fn"/>
+      <xs:element ref="mathml:lowlimit"/>
+      <xs:element ref="mathml:uplimit"/>
+      <xs:element ref="mathml:bvar"/>
+      <xs:element ref="mathml:degree"/>
+      <xs:element ref="mathml:logbase"/>
+      <xs:element ref="mathml:momentabout"/>
+      <xs:element ref="mathml:domainofapplication"/>
+      <xs:element ref="mathml:mstyle"/>
+      <xs:element ref="mathml:merror"/>
+      <xs:element ref="mathml:mphantom"/>
+      <xs:element ref="mathml:mrow"/>
+      <xs:element ref="mathml:mfrac"/>
+      <xs:element ref="mathml:msqrt"/>
+      <xs:element ref="mathml:menclose"/>
+      <xs:element ref="mathml:mroot"/>
+      <xs:element ref="mathml:msub"/>
+      <xs:element ref="mathml:msup"/>
+      <xs:element ref="mathml:msubsup"/>
+      <xs:element ref="mathml:mmultiscripts"/>
+      <xs:element ref="mathml:munder"/>
+      <xs:element ref="mathml:mover"/>
+      <xs:element ref="mathml:munderover"/>
+      <xs:element ref="mathml:mtable"/>
+      <xs:element ref="mathml:mtr"/>
+      <xs:element ref="mathml:mlabeledtr"/>
+      <xs:element ref="mathml:mtd"/>
+      <xs:element ref="mathml:maction"/>
+      <xs:element ref="mathml:mfenced"/>
+      <xs:element ref="mathml:mpadded"/>
+      <xs:element ref="mathml:mi"/>
+      <xs:element ref="mathml:mn"/>
+      <xs:element ref="mathml:mo"/>
+      <xs:element ref="mathml:mtext"/>
+      <xs:element ref="mathml:ms"/>
+      <xs:element ref="mathml:math"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:attributeGroup name="mathml.attlist-mspace">
+    <xs:attributeGroup ref="ns1:mathml.att-sizeinfo"/>
+    <xs:attributeGroup ref="ns1:mathml.att-linebreak"/>
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.pgenschema">
+    <xs:choice>
+      <xs:element ref="mathml:mrow"/>
+      <xs:element ref="mathml:mfrac"/>
+      <xs:element ref="mathml:msqrt"/>
+      <xs:element ref="mathml:mroot"/>
+      <xs:element ref="mathml:menclose"/>
+      <xs:element ref="mathml:mstyle"/>
+      <xs:element ref="mathml:merror"/>
+      <xs:element ref="mathml:mpadded"/>
+      <xs:element ref="mathml:mphantom"/>
+      <xs:element ref="mathml:mfenced"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-mrow">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mfrac">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-bevelled"/>
+    <xs:attributeGroup ref="ns1:mathml.att-numalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-denomalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-linethickness"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-msqrt">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-menclose">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attribute name="notation" default="longdiv"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mroot">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mstyle">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-fontinfo"/>
+    <xs:attributeGroup ref="ns1:mathml.att-opinfo"/>
+    <xs:attributeGroup ref="ns1:mathml.att-lquote"/>
+    <xs:attributeGroup ref="ns1:mathml.att-rquote"/>
+    <xs:attributeGroup ref="ns1:mathml.att-linethickness"/>
+    <xs:attributeGroup ref="ns1:mathml.att-scriptlevel"/>
+    <xs:attributeGroup ref="ns1:mathml.att-scriptsizemultiplier"/>
+    <xs:attributeGroup ref="ns1:mathml.att-scriptminsize"/>
+    <xs:attributeGroup ref="ns1:mathml.att-background"/>
+    <xs:attributeGroup ref="ns1:mathml.att-veryverythinmathspace"/>
+    <xs:attributeGroup ref="ns1:mathml.att-verythinmathspace"/>
+    <xs:attributeGroup ref="ns1:mathml.att-thinmathspace"/>
+    <xs:attributeGroup ref="ns1:mathml.att-mediummathspace"/>
+    <xs:attributeGroup ref="ns1:mathml.att-thickmathspace"/>
+    <xs:attributeGroup ref="ns1:mathml.att-verythickmathspace"/>
+    <xs:attributeGroup ref="ns1:mathml.att-veryverythickmathspace"/>
+    <xs:attributeGroup ref="ns1:mathml.att-open"/>
+    <xs:attributeGroup ref="ns1:mathml.att-close"/>
+    <xs:attributeGroup ref="ns1:mathml.att-separators"/>
+    <xs:attributeGroup ref="ns1:mathml.att-subscriptshift"/>
+    <xs:attributeGroup ref="ns1:mathml.att-superscriptshift"/>
+    <xs:attributeGroup ref="ns1:mathml.att-accentunder"/>
+    <xs:attributeGroup ref="ns1:mathml.att-tableinfo"/>
+    <xs:attributeGroup ref="ns1:mathml.att-rowspan"/>
+    <xs:attributeGroup ref="ns1:mathml.att-columnspan"/>
+    <xs:attributeGroup ref="ns1:mathml.att-edge"/>
+    <xs:attributeGroup ref="ns1:mathml.att-actiontype"/>
+    <xs:attributeGroup ref="ns1:mathml.att-selection"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-merror">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mpadded">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-sizeinfo"/>
+    <xs:attributeGroup ref="ns1:mathml.att-lspace"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mphantom">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mfenced">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-open"/>
+    <xs:attributeGroup ref="ns1:mathml.att-close"/>
+    <xs:attributeGroup ref="ns1:mathml.att-separators"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.pscrschema">
+    <xs:choice>
+      <xs:element ref="mathml:msub"/>
+      <xs:element ref="mathml:msup"/>
+      <xs:element ref="mathml:msubsup"/>
+      <xs:element ref="mathml:munder"/>
+      <xs:element ref="mathml:mover"/>
+      <xs:element ref="mathml:munderover"/>
+      <xs:element ref="mathml:mmultiscripts"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-msub">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-subscriptshift"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-msup">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-superscriptshift"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-msubsup">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-subscriptshift"/>
+    <xs:attributeGroup ref="ns1:mathml.att-superscriptshift"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-munder">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-accentunder"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mover">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-accent"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-munderover">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-accent"/>
+    <xs:attributeGroup ref="ns1:mathml.att-accentunder"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mmultiscripts">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-subscriptshift"/>
+    <xs:attributeGroup ref="ns1:mathml.att-superscriptshift"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.pscreschema">
+    <xs:choice>
+      <xs:element ref="mathml:mprescripts"/>
+      <xs:element ref="mathml:none"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="mathml.ptabschema">
+    <xs:choice>
+      <xs:element ref="mathml:mtable"/>
+      <xs:element ref="mathml:mtr"/>
+      <xs:element ref="mathml:mlabeledtr"/>
+      <xs:element ref="mathml:mtd"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-mtable">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-tableinfo"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mtr">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-rowalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-columnalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-groupalign"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mlabeledtr">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-rowalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-columnalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-groupalign"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mtd">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-rowalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-columnalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-groupalign"/>
+    <xs:attributeGroup ref="ns1:mathml.att-rowspan"/>
+    <xs:attributeGroup ref="ns1:mathml.att-columnspan"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.plschema">
+    <xs:choice>
+      <xs:group ref="ns1:mathml.pgenschema"/>
+      <xs:group ref="ns1:mathml.pscrschema"/>
+      <xs:group ref="ns1:mathml.ptabschema"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="mathml.peschema">
+    <xs:choice>
+      <xs:element ref="mathml:maligngroup"/>
+      <xs:element ref="mathml:malignmark"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-malignmark">
+    <xs:attributeGroup ref="ns1:mathml.att-edge"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-maligngroup">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-groupalign"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mglyph">
+    <xs:attributeGroup ref="ns1:mathml.att-alt"/>
+    <xs:attributeGroup ref="ns1:mathml.att-fontfamily"/>
+    <xs:attributeGroup ref="ns1:mathml.att-index"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.pactions">
+    <xs:sequence>
+      <xs:element ref="mathml:maction"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-maction">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-actiontype"/>
+    <xs:attributeGroup ref="ns1:mathml.att-selection"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.PresInCont">
+    <xs:choice>
+      <xs:group ref="ns1:mathml.ptoken"/>
+      <xs:group ref="ns1:mathml.petoken"/>
+      <xs:group ref="ns1:mathml.plschema"/>
+      <xs:group ref="ns1:mathml.peschema"/>
+      <xs:group ref="ns1:mathml.pactions"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="mathml.Presentation">
+    <xs:choice>
+      <xs:group ref="ns1:mathml.ptoken"/>
+      <xs:group ref="ns1:mathml.petoken"/>
+      <xs:group ref="ns1:mathml.pscreschema"/>
+      <xs:group ref="ns1:mathml.plschema"/>
+      <xs:group ref="ns1:mathml.peschema"/>
+      <xs:group ref="ns1:mathml.pactions"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.att-base">
+    <xs:attribute name="base" default="10"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-closure">
+    <xs:attribute name="closure" default="closed"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-definition">
+    <xs:attribute name="definitionURL" default=""/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-encoding">
+    <xs:attribute name="encoding" default=""/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-nargs">
+    <xs:attribute name="nargs" default="1"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-occurrence">
+    <xs:attribute name="occurrence" default="function-model"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-order">
+    <xs:attribute name="order" default="numeric"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-scope">
+    <xs:attribute name="scope" default="local"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-type">
+    <xs:attribute name="type"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.ctoken">
+    <xs:choice>
+      <xs:element ref="mathml:csymbol"/>
+      <xs:element ref="mathml:ci"/>
+      <xs:element ref="mathml:cn"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-ci">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-type"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-csymbol">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+    <xs:attributeGroup ref="ns1:mathml.att-type"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-cn">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-type"/>
+    <xs:attributeGroup ref="ns1:mathml.att-base"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cspecial">
+    <xs:choice>
+      <xs:element ref="mathml:apply"/>
+      <xs:element ref="mathml:reln"/>
+      <xs:element ref="mathml:lambda"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-apply">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-reln">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-lambda">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cother">
+    <xs:choice>
+      <xs:element ref="mathml:condition"/>
+      <xs:element ref="mathml:declare"/>
+      <xs:element ref="mathml:sep"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-condition">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-declare">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-type"/>
+    <xs:attributeGroup ref="ns1:mathml.att-scope"/>
+    <xs:attributeGroup ref="ns1:mathml.att-nargs"/>
+    <xs:attributeGroup ref="ns1:mathml.att-occurrence"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.csemantics">
+    <xs:choice>
+      <xs:element ref="mathml:semantics"/>
+      <xs:element ref="mathml:annotation"/>
+      <xs:element ref="mathml:annotation-xml"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-semantics">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-annotation">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-annotation-xml">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cconstructor">
+    <xs:choice>
+      <xs:element ref="mathml:interval"/>
+      <xs:element ref="mathml:list"/>
+      <xs:element ref="mathml:matrix"/>
+      <xs:element ref="mathml:matrixrow"/>
+      <xs:element ref="mathml:set"/>
+      <xs:element ref="mathml:vector"/>
+      <xs:element ref="mathml:piecewise"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-interval">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-closure"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-set">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-type"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-list">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-order"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-vector">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-matrix">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-matrixrow">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-piecewise">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-piece">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-otherwise">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.c0ary">
+    <xs:choice>
+      <xs:element ref="mathml:integers"/>
+      <xs:element ref="mathml:reals"/>
+      <xs:element ref="mathml:rationals"/>
+      <xs:element ref="mathml:naturalnumbers"/>
+      <xs:element ref="mathml:complexes"/>
+      <xs:element ref="mathml:primes"/>
+      <xs:element ref="mathml:exponentiale"/>
+      <xs:element ref="mathml:imaginaryi"/>
+      <xs:element ref="mathml:notanumber"/>
+      <xs:element ref="mathml:true"/>
+      <xs:element ref="mathml:false"/>
+      <xs:element ref="mathml:emptyset"/>
+      <xs:element ref="mathml:pi"/>
+      <xs:element ref="mathml:eulergamma"/>
+      <xs:element ref="mathml:infinity"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-integers">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-reals">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-rationals">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-naturalnumbers">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-complexes">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-primes">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-exponentiale">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-imaginaryi">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-notanumber">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-true">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-false">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-emptyset">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-pi">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-eulergamma">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-infinity">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cfuncop1ary">
+    <xs:choice>
+      <xs:element ref="mathml:inverse"/>
+      <xs:element ref="mathml:ident"/>
+      <xs:element ref="mathml:domain"/>
+      <xs:element ref="mathml:codomain"/>
+      <xs:element ref="mathml:image"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-inverse">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-domain">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-codomain">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-image">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cfuncopnary">
+    <xs:choice>
+      <xs:element ref="mathml:fn"/>
+      <xs:element ref="mathml:compose"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-fn">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-ident">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-compose">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.carithop1ary">
+    <xs:choice>
+      <xs:element ref="mathml:abs"/>
+      <xs:element ref="mathml:conjugate"/>
+      <xs:element ref="mathml:exp"/>
+      <xs:element ref="mathml:factorial"/>
+      <xs:element ref="mathml:arg"/>
+      <xs:element ref="mathml:real"/>
+      <xs:element ref="mathml:imaginary"/>
+      <xs:element ref="mathml:floor"/>
+      <xs:element ref="mathml:ceiling"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-exp">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-abs">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arg">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-real">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-imaginary">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-conjugate">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-factorial">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-floor">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-ceiling">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.carithop1or2ary">
+    <xs:sequence>
+      <xs:element ref="mathml:minus"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-minus">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.carithop2ary">
+    <xs:choice>
+      <xs:element ref="mathml:quotient"/>
+      <xs:element ref="mathml:divide"/>
+      <xs:element ref="mathml:power"/>
+      <xs:element ref="mathml:rem"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-quotient">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-divide">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-power">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-rem">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.carithopnary">
+    <xs:choice>
+      <xs:element ref="mathml:plus"/>
+      <xs:element ref="mathml:times"/>
+      <xs:element ref="mathml:max"/>
+      <xs:element ref="mathml:min"/>
+      <xs:element ref="mathml:gcd"/>
+      <xs:element ref="mathml:lcm"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-plus">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-max">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-min">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-times">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-gcd">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-lcm">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.carithoproot">
+    <xs:sequence>
+      <xs:element ref="mathml:root"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-root">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.clogicopquant">
+    <xs:choice>
+      <xs:element ref="mathml:exists"/>
+      <xs:element ref="mathml:forall"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-exists">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-forall">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.clogicopnary">
+    <xs:choice>
+      <xs:element ref="mathml:and"/>
+      <xs:element ref="mathml:or"/>
+      <xs:element ref="mathml:xor"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-and">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-or">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-xor">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.clogicop1ary">
+    <xs:sequence>
+      <xs:element ref="mathml:not"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-not">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.clogicop2ary">
+    <xs:sequence>
+      <xs:element ref="mathml:implies"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-implies">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.ccalcop">
+    <xs:choice>
+      <xs:element ref="mathml:log"/>
+      <xs:element ref="mathml:int"/>
+      <xs:element ref="mathml:diff"/>
+      <xs:element ref="mathml:partialdiff"/>
+      <xs:element ref="mathml:divergence"/>
+      <xs:element ref="mathml:grad"/>
+      <xs:element ref="mathml:curl"/>
+      <xs:element ref="mathml:laplacian"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-divergence">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-grad">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-curl">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-laplacian">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-log">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-int">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-diff">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-partialdiff">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.ccalcop1ary">
+    <xs:sequence>
+      <xs:element ref="mathml:ln"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-ln">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.csetop1ary">
+    <xs:sequence>
+      <xs:element ref="mathml:card"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-card">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.csetop2ary">
+    <xs:sequence>
+      <xs:element ref="mathml:setdiff"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-setdiff">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.csetopnary">
+    <xs:choice>
+      <xs:element ref="mathml:union"/>
+      <xs:element ref="mathml:intersect"/>
+      <xs:element ref="mathml:cartesianproduct"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-union">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-intersect">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-cartesianproduct">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cseqop">
+    <xs:choice>
+      <xs:element ref="mathml:sum"/>
+      <xs:element ref="mathml:product"/>
+      <xs:element ref="mathml:limit"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-sum">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-product">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-limit">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.ctrigop">
+    <xs:choice>
+      <xs:element ref="mathml:sin"/>
+      <xs:element ref="mathml:cos"/>
+      <xs:element ref="mathml:tan"/>
+      <xs:element ref="mathml:sec"/>
+      <xs:element ref="mathml:csc"/>
+      <xs:element ref="mathml:cot"/>
+      <xs:element ref="mathml:sinh"/>
+      <xs:element ref="mathml:cosh"/>
+      <xs:element ref="mathml:tanh"/>
+      <xs:element ref="mathml:sech"/>
+      <xs:element ref="mathml:csch"/>
+      <xs:element ref="mathml:coth"/>
+      <xs:element ref="mathml:arcsin"/>
+      <xs:element ref="mathml:arccos"/>
+      <xs:element ref="mathml:arctan"/>
+      <xs:element ref="mathml:arccosh"/>
+      <xs:element ref="mathml:arccot"/>
+      <xs:element ref="mathml:arccoth"/>
+      <xs:element ref="mathml:arccsc"/>
+      <xs:element ref="mathml:arccsch"/>
+      <xs:element ref="mathml:arcsec"/>
+      <xs:element ref="mathml:arcsech"/>
+      <xs:element ref="mathml:arcsinh"/>
+      <xs:element ref="mathml:arctanh"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-sin">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-cos">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-tan">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-sec">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-csc">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-cot">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-sinh">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-cosh">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-tanh">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-sech">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-csch">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-coth">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arcsin">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arccos">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arctan">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arccosh">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arccot">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arccoth">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arccsc">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arccsch">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arcsec">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arcsech">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arcsinh">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-arctanh">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cstatopnary">
+    <xs:choice>
+      <xs:element ref="mathml:mean"/>
+      <xs:element ref="mathml:sdev"/>
+      <xs:element ref="mathml:variance"/>
+      <xs:element ref="mathml:median"/>
+      <xs:element ref="mathml:mode"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-mean">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-sdev">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-variance">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-median">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-mode">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cstatopmoment">
+    <xs:sequence>
+      <xs:element ref="mathml:moment"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-moment">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.clalgop1ary">
+    <xs:choice>
+      <xs:element ref="mathml:determinant"/>
+      <xs:element ref="mathml:transpose"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-determinant">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-transpose">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.clalgop2ary">
+    <xs:choice>
+      <xs:element ref="mathml:vectorproduct"/>
+      <xs:element ref="mathml:scalarproduct"/>
+      <xs:element ref="mathml:outerproduct"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-vectorproduct">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-scalarproduct">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-outerproduct">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.clalgopnary">
+    <xs:sequence>
+      <xs:element ref="mathml:selector"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-selector">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cgenrel2ary">
+    <xs:choice>
+      <xs:element ref="mathml:neq"/>
+      <xs:element ref="mathml:factorof"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-neq">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-factorof">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cgenrelnary">
+    <xs:choice>
+      <xs:element ref="mathml:eq"/>
+      <xs:element ref="mathml:leq"/>
+      <xs:element ref="mathml:lt"/>
+      <xs:element ref="mathml:geq"/>
+      <xs:element ref="mathml:gt"/>
+      <xs:element ref="mathml:equivalent"/>
+      <xs:element ref="mathml:approx"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-eq">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-equivalent">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-approx">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-gt">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-lt">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-geq">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-leq">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.csetrel2ary">
+    <xs:choice>
+      <xs:element ref="mathml:in"/>
+      <xs:element ref="mathml:notin"/>
+      <xs:element ref="mathml:notsubset"/>
+      <xs:element ref="mathml:notprsubset"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-in">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-notin">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-notsubset">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-notprsubset">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.csetrelnary">
+    <xs:choice>
+      <xs:element ref="mathml:subset"/>
+      <xs:element ref="mathml:prsubset"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-subset">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-prsubset">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cseqrel2ary">
+    <xs:sequence>
+      <xs:element ref="mathml:tendsto"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-tendsto">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-definition"/>
+    <xs:attributeGroup ref="ns1:mathml.att-encoding"/>
+    <xs:attributeGroup ref="ns1:mathml.att-type"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cquantifier">
+    <xs:choice>
+      <xs:element ref="mathml:lowlimit"/>
+      <xs:element ref="mathml:uplimit"/>
+      <xs:element ref="mathml:bvar"/>
+      <xs:element ref="mathml:degree"/>
+      <xs:element ref="mathml:logbase"/>
+      <xs:element ref="mathml:momentabout"/>
+      <xs:element ref="mathml:domainofapplication"/>
+    </xs:choice>
+  </xs:group>
+  <xs:attributeGroup name="mathml.attlist-lowlimit">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-uplimit">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-bvar">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-degree">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-logbase">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-momentabout">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-domainofapplication">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+  </xs:attributeGroup>
+  <xs:group name="mathml.cop1ary">
+    <xs:choice>
+      <xs:group ref="ns1:mathml.cfuncop1ary"/>
+      <xs:group ref="ns1:mathml.carithop1ary"/>
+      <xs:group ref="ns1:mathml.clogicop1ary"/>
+      <xs:group ref="ns1:mathml.ccalcop1ary"/>
+      <xs:group ref="ns1:mathml.ctrigop"/>
+      <xs:group ref="ns1:mathml.clalgop1ary"/>
+      <xs:group ref="ns1:mathml.csetop1ary"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="mathml.cop2ary">
+    <xs:choice>
+      <xs:group ref="ns1:mathml.carithop2ary"/>
+      <xs:group ref="ns1:mathml.clogicop2ary"/>
+      <xs:group ref="ns1:mathml.clalgop2ary"/>
+      <xs:group ref="ns1:mathml.csetop2ary"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="mathml.copnary">
+    <xs:choice>
+      <xs:group ref="ns1:mathml.cfuncopnary"/>
+      <xs:group ref="ns1:mathml.carithopnary"/>
+      <xs:group ref="ns1:mathml.clogicopnary"/>
+      <xs:group ref="ns1:mathml.csetopnary"/>
+      <xs:group ref="ns1:mathml.cstatopnary"/>
+      <xs:group ref="ns1:mathml.clalgopnary"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="mathml.copmisc">
+    <xs:choice>
+      <xs:group ref="ns1:mathml.carithoproot"/>
+      <xs:group ref="ns1:mathml.carithop1or2ary"/>
+      <xs:group ref="ns1:mathml.ccalcop"/>
+      <xs:group ref="ns1:mathml.cseqop"/>
+      <xs:group ref="ns1:mathml.cstatopmoment"/>
+      <xs:group ref="ns1:mathml.clogicopquant"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="mathml.crel2ary">
+    <xs:choice>
+      <xs:group ref="ns1:mathml.cgenrel2ary"/>
+      <xs:group ref="ns1:mathml.csetrel2ary"/>
+      <xs:group ref="ns1:mathml.cseqrel2ary"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="mathml.crelnary">
+    <xs:choice>
+      <xs:group ref="ns1:mathml.cgenrelnary"/>
+      <xs:group ref="ns1:mathml.csetrelnary"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="mathml.Content">
+    <xs:choice>
+      <xs:group ref="ns1:mathml.ctoken"/>
+      <xs:group ref="ns1:mathml.cspecial"/>
+      <xs:group ref="ns1:mathml.cother"/>
+      <xs:group ref="ns1:mathml.csemantics"/>
+      <xs:group ref="ns1:mathml.c0ary"/>
+      <xs:group ref="ns1:mathml.cconstructor"/>
+      <xs:group ref="ns1:mathml.cquantifier"/>
+      <xs:group ref="ns1:mathml.cop1ary"/>
+      <xs:group ref="ns1:mathml.cop2ary"/>
+      <xs:group ref="ns1:mathml.copnary"/>
+      <xs:group ref="ns1:mathml.copmisc"/>
+      <xs:group ref="ns1:mathml.crel2ary"/>
+      <xs:group ref="ns1:mathml.crelnary"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="mathml.ContInPres">
+    <xs:choice>
+      <xs:element ref="mathml:ci"/>
+      <xs:element ref="mathml:csymbol"/>
+      <xs:element ref="mathml:cn"/>
+      <xs:group ref="ns1:mathml.c0ary"/>
+      <xs:element ref="mathml:apply"/>
+      <xs:element ref="mathml:fn"/>
+      <xs:element ref="mathml:lambda"/>
+      <xs:element ref="mathml:reln"/>
+      <xs:group ref="ns1:mathml.cconstructor"/>
+      <xs:element ref="mathml:semantics"/>
+      <xs:element ref="mathml:declare"/>
+    </xs:choice>
+  </xs:group>
+  <xs:complexType name="mathml.ContentExpression">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="ns1:mathml.Content"/>
+      <xs:group ref="ns1:mathml.PresInCont"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="mathml.PresExpression">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="ns1:mathml.Presentation"/>
+      <xs:group ref="ns1:mathml.ContInPres"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="mathml.MathExpression">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="ns1:mathml.PresInCont"/>
+      <xs:group ref="ns1:mathml.ContInPres"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:group name="mathml.MathMLCharacters">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="mathml:mglyph"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="mathml.att-macros">
+    <xs:attribute name="macros"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-mode">
+    <xs:attribute name="mode"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-display">
+    <xs:attribute name="display"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-topinfo">
+    <xs:attributeGroup ref="ns1:MATHML.Common.attrib"/>
+    <xs:attributeGroup ref="ns1:mathml.att-macros"/>
+    <xs:attributeGroup ref="ns1:mathml.att-mode"/>
+    <xs:attributeGroup ref="ns1:mathml.att-display"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-baseline">
+    <xs:attribute name="baseline"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-overflow">
+    <xs:attribute name="overflow" default="scroll">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="scroll"/>
+          <xs:enumeration value="elide"/>
+          <xs:enumeration value="truncate"/>
+          <xs:enumeration value="scale"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-altimg">
+    <xs:attribute name="altimg"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-alttext">
+    <xs:attribute name="alttext"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.att-browif">
+    <xs:attributeGroup ref="ns1:mathml.att-type"/>
+    <xs:attributeGroup ref="ns1:mathml.att-name"/>
+    <xs:attributeGroup ref="ns1:mathml.att-height"/>
+    <xs:attributeGroup ref="ns1:mathml.att-width"/>
+    <xs:attributeGroup ref="ns1:mathml.att-baseline"/>
+    <xs:attributeGroup ref="ns1:mathml.att-overflow"/>
+    <xs:attributeGroup ref="ns1:mathml.att-altimg"/>
+    <xs:attributeGroup ref="ns1:mathml.att-alttext"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="mathml.attlist-math">
+    <xs:attributeGroup ref="ns1:mathml.att-topinfo"/>
+    <xs:attributeGroup ref="ns1:mathml.att-browif"/>
+  </xs:attributeGroup>
   <xs:complexType name="tei_macro.paraContent" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="ns1:tei_model.phrase"/>
@@ -716,99 +2716,6 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</xs:documentat
   </xs:attributeGroup>
   <xs:attributeGroup name="tei_att.global.attribute.xmlspace">
     <xs:attribute ref="xml:space"/>
-  </xs:attributeGroup>
-  <xs:attributeGroup name="tei_att.handFeatures.attribute.scribe">
-    <xs:attribute name="scribe" type="ns1:tei_data.name">
-      <xs:annotation>
-        <xs:documentation>gives a name or other identifier for the scribe believed to be responsible for this hand.</xs:documentation>
-      </xs:annotation>
-    </xs:attribute>
-  </xs:attributeGroup>
-  <xs:attributeGroup name="tei_att.handFeatures.attribute.scribeRef">
-    <xs:attribute name="scribeRef">
-      <xs:annotation>
-        <xs:documentation>points to a full description of the scribe concerned, typically supplied by a person element elsewhere in the description.</xs:documentation>
-      </xs:annotation>
-      <xs:simpleType>
-        <xs:restriction>
-          <xs:simpleType>
-            <xs:list itemType="ns1:tei_data.pointer"/>
-          </xs:simpleType>
-          <xs:minLength value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-  </xs:attributeGroup>
-  <xs:attributeGroup name="tei_att.handFeatures.attribute.script">
-    <xs:attribute name="script">
-      <xs:annotation>
-        <xs:documentation>characterizes the particular script or writing style used by this hand, for example secretary, copperplate, Chancery, Italian, etc.</xs:documentation>
-      </xs:annotation>
-      <xs:simpleType>
-        <xs:restriction>
-          <xs:simpleType>
-            <xs:list itemType="ns1:tei_data.name"/>
-          </xs:simpleType>
-          <xs:minLength value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-  </xs:attributeGroup>
-  <xs:attributeGroup name="tei_att.handFeatures.attribute.scriptRef">
-    <xs:attribute name="scriptRef">
-      <xs:annotation>
-        <xs:documentation>points to a full description of the script or writing style used by this hand, typically supplied by a scriptNote element elsewhere in the description.</xs:documentation>
-      </xs:annotation>
-      <xs:simpleType>
-        <xs:restriction>
-          <xs:simpleType>
-            <xs:list itemType="ns1:tei_data.pointer"/>
-          </xs:simpleType>
-          <xs:minLength value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-  </xs:attributeGroup>
-  <xs:attributeGroup name="tei_att.handFeatures.attribute.medium">
-    <xs:attribute name="medium">
-      <xs:annotation>
-        <xs:documentation>describes the tint or type of ink, e.g. brown, or other writing medium, e.g. pencil</xs:documentation>
-      </xs:annotation>
-      <xs:simpleType>
-        <xs:restriction>
-          <xs:simpleType>
-            <xs:list itemType="ns1:tei_data.enumerated"/>
-          </xs:simpleType>
-          <xs:minLength value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-  </xs:attributeGroup>
-  <xs:attributeGroup name="tei_att.handFeatures.attribute.scope">
-    <xs:attribute name="scope">
-      <xs:annotation>
-        <xs:documentation>specifies how widely this hand is used in the manuscript.</xs:documentation>
-      </xs:annotation>
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="sole">
-            <xs:annotation>
-              <xs:documentation>only this hand is used throughout the manuscript</xs:documentation>
-            </xs:annotation>
-          </xs:enumeration>
-          <xs:enumeration value="major">
-            <xs:annotation>
-              <xs:documentation>this hand is used through most of the manuscript</xs:documentation>
-            </xs:annotation>
-          </xs:enumeration>
-          <xs:enumeration value="minor">
-            <xs:annotation>
-              <xs:documentation>this hand is used occasionally in the manuscript</xs:documentation>
-            </xs:annotation>
-          </xs:enumeration>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
   </xs:attributeGroup>
   <xs:attributeGroup name="tei_att.internetMedia.attributes">
     <xs:attributeGroup ref="ns1:tei_att.internetMedia.attribute.mimeType"/>
@@ -2529,14 +4436,6 @@ Suggested values include: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] 
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:rs"/>
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:idno"/>
       <xs:group minOccurs="0" maxOccurs="unbounded" ref="ns1:tei_model.persNamePart_sequenceOptionalRepeatable"/>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="tei_model.nameLike_sequenceRepeatable">
-    <xs:sequence>
-      <xs:group maxOccurs="unbounded" ref="ns1:tei_model.nameLike.agent_sequenceRepeatable"/>
-      <xs:element maxOccurs="unbounded" ref="ns1:rs"/>
-      <xs:element maxOccurs="unbounded" ref="ns1:idno"/>
-      <xs:group maxOccurs="unbounded" ref="ns1:tei_model.persNamePart_sequenceRepeatable"/>
     </xs:sequence>
   </xs:group>
   <xs:group name="tei_model.global">
@@ -6773,6 +8672,131 @@ Suggested values include: 1] main; 2] sub(subordinate) ; 3] alt(alternate) ; 4] 
       <xs:attributeGroup ref="ns1:tei_att.declaring.attributes"/>
     </xs:complexType>
   </xs:element>
+  <xs:element name="table">
+    <xs:annotation>
+      <xs:documentation>contains text displayed in tabular form, in rows and columns. [14.1.1. ]</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="ns1:tei_model.headLike"/>
+          <xs:group ref="ns1:tei_model.global"/>
+        </xs:choice>
+        <xs:choice>
+          <xs:sequence maxOccurs="unbounded">
+            <xs:element ref="ns1:row"/>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="ns1:tei_model.global"/>
+          </xs:sequence>
+          <xs:sequence maxOccurs="unbounded">
+            <xs:group ref="ns1:tei_model.graphicLike"/>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="ns1:tei_model.global"/>
+          </xs:sequence>
+        </xs:choice>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="ns1:tei_model.divBottom"/>
+          <xs:group minOccurs="0" maxOccurs="unbounded" ref="ns1:tei_model.global"/>
+        </xs:sequence>
+      </xs:sequence>
+      <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
+      <xs:attribute name="rows" type="ns1:tei_data.count">
+        <xs:annotation>
+          <xs:documentation>indicates the number of rows in the table.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="cols" type="ns1:tei_data.count">
+        <xs:annotation>
+          <xs:documentation>(columns) indicates the number of columns in each row of the table.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="row">
+    <xs:annotation>
+      <xs:documentation>contains one row of a table. [14.1.1. ]</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="ns1:cell"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
+      <xs:attributeGroup ref="ns1:tei_att.tableDecoration.attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cell">
+    <xs:annotation>
+      <xs:documentation>contains one cell of a table. [14.1.1. ]</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="ns1:tei_macro.specialPara">
+          <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
+          <xs:attributeGroup ref="ns1:tei_att.tableDecoration.attributes"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="formula">
+    <xs:annotation>
+      <xs:documentation>contains a mathematical or other formula. [14.2. ]</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="mathml:math"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
+      <xs:attribute name="notation" type="ns1:tei_data.enumerated">
+        <xs:annotation>
+          <xs:documentation>names the notation used for the content of the element.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="notatedMusic">
+    <xs:annotation>
+      <xs:documentation>encodes the presence of music notation in a text [14.3. ]</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="ns1:tei_model.labelLike"/>
+        <xs:group ref="ns1:tei_model.ptrLike"/>
+        <xs:element ref="ns1:graphic"/>
+        <xs:element ref="ns1:binaryObject"/>
+      </xs:choice>
+      <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
+      <xs:attributeGroup ref="ns1:tei_att.placement.attributes"/>
+      <xs:attributeGroup ref="ns1:tei_att.typed.attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="figure">
+    <xs:annotation>
+      <xs:documentation>groups elements representing or containing graphic information such as an illustration, formula, or figure. [14.4. ]</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="ns1:tei_model.headLike"/>
+        <xs:group ref="ns1:tei_model.common"/>
+        <xs:element ref="ns1:figDesc"/>
+        <xs:group ref="ns1:tei_model.graphicLike"/>
+        <xs:group ref="ns1:tei_model.global"/>
+        <xs:group ref="ns1:tei_model.divBottom"/>
+      </xs:choice>
+      <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
+      <xs:attributeGroup ref="ns1:tei_att.placement.attributes"/>
+      <xs:attributeGroup ref="ns1:tei_att.typed.attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="figDesc">
+    <xs:annotation>
+      <xs:documentation>(description of figure) contains a brief prose description of the appearance or content of a graphic figure, for use when documenting an image without displaying it. [14.4. ]</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="ns1:tei_macro.limitedContent">
+          <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:attributeGroup name="tei_att.datable.custom.attributes">
     <xs:attributeGroup ref="ns1:tei_att.datable.custom.attribute.when-custom"/>
     <xs:attributeGroup ref="ns1:tei_att.datable.custom.attribute.notBefore-custom"/>
@@ -7004,132 +9028,6 @@ Suggested values include: 1] main; 2] sub(subordinate) ; 3] alt(alternate) ; 4] 
           <xs:attributeGroup ref="ns1:tei_att.editLike.attributes"/>
           <xs:attributeGroup ref="ns1:tei_att.datable.attributes"/>
           <xs:attributeGroup ref="ns1:tei_att.naming.attributes"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="table">
-    <xs:annotation>
-      <xs:documentation>contains text displayed in tabular form, in rows and columns. [14.1.1. ]</xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:sequence>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:group ref="ns1:tei_model.headLike"/>
-          <xs:group ref="ns1:tei_model.global"/>
-        </xs:choice>
-        <xs:choice>
-          <xs:sequence maxOccurs="unbounded">
-            <xs:element ref="ns1:row"/>
-            <xs:group minOccurs="0" maxOccurs="unbounded" ref="ns1:tei_model.global"/>
-          </xs:sequence>
-          <xs:sequence maxOccurs="unbounded">
-            <xs:group ref="ns1:tei_model.graphicLike"/>
-            <xs:group minOccurs="0" maxOccurs="unbounded" ref="ns1:tei_model.global"/>
-          </xs:sequence>
-        </xs:choice>
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
-          <xs:group ref="ns1:tei_model.divBottom"/>
-          <xs:group minOccurs="0" maxOccurs="unbounded" ref="ns1:tei_model.global"/>
-        </xs:sequence>
-      </xs:sequence>
-      <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
-      <xs:attribute name="rows" type="ns1:tei_data.count">
-        <xs:annotation>
-          <xs:documentation>indicates the number of rows in the table.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="cols" type="ns1:tei_data.count">
-        <xs:annotation>
-          <xs:documentation>(columns) indicates the number of columns in each row of the table.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="row">
-    <xs:annotation>
-      <xs:documentation>contains one row of a table. [14.1.1. ]</xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="ns1:cell"/>
-      </xs:sequence>
-      <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
-      <xs:attributeGroup ref="ns1:tei_att.tableDecoration.attributes"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="cell">
-    <xs:annotation>
-      <xs:documentation>contains one cell of a table. [14.1.1. ]</xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:complexContent>
-        <xs:extension base="ns1:tei_macro.specialPara">
-          <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
-          <xs:attributeGroup ref="ns1:tei_att.tableDecoration.attributes"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="formula">
-    <xs:annotation>
-      <xs:documentation>contains a mathematical or other formula. [14.2. ]</xs:documentation>
-    </xs:annotation>
-    <xs:complexType mixed="true">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="ns1:tei_model.graphicLike"/>
-        <xs:group ref="ns1:tei_model.hiLike"/>
-      </xs:choice>
-      <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
-      <xs:attribute name="notation" type="ns1:tei_data.enumerated">
-        <xs:annotation>
-          <xs:documentation>names the notation used for the content of the element.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="notatedMusic">
-    <xs:annotation>
-      <xs:documentation>encodes the presence of music notation in a text [14.3. ]</xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="ns1:tei_model.labelLike"/>
-        <xs:group ref="ns1:tei_model.ptrLike"/>
-        <xs:element ref="ns1:graphic"/>
-        <xs:element ref="ns1:binaryObject"/>
-      </xs:choice>
-      <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
-      <xs:attributeGroup ref="ns1:tei_att.placement.attributes"/>
-      <xs:attributeGroup ref="ns1:tei_att.typed.attributes"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="figure">
-    <xs:annotation>
-      <xs:documentation>groups elements representing or containing graphic information such as an illustration, formula, or figure. [14.4. ]</xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="ns1:tei_model.headLike"/>
-        <xs:group ref="ns1:tei_model.common"/>
-        <xs:element ref="ns1:figDesc"/>
-        <xs:group ref="ns1:tei_model.graphicLike"/>
-        <xs:group ref="ns1:tei_model.global"/>
-        <xs:group ref="ns1:tei_model.divBottom"/>
-      </xs:choice>
-      <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
-      <xs:attributeGroup ref="ns1:tei_att.placement.attributes"/>
-      <xs:attributeGroup ref="ns1:tei_att.typed.attributes"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="figDesc">
-    <xs:annotation>
-      <xs:documentation>(description of figure) contains a brief prose description of the appearance or content of a graphic figure, for use when documenting an image without displaying it. [14.4. ]</xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:complexContent>
-        <xs:extension base="ns1:tei_macro.limitedContent">
-          <xs:attributeGroup ref="ns1:tei_att.global.attributes"/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>

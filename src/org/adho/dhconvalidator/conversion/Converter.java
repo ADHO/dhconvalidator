@@ -111,10 +111,10 @@ public class Converter {
 		serializer.setIndent(2);
 		serializer.write(document);
 		
+		DocumentLog.logConversionStepOutput(
+				Messages.getString("Converter.log2"), conversionResultDocBuffer.toString("UTF-8")); //$NON-NLS-1$ //$NON-NLS-2$
 		validateDocument(conversionResultDocBuffer, progressListener);
 		
-		DocumentLog.logConversionStepOutput(
-			Messages.getString("Converter.log2"), conversionResultDocBuffer.toString("UTF-8")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		progressListener.setProgress(Messages.getString("Converter.progress4")); //$NON-NLS-1$
 		

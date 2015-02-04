@@ -43,8 +43,58 @@ public class DocxOutputConverter extends CommonOutputConverter {
 		removeFrontSection(document);
 		makeQuotations(document);
 		renameImageDir(document);
+		fixFormulae(document);
+		removeSegs(document);
 	}
 	
+	/**
+	 * Segments are not allowed so far, so we convert them to hi elements or remove the
+	 * completely.
+	 * @param document
+	 */
+	private void removeSegs(Document document) {
+		Nodes searchResult = 
+				document.query(
+					"//tei:seg",  //$NON-NLS-1$
+					xPathContext);
+		for (int i=0; i<searchResult.size(); i++) {
+			Element segElement = (Element)searchResult.get(i);
+			Element parentElement = (Element)segElement.getParent();
+			if (segElement.getAttribute("rend") != null) {//$NON-NLS-1$
+				segElement.setLocalName("hi");	//$NON-NLS-1$
+			}
+			else {
+				int position = parentElement.indexOf(segElement);
+				for (int j=0; j<segElement.getChildCount(); j++) {
+					parentElement.insertChild(segElement.getChild(j).copy(), position);
+					position++;
+				}
+				parentElement.removeChild(segElement);
+			}
+		}		
+	}
+
+	//TODO: this should probably be fixed in the stylesheets
+	/**
+	 * Ensures that mathml formulae appear always within a formula element
+	 * @param document
+	 */
+	private void fixFormulae(Document document) {
+		Nodes searchResult = 
+				document.query(
+					"//mml:math",  //$NON-NLS-1$
+					xPathContext);
+		for (int i=0; i<searchResult.size(); i++) {
+			Element mathElement = (Element)searchResult.get(i);
+			Element parentElement = (Element)mathElement.getParent();
+			if (!parentElement.getLocalName().equals("formula")) { //$NON-NLS-1$
+				Element formulaElement = new Element("formula", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+				parentElement.replaceChild(mathElement, formulaElement);
+				formulaElement.appendChild(mathElement.copy());
+			}
+		}
+	}
+
 	private void renameImageDir(Document document) {
 		Nodes searchResult = 
 				document.query(
