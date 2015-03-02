@@ -25,7 +25,6 @@ import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentUtil;
-import org.adho.dhconvalidator.util.Pair;
 
 /**
  * An InputConverter for the OASIS odt format.
@@ -418,7 +417,7 @@ public class OdtInputConverter implements InputConverter {
 	 * @param authorsAndAffiliations
 	 */
 	private void injectAuthorsIntoMeta(Document metaDoc,
-			List<Pair<String,String>> authorsAndAffiliations) {
+			List<User> authorsAndAffiliations) {
 		Nodes searchResult = 
 				metaDoc.query(
 					"/office:document-meta/office:meta/meta:initial-creator",  //$NON-NLS-1$
@@ -439,11 +438,13 @@ public class OdtInputConverter implements InputConverter {
 		initialCreatorElement.removeChildren();
 		StringBuilder builder = new StringBuilder();
 		String conc  = ""; //$NON-NLS-1$
-		for (Pair<String,String> authorAffiliation : authorsAndAffiliations) {
+		for (User authorAffiliation : authorsAndAffiliations) {
 			builder.append(conc);
-			builder.append(authorAffiliation.getFirst());
-			builder.append(", "); //$NON-NLS-1$
-			builder.append(authorAffiliation.getSecond());
+			builder.append(authorAffiliation.getFirstName() + " " + authorAffiliation.getLastName());
+			builder.append(" ("); //$NON-NLS-1$
+			builder.append(authorAffiliation.getEmail());
+			builder.append("), ");
+			builder.append(authorAffiliation.getOrganizations());
 			conc = "; "; //$NON-NLS-1$
 		}
 		initialCreatorElement.appendChild(builder.toString());
@@ -489,7 +490,7 @@ public class OdtInputConverter implements InputConverter {
 	 * @throws IOException
 	 */
 	private void injectAuthorsIntoContent(Document contentDoc,
-			List<Pair<String,String>> authorsAndAffiliations) throws IOException {
+			List<User> authorsAndAffiliations) throws IOException {
 		Nodes searchResult = 
 				contentDoc.query(
 					"//text:section[@text:name='Authors from ConfTool']",  //$NON-NLS-1$
@@ -511,13 +512,14 @@ public class OdtInputConverter implements InputConverter {
 		Element authorSectionElement = (Element) searchResult.get(0);
 		
 		authorSectionElement.removeChildren();
-		for (Pair<String,String> authorAffiliation : authorsAndAffiliations){
+		for (User authorAffiliation : authorsAndAffiliations){
 			Element authorParagraphElement = new Element("p", Namespace.TEXT.toUri()); //$NON-NLS-1$
 			authorSectionElement.appendChild(authorParagraphElement);
 			authorParagraphElement.appendChild(
-					authorAffiliation.getFirst()
+					authorAffiliation.getFirstName() + " " + authorAffiliation.getLastName() //$NON-NLS-1$
+					+" ("+authorAffiliation.getEmail()+")"
 					+", " //$NON-NLS-1$
-					+authorAffiliation.getSecond());
+					+authorAffiliation.getOrganizations());
 			authorParagraphElement.addAttribute(
 				new Attribute("text:style-name", Namespace.TEXT.toUri(), "P6")); //$NON-NLS-1$ //$NON-NLS-2$
 		}

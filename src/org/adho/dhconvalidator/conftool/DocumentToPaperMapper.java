@@ -11,6 +11,8 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 
+import com.google.common.collect.Lists;
+
 /**
  * Maps a ConfTool Paper result document to a {@link Paper}.
  * 
@@ -22,6 +24,7 @@ public class DocumentToPaperMapper {
 	public List<Paper> getPaperList(Document document) {
 		
 		List<Paper> result = new ArrayList<>();
+
 		Elements paperElements =
 			document.getRootElement().getChildElements("paper"); //$NON-NLS-1$
 		
@@ -30,10 +33,39 @@ public class DocumentToPaperMapper {
 			Integer paperId = 
 				Integer.valueOf(paperElement.getFirstChildElement("paperID").getValue()); //$NON-NLS-1$
 			
-			String authors = 
-					paperElement.getFirstChildElement("authors").getValue(); //$NON-NLS-1$
-			String organisations = 
-					paperElement.getFirstChildElement("organisations").getValue(); //$NON-NLS-1$
+			List<User> authors = Lists.newArrayList();
+			
+			int authorIndex = 1;
+			Element authorsNameElement = null;
+			
+			while ((authorsNameElement = paperElement.getFirstChildElement(
+					"authors_formatted_"+authorIndex+"_name")) !=null) {  //$NON-NLS-1$ //$NON-NLS-2$
+				String name = authorsNameElement.getValue();
+				
+				if ((name != null) && (!name.isEmpty())) { //ConfTool sometimes reports empty authors...
+					String organisations = 
+							paperElement.getFirstChildElement(
+								"authors_formatted_"+authorIndex+"_organisation").getValue();  //$NON-NLS-1$ //$NON-NLS-2$
+					
+					String email = 
+							paperElement.getFirstChildElement(
+								"authors_formatted_"+authorIndex+"_email").getValue();  //$NON-NLS-1$ //$NON-NLS-2$
+					
+					String firstname = "";
+					
+					int splitterIndex = name.indexOf(',');
+					if (splitterIndex != -1) {
+						if (splitterIndex < name.length()-1) {
+							firstname = name.substring(splitterIndex+1).trim();
+						}
+						name = name.substring(0, splitterIndex);
+					}
+					
+					authors.add(new User(firstname, name, organisations, email));
+				}				
+				authorIndex++;
+			}
+			
 			String title = 
 					paperElement.getFirstChildElement("title").getValue(); //$NON-NLS-1$
 			String keywords =
@@ -45,7 +77,7 @@ public class DocumentToPaperMapper {
 			
 			result.add(
 				new Paper(
-					paperId, title, authors, organisations, 
+					paperId, title, authors, 
 					keywords, topics, contributionType));
 		}
 		

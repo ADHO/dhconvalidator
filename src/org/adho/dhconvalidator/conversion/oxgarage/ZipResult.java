@@ -189,4 +189,8 @@ public class ZipResult {
 	public void putResource(String path, byte[] data) {
 		externalResources.put(path, data);
 	}
+	
+	public String getDocumentName() {
+		return documentName;
+	}
 }

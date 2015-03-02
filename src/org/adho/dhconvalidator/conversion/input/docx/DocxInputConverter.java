@@ -25,7 +25,6 @@ import org.adho.dhconvalidator.conversion.input.docx.paragraphparser.ParagraphPa
 import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentLog;
 import org.adho.dhconvalidator.util.DocumentUtil;
-import org.adho.dhconvalidator.util.Pair;
 
 /**
  * A converter for Microsoft docx format.
@@ -259,7 +258,7 @@ public class DocxInputConverter implements InputConverter {
 	 * @throws IOException
 	 */
 	private void injectAuthorsIntoContent(Document document,
-			List<Pair<String, String>> authorsAndAffiliations) throws IOException {
+			List<User> authorsAndAffiliations) throws IOException {
 		Nodes searchResult = 
 				document.query("//w:pStyle[@w:val='DH-AuthorAffiliation']", xPathContext); //$NON-NLS-1$
 		
@@ -275,7 +274,7 @@ public class DocxInputConverter implements InputConverter {
 		Element paragraphParent = (Element) authorParagraphElement.getParent();
 		int insertPosition = paragraphParent.indexOf(authorParagraphElement)-1;
 		
-		for (Pair<String,String> authorAffiliation : authorsAndAffiliations){
+		for (User authorAffiliation : authorsAndAffiliations){
 			Element curAuthorParagraphElement = (Element) authorParagraphElement.copy();
 			
 			Element authorElement = DocumentUtil.getFirstMatch(
@@ -283,7 +282,9 @@ public class DocxInputConverter implements InputConverter {
 			
 			authorElement.removeChildren();
 			authorElement.appendChild(
-				authorAffiliation.getFirst() + ", " + authorAffiliation.getSecond()); //$NON-NLS-1$
+				authorAffiliation.getFirstName() + " " + authorAffiliation.getLastName()  //$NON-NLS-1
+				+ " (" + authorAffiliation.getEmail() + "), " //$NON-NLS-1 //$NON-NLS-2
+				+ authorAffiliation.getOrganizations()); //$NON-NLS-1$
 			paragraphParent.insertChild(curAuthorParagraphElement, insertPosition);
 			insertPosition++;
 		}

@@ -177,7 +177,7 @@ public enum ConversionPath {
 	 * @return the ConversionPath for the given source file
 	 * @throws IllegalArgumentException if there is no path for this file type
 	 */
-	public static ConversionPath getConvertionPathByFilename(String filename) {
+	public static ConversionPath getConversionPathByFilename(String filename) {
 		for (ConversionPath path : values()) {
 			if (path.getDefaultFileExt().equals(filename.substring(filename.lastIndexOf('.')+1))) {
 				return path;

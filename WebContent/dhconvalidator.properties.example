@@ -12,3 +12,5 @@ publicationStmt=<publicationStmt xmlns="http://www.tei-c.org/ns/1.0"><publisher>
 encodingDesc=<encodingDesc xmlns="http://www.tei-c.org/ns/1.0"><appInfo><application ident="DHCONVALIDATOR" version="{VERSION}"><label>DHConvalidator</label></application></appInfo></encodingDesc>
 performSchemaValidation=true
 base_url=http://www.digitalhumanities.it/dhconvalidator/
+html_address_generation=true
+html_to_xml_link=true

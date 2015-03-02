@@ -149,6 +149,8 @@ public class ConfToolClient {
 	private Document getExportData(ExportType type, User user) throws IOException {
 		String nonce = getNonce();
 		
+		// see: ConfTool REST interface specification
+
 		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
 		urlBuilder.append("?page=adminExport"); //$NON-NLS-1$
 		urlBuilder.append("&nonce="); //$NON-NLS-1$
@@ -161,6 +163,12 @@ public class ConfToolClient {
 		urlBuilder.append("&form_export_format=xml"); //$NON-NLS-1$
 		urlBuilder.append("&form_export_header=default"); //$NON-NLS-1$
 		urlBuilder.append("&cmd_create_export=true"); //$NON-NLS-1$
+		if (type.equals(ExportType.papers)) {
+			urlBuilder.append("&form_export_papers_options[]=authors_extended_columns"); //$NON-NLS-1$
+			urlBuilder.append("&form_export_papers_options[]=authors_extended_email"); //$NON-NLS-1$
+			urlBuilder.append("&form_export_papers_options[]=authors_extended_organisations"); //$NON-NLS-1$
+		}
+		
 		
 		if (user != null) {
 			urlBuilder.append("&form_userID="); //$NON-NLS-1$
@@ -250,4 +258,5 @@ public class ConfToolClient {
 		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/message"); //$NON-NLS-1$
 		return resultElement.getValue();
 	}
+
 }

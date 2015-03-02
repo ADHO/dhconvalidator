@@ -124,7 +124,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 									
 									ZipResult zipResult = converter.convert(
 										uploadData, 
-										ConversionPath.getConvertionPathByFilename(filename),
+										ConversionPath.getConversionPathByFilename(filename),
 										(User)VaadinSession.getCurrent().getAttribute(
 												SessionStorageKey.USER.name()),
 										filename,
@@ -145,6 +145,13 @@ public class ConverterPanel extends VerticalLayout implements View {
 								public void done(
 										Pair<ZipResult, String> result) {
 									// back to GUI foreground at this point
+									String originalExtension = 
+											filename.substring(
+													filename.lastIndexOf('.')+1);
+									
+									filename = result.getFirst().getDocumentName().substring(
+										0, result.getFirst().getDocumentName().lastIndexOf('.')) 
+										+ "." + originalExtension;
 									
 									// we store the result in the session for the ExternalResourceRequestHandler
 									VaadinSession.getCurrent().setAttribute(

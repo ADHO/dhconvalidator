@@ -29,7 +29,6 @@ import org.adho.dhconvalidator.conversion.TeiNamespace;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.util.DocumentUtil;
-import org.adho.dhconvalidator.util.Pair;
 
 /**
  * An OutputConverter that does modifications common to all supported formats (so far).
@@ -254,30 +253,30 @@ public class CommonOutputConverter implements OutputConverter {
 			oldAuthor.getParent().removeChild(oldAuthor);
 		}
 		
-		for (Pair<String,String> authorAffiliation : paper.getAuthorsAndAffiliations()) {
-			String author = authorAffiliation.getFirst();
-			if (author.contains(",")) { //$NON-NLS-1$
-				int splitPos = author.indexOf(","); //$NON-NLS-1$
-				String surname = author.substring(0, splitPos).trim();
-				String forename = author.substring(splitPos+1, author.length());
-				
-				Element authorElement = new Element("author", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-				Element persNameElement = new Element("persName", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-				authorElement.appendChild(persNameElement);
-				
-				Element surnameElement = new Element("surname", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-				surnameElement.appendChild(surname);
-				persNameElement.appendChild(surnameElement);
-				Element forenameElement = new Element("forename", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-				forenameElement.appendChild(forename);
-				persNameElement.appendChild(forenameElement);
-				
-				Element affiliationElement = new Element("affiliation", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-				affiliationElement.appendChild(authorAffiliation.getSecond());
-				authorElement.appendChild(affiliationElement);
-				
-				titleStmtElement.appendChild(authorElement);
-			}
+		for (User authorAffiliation : paper.getAuthorsAndAffiliations()) {
+			String surname = authorAffiliation.getLastName();
+			String forename = authorAffiliation.getFirstName();
+			
+			Element authorElement = new Element("author", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+			Element persNameElement = new Element("persName", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+			authorElement.appendChild(persNameElement);
+			
+			Element surnameElement = new Element("surname", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+			surnameElement.appendChild(surname);
+			persNameElement.appendChild(surnameElement);
+			Element forenameElement = new Element("forename", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+			forenameElement.appendChild(forename);
+			persNameElement.appendChild(forenameElement);
+			
+			Element affiliationElement = new Element("affiliation", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+			affiliationElement.appendChild(authorAffiliation.getOrganizations());
+			authorElement.appendChild(affiliationElement);
+			
+			Element emailElement = new Element("email", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
+			emailElement.appendChild(authorAffiliation.getEmail());
+			authorElement.appendChild(emailElement);
+			
+			titleStmtElement.appendChild(authorElement);
 		}
 		
 	}

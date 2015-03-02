@@ -17,6 +17,8 @@ public class User {
 	private String userName;
 	private String firstName;
 	private String lastName;
+	private String organizations;
+	private String email;
 	
 	/**
 	 * ConfTool user with id and username as delivered by authentication.
@@ -40,6 +42,22 @@ public class User {
 		this.userId = userId;
 		this.firstName = firstName;
 		this.lastName = lastName;
+	}
+	
+	/**
+	 * An author as delivered by {@link ExportType#papers}.
+	 * @param firstName
+	 * @param lastName
+	 * @param organizations
+	 * @param email
+	 */
+	public User(String firstName,
+			String lastName, String organizations, String email) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.organizations = organizations;
+		this.email = email;
 	}
 
 	public Integer getUserId() {
@@ -71,6 +89,14 @@ public class User {
 		this.lastName = lastName;
 	}
 	
+	public String getOrganizations() {
+		return organizations;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

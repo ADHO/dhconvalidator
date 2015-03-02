@@ -65,6 +65,16 @@ public enum PropertyKey {
 	 * the base url of the DHConvalidator, e. g. http://localhost/dhconvalidator/
 	 */
 	base_url,
+	/**
+	 * <code>true</code> -> use DHConvalidator address generation with email for
+	 * HTML output.
+	 */
+	html_address_generation, 
+	/**
+	 * <code>true</code> -> a link to the corresponding (same name) xml file is
+	 * added to the HTML output.
+	 */
+	html_to_xml_link,
 	;
 	
 	/**
