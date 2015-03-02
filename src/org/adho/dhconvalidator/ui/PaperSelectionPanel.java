@@ -16,6 +16,7 @@ import org.adho.dhconvalidator.conftool.Paper;
 import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
+import org.adho.dhconvalidator.properties.PropertyKey;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -120,7 +121,8 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		postDownloadLabel = 
 				new Label(
 					Messages.getString("PaperSelectionPanel.postDownloadInfo",
-						inputConverter.getTextEditorDescription()),
+						inputConverter.getTextEditorDescription(),
+						PropertyKey.base_url.getValue()+"popup/DHConvalidatorServices#!converter"),
 					ContentMode.HTML);
 		postDownloadLabel.addStyleName("postDownloadInfoRedAndBold");
 		postDownloadLabel.setVisible(false);
