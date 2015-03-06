@@ -5,12 +5,15 @@
 package org.adho.dhconvalidator.ui;
 
 import org.adho.dhconvalidator.Messages;
+import org.adho.dhconvalidator.conftool.User;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -73,7 +76,11 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
 	 * Setup UI.
 	 */
 	private void initComponents() {
-		getBackLink().setVisible(false);
+		User user = (User) VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name());
+		if (user.isAdmin()) {
+			UserSwitchPanel userSwitchPanel = new UserSwitchPanel();
+			addCenteredComponent(userSwitchPanel, Alignment.TOP_RIGHT);
+		}
 		
 		Label infoLabel = new Label(
 			Messages.getString("ServiceSelectionPanel.intro"), //$NON-NLS-1$

@@ -103,11 +103,13 @@ public class ConfToolClient {
 	 * @throws IOException in case of any failure
 	 */
 	public User getDetailedUser(User loginUser) throws IOException {
-		User author = new DocumentToUserMapper().getUser(
+		User detailedUser = new DocumentToUserMapper().getUser(
 				getExportData(ExportType.users, loginUser));
-		if (author != null) {
-			loginUser.setFirstName(author.getFirstName());
-			loginUser.setLastName(author.getLastName());
+		if (detailedUser != null) {
+			loginUser.setFirstName(detailedUser.getFirstName());
+			loginUser.setLastName(detailedUser.getLastName());
+			loginUser.setEmail(detailedUser.getEmail());
+			loginUser.setAdmin(detailedUser.isAdmin());
 		}
 		return loginUser;
 	}
@@ -183,6 +185,8 @@ public class ConfToolClient {
 		try (InputStream resultStream = result.getStream()) {
 			Builder builder = new Builder();
 			Document resultDoc = builder.build(resultStream);
+			System.out.println(resultDoc.toXML());
+
 			return resultDoc;
 		}
 		catch (Exception e) {
@@ -223,6 +227,7 @@ public class ConfToolClient {
 		try (InputStream resultStream = result.getStream()) {
 			Builder builder = new Builder();
 			Document resultDoc = builder.build(resultStream);
+			
 			if (getLoginResult(resultDoc) == LOGIN_SUCCESS) {
 				return getUser(resultDoc);
 			}
@@ -258,5 +263,24 @@ public class ConfToolClient {
 		Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/message"); //$NON-NLS-1$
 		return resultElement.getValue();
 	}
-
+	
+	List<User> getUsers() {
+		try {
+			return new DocumentToUserMapper().getUsers(
+					getExportData(ExportType.users, null));
+		}
+		catch (Exception e) {
+			throw new IllegalStateException(e);
+		}
+	}
+	
+	public static void main(String[] args) {
+		try {
+			System.out.println(
+				new ConfToolClient("https://www.conftool.net/demo/dh2015_26a/rest.php", "DHhed8QD15".toCharArray()).getExportData(ExportType.users, null).toXML());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

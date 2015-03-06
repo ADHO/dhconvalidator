@@ -19,6 +19,7 @@ public class User {
 	private String lastName;
 	private String organizations;
 	private String email;
+	private boolean admin;
 	
 	/**
 	 * ConfTool user with id and username as delivered by authentication.
@@ -36,14 +37,35 @@ public class User {
 	 * @param userId
 	 * @param firstName
 	 * @param lastName
+	 * @param admin 
 	 */
-	public User(Integer userId, String firstName, String lastName) {
+	public User(Integer userId, String firstName, String lastName, boolean admin) {
 		super();
 		this.userId = userId;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.admin = admin;
 	}
 	
+	/**
+	 * Detailed user as delivered by {@link ExportType#users}
+	 * and copy constructor for user switching.
+	 * @param userId
+	 * @param userName
+	 * @param firstName
+	 * @param lastName
+	 * @param admin
+	 */
+	public User(Integer userId, String firstName,
+			String lastName, String email, boolean admin) {
+		super();
+		this.userId = userId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.admin = admin;
+	}
+
 	/**
 	 * An author as delivered by {@link ExportType#papers}.
 	 * @param firstName
@@ -64,10 +86,6 @@ public class User {
 		return userId;
 	}
 
-	public String getUserName() {
-		return userName;
-	}
-	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -78,7 +96,7 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "#"+userId+"["+userName+","+firstName+","+lastName+"]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		return "#"+userId+"["+userName+","+firstName+","+lastName+","+email+"]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 	}
 
 	public void setFirstName(String firstName) {
@@ -95,6 +113,10 @@ public class User {
 
 	public String getEmail() {
 		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	@Override
@@ -122,5 +144,11 @@ public class User {
 		return true;
 	}
 	
+	public boolean isAdmin() {
+		return admin;
+	}
 	
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
 }
