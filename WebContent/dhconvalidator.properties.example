@@ -1,4 +1,4 @@
-version=1.7
+version=1.8
 logConversionStepOutput=false
 conftool_shared_pass=MyPass
 conftool_login_url=https://www.conftool.net/demo/dh2015_26a/
@@ -14,3 +14,4 @@ performSchemaValidation=true
 base_url=http://www.digitalhumanities.it/dhconvalidator/
 html_address_generation=true
 html_to_xml_link=true
+showOnlyAcceptedPapers=false

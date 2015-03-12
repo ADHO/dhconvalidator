@@ -6,6 +6,7 @@ package org.adho.dhconvalidator.conftool;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -104,7 +105,7 @@ public class ConfToolClient {
 	 */
 	public User getDetailedUser(User loginUser) throws IOException {
 		User detailedUser = new DocumentToUserMapper().getUser(
-				getExportData(ExportType.users, loginUser));
+				getExportData(ExportType.users, loginUser, null));
 		if (detailedUser != null) {
 			loginUser.setFirstName(detailedUser.getFirstName());
 			loginUser.setLastName(detailedUser.getLastName());
@@ -121,7 +122,8 @@ public class ConfToolClient {
 	 */
 	public List<Paper> getPapers(User user) throws IOException {
 		return new DocumentToPaperMapper().getPaperList(
-				getExportData(ExportType.papers, user));
+				getExportData(ExportType.papers, user, 
+					PropertyKey.showOnlyAcceptedPapers.isTrue()?"p":null));
 	}
 
 	/**
@@ -148,7 +150,7 @@ public class ConfToolClient {
 		return String.valueOf(date.getTime());
 	}
 	
-	private Document getExportData(ExportType type, User user) throws IOException {
+	private Document getExportData(ExportType type, User user, String status) throws IOException {
 		String nonce = getNonce();
 		
 		// see: ConfTool REST interface specification
@@ -164,13 +166,17 @@ public class ConfToolClient {
 		urlBuilder.append("&form_include_deleted=0"); //$NON-NLS-1$
 		urlBuilder.append("&form_export_format=xml"); //$NON-NLS-1$
 		urlBuilder.append("&form_export_header=default"); //$NON-NLS-1$
-		urlBuilder.append("&cmd_create_export=true"); //$NON-NLS-1$
+		urlBuilder.append("&cmd_create_export=Create Export File"); //$NON-NLS-1$
 		if (type.equals(ExportType.papers)) {
 			urlBuilder.append("&form_export_papers_options[]=authors_extended_columns"); //$NON-NLS-1$
 			urlBuilder.append("&form_export_papers_options[]=authors_extended_email"); //$NON-NLS-1$
 			urlBuilder.append("&form_export_papers_options[]=authors_extended_organisations"); //$NON-NLS-1$
 		}
 		
+		if (status != null) {
+			urlBuilder.append("&form_status=");
+			urlBuilder.append(status);
+		}
 		
 		if (user != null) {
 			urlBuilder.append("&form_userID="); //$NON-NLS-1$
@@ -185,7 +191,6 @@ public class ConfToolClient {
 		try (InputStream resultStream = result.getStream()) {
 			Builder builder = new Builder();
 			Document resultDoc = builder.build(resultStream);
-			System.out.println(resultDoc.toXML());
 
 			return resultDoc;
 		}
@@ -266,21 +271,27 @@ public class ConfToolClient {
 	
 	List<User> getUsers() {
 		try {
-			return new DocumentToUserMapper().getUsers(
-					getExportData(ExportType.users, null));
+			DocumentToUserMapper documentToUserMapper = new DocumentToUserMapper();
+			
+			List<User> allUsers = documentToUserMapper.getUsers(
+					getExportData(ExportType.users, null, null));
+			
+			List<User> acceptedUsers = documentToUserMapper.getAuthors(
+					getExportData(ExportType.subsumed_authors, null, "1"));
+					
+			List<User> result = new ArrayList<>();
+			
+			for (User user : allUsers) {
+				if (user.isAdmin() || acceptedUsers.contains(user)) {
+					result.add(user);
+				}
+			}
+			
+			return result;
 		}
 		catch (Exception e) {
 			throw new IllegalStateException(e);
 		}
 	}
 	
-	public static void main(String[] args) {
-		try {
-			System.out.println(
-				new ConfToolClient("https://www.conftool.net/demo/dh2015_26a/rest.php", "DHhed8QD15".toCharArray()).getExportData(ExportType.users, null).toXML());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

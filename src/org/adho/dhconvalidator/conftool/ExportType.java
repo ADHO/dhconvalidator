@@ -16,8 +16,12 @@ public enum ExportType {
 	 */
 	papers,
 	/**
-	 * details for a specific user
+	 * details for a specific user or a list of users
 	 */
-	users,
+	users, 
+	/**
+	 * list of accepted authors 
+	 */
+	subsumed_authors,
 	;
 }

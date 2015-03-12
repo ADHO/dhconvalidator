@@ -74,7 +74,11 @@ public enum PropertyKey {
 	 * <code>true</code> -> a link to the corresponding (same name) xml file is
 	 * added to the HTML output.
 	 */
-	html_to_xml_link,
+	html_to_xml_link, 
+	/**
+	 * <code>true</code> -> list only accepted submissions
+	 */
+	showOnlyAcceptedPapers,
 	;
 	
 	/**

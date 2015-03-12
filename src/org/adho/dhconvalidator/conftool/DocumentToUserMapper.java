@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.adho.dhconvalidator.Messages;
-
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
+
+import org.adho.dhconvalidator.Messages;
 
 /**
  * Maps a ConfTool User result document to a {@link User} or a list of Users.
@@ -47,6 +47,18 @@ public class DocumentToUserMapper {
 		return result;
 	}
 	
+	public List<User> getAuthors(Document document) {
+		Elements userElements = 
+				document.getRootElement().getChildElements("subsumed_author"); //$NON-NLS-1$
+		ArrayList<User> result = new ArrayList<>();
+		
+		for (int i=0; i<userElements.size(); i++) {
+			result.add(getAuthor(userElements.get(i)));
+		}
+		
+		return result;
+	}
+	
 	private User getUser(Element userElement) {
 		Integer userId = 
 				Integer.valueOf(
@@ -63,5 +75,19 @@ public class DocumentToUserMapper {
 			return new User(userId, firstName, lastName, email, statusList.contains("admin"));  //$NON-NLS-1$
 
 	}
+	
+	private User getAuthor(Element userElement) {
+		Integer userId = 
+				Integer.valueOf(
+					userElement.getFirstChildElement("personID").getValue()); //$NON-NLS-1$
+			String firstName = 
+					userElement.getFirstChildElement("firstname").getValue(); //$NON-NLS-1$
+			String lastName =  
+					userElement.getFirstChildElement("lastname").getValue(); //$NON-NLS-1$
+			String email =  
+					userElement.getFirstChildElement("email").getValue(); //$NON-NLS-1$
+			
+			return new User(userId, firstName, lastName, email, false); 
 
+	}
 }
