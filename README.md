@@ -41,19 +41,20 @@ This is a working [nginx] (http://nginx.org/) setting for nginx version 1.6.2:
 	location /dhconvalidator/ {
 		proxy_pass http://myforwarddomain:8090/dhconvalidator/;
 
+		keepalive_timeout 60;
 		proxy_redirect off;
 		proxy_set_header Host $host;
 		proxy_set_header   X-Real-IP        $remote_addr;
 		proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
 		proxy_max_temp_file_size 0;
-		proxy_connect_timeout      20;
+		proxy_connect_timeout      5m;
 		proxy_send_timeout         20;
-		proxy_read_timeout         90;
-		proxy_buffer_size          4k;
-		proxy_buffers              4 32k;
-		proxy_busy_buffers_size    64k;
-		proxy_temp_file_write_size 64k;
-
+		proxy_read_timeout         5m;
+		proxy_buffer_size          128k;
+		proxy_buffers              16 64k;
+		proxy_busy_buffers_size    128k;
+		proxy_temp_file_write_size 128k;
+		proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
 		proxy_http_version 1.1;
 		proxy_set_header Upgrade $http_upgrade;
 		proxy_set_header Connection $connection_upgrade;
