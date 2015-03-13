@@ -21,6 +21,8 @@ Copy the dhconvalidator.properties.example to dhconvalidator.properties and edit
 - Set the OxGarage webservice URL (Note that the dhconvalidator TEI/Stylesheets profile must be installed for the OxGarage webservice)
 - Edit settings for validation, min resolution, publication statement and so on.
 
+If you change the context path you need to change it in WEB-INF/lib/jetty-web.xml as well!
+
 Integration of the DHConvalidator is done via integrating an IFRAME into the host site:
 
 ```

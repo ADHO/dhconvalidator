@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -32,6 +33,8 @@ import com.google.common.hash.Hashing;
  */
 public class ConfToolClient {
 	private static final boolean LOGIN_SUCCESS = true;
+	private static final Logger LOGGER = Logger.getLogger(ConfToolClient.class.getName());
+	
 	public static final class AuthenticationException extends Exception {
 
 		public AuthenticationException() {
@@ -191,7 +194,7 @@ public class ConfToolClient {
 		try (InputStream resultStream = result.getStream()) {
 			Builder builder = new Builder();
 			Document resultDoc = builder.build(resultStream);
-
+			LOGGER.info(resultDoc.toXML());
 			return resultDoc;
 		}
 		catch (Exception e) {
@@ -276,8 +279,8 @@ public class ConfToolClient {
 			List<User> allUsers = documentToUserMapper.getUsers(
 					getExportData(ExportType.users, null, null));
 			
-			List<User> acceptedUsers = documentToUserMapper.getAuthors(
-					getExportData(ExportType.subsumed_authors, null, "1"));
+			List<User> acceptedUsers = documentToUserMapper.getSubmittingAuthors(
+					getExportData(ExportType.subsumed_authors, null, "p"));
 					
 			List<User> result = new ArrayList<>();
 			
@@ -294,4 +297,14 @@ public class ConfToolClient {
 		}
 	}
 	
+	// testing
+	public static void main(String[] args) {
+		try {
+//			System.out.println(
+				new ConfToolClient(args[0], args[1].toCharArray()).getExportData(ExportType.subsumed_authors, null, "p");
+//				.toXML());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
