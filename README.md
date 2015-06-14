@@ -2,7 +2,7 @@
 
 The goal of the DHConvalidator is a simplification of the creation of a consistent [TEI] (http://www.tei-c.org) text base of Digital Humanities (DH) conference abstracts for further processing like the generation of the book of abstracts. The idea was to offer the user the possibility to edit the final version of the submission with her tool of choice starting with two of the most popular systems Libre Office and Microsoft Word. 
 
-The DHCovalidator works together with the conference management tool [ConfTool] (http://www.conftool.net/) and uses [OxGarage] (http://www.tei-c.org/oxgarage/) to do the bulk conversion.
+The DHConvalidator works together with the conference management tool [ConfTool] (http://www.conftool.net/) and uses [OxGarage] (http://www.tei-c.org/oxgarage/) to do the bulk conversion.
 
 The submission of the final version is composed of four steps after logging in:
 
