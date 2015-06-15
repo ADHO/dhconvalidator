@@ -14,7 +14,7 @@ The submission of the final version is composed of four steps after logging in:
 The .dhc package contains the TEI version, integrated media files and a HTML version of the submission.
 
 ## Installation
-Take the latest [WAR file release] (https://github.com/mpetris/dhconvalidator/blob/master/release/) or create a WAR file yourself and extract it to a Servlet container that supports websockets (Jetty 7 or higher, Tomcat 8 or higher) and JNDI. 
+Take the latest [WAR file release] (https://github.com/mpetris/dhconvalidator/blob/master/release/) or create a WAR file yourself and extract it to a Servlet container that supports websockets (Jetty 9 or higher, Tomcat 8 or higher) and JNDI. 
 
 Copy the dhconvalidator.properties.example to dhconvalidator.properties and edit it as needed:
 - Set the ConfTool REST interface settings like URL and shared password. 
@@ -32,7 +32,8 @@ Integration of the DHConvalidator is done via integrating an IFRAME into the hos
 
 To avoid cross site scripting issues the domain should be the same as the domain of the host site. 
 
-If you want to use a proxy to forward the dhconvalidator requests keep in mind that the proxy must support websockets as well.
+If you want to use a proxy to forward the dhconvalidator requests the proxy should support websockets to achieve better performance results.
+
 This is a working [nginx] (http://nginx.org/) setting for nginx version 1.6.2:
 
 	map $http_upgrade $connection_upgrade {
