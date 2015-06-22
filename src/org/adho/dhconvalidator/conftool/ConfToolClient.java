@@ -15,7 +15,11 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 
+import org.adho.dhconvalidator.paper.Paper;
+import org.adho.dhconvalidator.paper.PaperProvider;
 import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.user.User;
+import org.adho.dhconvalidator.user.UserProvider;
 import org.adho.dhconvalidator.util.DocumentUtil;
 import org.restlet.Context;
 import org.restlet.data.Method;
@@ -31,20 +35,10 @@ import com.google.common.hash.Hashing;
  * @author marco.petris@web.de
  *
  */
-public class ConfToolClient {
+public class ConfToolClient implements UserProvider, PaperProvider {
+	
 	private static final boolean LOGIN_SUCCESS = true;
 	private static final Logger LOGGER = Logger.getLogger(ConfToolClient.class.getName());
-	
-	public static final class AuthenticationException extends Exception {
-
-		public AuthenticationException() {
-			super();
-		}
-
-		public AuthenticationException(String message) {
-			super(message);
-		}
-	}
 	
 	private char[] restSharedPass;
 	private String confToolUrl;
@@ -206,11 +200,11 @@ public class ConfToolClient {
 	 * @param user a username
 	 * @param pass a password
 	 * @return the User
-	 * @throws AuthenticationException in case of authentication failur
+	 * @throws UserProvider.AuthenticationException in case of authentication failur
 	 * @throws IOException in case of any other failure
 	 */
 	public User authenticate(String user, char[] pass) 
-			throws IOException, AuthenticationException {
+			throws IOException, UserProvider.AuthenticationException {
 		String nonce = getNonce();
 		
 		// see: ConfTool REST interface specification
@@ -240,7 +234,7 @@ public class ConfToolClient {
 				return getUser(resultDoc);
 			}
 			else {
-				throw new AuthenticationException(getMessage(resultDoc));
+				throw new UserProvider.AuthenticationException(getMessage(resultDoc));
 			}
 		}
 		catch (Exception e) {
@@ -272,7 +266,7 @@ public class ConfToolClient {
 		return resultElement.getValue();
 	}
 	
-	List<User> getUsers() {
+	public List<User> getUsers() {
 		try {
 			DocumentToUserMapper documentToUserMapper = new DocumentToUserMapper();
 			
@@ -299,12 +293,14 @@ public class ConfToolClient {
 	
 	// testing
 	public static void main(String[] args) {
-		try {
+////		} catch (IOException e) {
+//		e.printStackTrace();
+//	}		try {
 //			System.out.println(
-				new ConfToolClient(args[0], args[1].toCharArray()).getExportData(ExportType.subsumed_authors, null, "p");
+//				new ConfToolClient(args[0], args[1].toCharArray()).getExportData(ExportType.subsumed_authors, null, "p");
 //				.toXML());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 }

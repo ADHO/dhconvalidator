@@ -5,7 +5,7 @@
 package org.adho.dhconvalidator.ui;
 
 import org.adho.dhconvalidator.Messages;
-import org.adho.dhconvalidator.conftool.User;
+import org.adho.dhconvalidator.user.User;
 
 import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.VaadinSession;

@@ -11,12 +11,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.adho.dhconvalidator.Messages;
-import org.adho.dhconvalidator.conftool.ConfToolClient;
-import org.adho.dhconvalidator.conftool.Paper;
-import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
+import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.user.User;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -62,7 +61,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		
 		paperTable.removeAllItems();
 		try {
-			List<Paper> papers = new ConfToolClient().getPapers(
+			List<Paper> papers = PropertyKey.getPaperProviderInstance().getPapers(
 					(User)VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name()));
 			for (Paper paper : papers) {
 				paperTable.addItem(new Object[] {paper.getTitle()}, paper);

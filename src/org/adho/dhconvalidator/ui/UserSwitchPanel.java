@@ -7,8 +7,8 @@ package org.adho.dhconvalidator.ui;
 import java.util.List;
 
 import org.adho.dhconvalidator.Messages;
-import org.adho.dhconvalidator.conftool.User;
-import org.adho.dhconvalidator.conftool.UserList;
+import org.adho.dhconvalidator.user.User;
+import org.adho.dhconvalidator.user.UserList;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;

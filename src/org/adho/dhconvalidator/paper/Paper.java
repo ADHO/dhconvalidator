@@ -2,11 +2,13 @@
  * Copyright (c) 2015 http://www.adho.org/
  * License: see LICENSE file
  */
-package org.adho.dhconvalidator.conftool;
+package org.adho.dhconvalidator.paper;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.adho.dhconvalidator.user.User;
 
 /**
  * A paper as delivered by ConfTool.

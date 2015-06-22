@@ -5,7 +5,7 @@
 package org.adho.dhconvalidator.ui;
 
 import org.adho.dhconvalidator.Messages;
-import org.adho.dhconvalidator.conftool.User;
+import org.adho.dhconvalidator.user.User;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;

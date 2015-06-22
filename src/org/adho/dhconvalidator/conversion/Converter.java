@@ -24,15 +24,15 @@ import nu.xom.Serializer;
 import nu.xom.XPathContext;
 
 import org.adho.dhconvalidator.Messages;
-import org.adho.dhconvalidator.conftool.Paper;
-import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.conversion.input.InputConverterFactory;
 import org.adho.dhconvalidator.conversion.output.OutputConverter;
 import org.adho.dhconvalidator.conversion.output.OutputConverterFactory;
 import org.adho.dhconvalidator.conversion.oxgarage.OxGarageConversionClient;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
+import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.user.User;
 import org.adho.dhconvalidator.util.DocumentLog;
 import org.adho.dhconvalidator.util.DocumentUtil;
 import org.xml.sax.SAXException;

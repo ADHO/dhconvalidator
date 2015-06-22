@@ -13,12 +13,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.adho.dhconvalidator.Messages;
-import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.ConversionPath;
 import org.adho.dhconvalidator.conversion.ConversionProgressListener;
 import org.adho.dhconvalidator.conversion.Converter;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.user.User;
 import org.adho.dhconvalidator.util.Pair;
 
 import com.vaadin.navigator.View;

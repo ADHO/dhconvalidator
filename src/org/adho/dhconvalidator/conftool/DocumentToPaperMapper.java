@@ -7,6 +7,9 @@ package org.adho.dhconvalidator.conftool;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.adho.dhconvalidator.paper.Paper;
+import org.adho.dhconvalidator.user.User;
+
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -19,7 +22,7 @@ import com.google.common.collect.Lists;
  * @author marco.petris@web.de
  *
  */
-public class DocumentToPaperMapper {
+class DocumentToPaperMapper {
 
 	public List<Paper> getPaperList(Document document) {
 		

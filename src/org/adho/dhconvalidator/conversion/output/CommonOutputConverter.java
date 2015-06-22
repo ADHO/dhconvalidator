@@ -23,11 +23,11 @@ import nu.xom.Text;
 import nu.xom.XPathContext;
 
 import org.adho.dhconvalidator.Messages;
-import org.adho.dhconvalidator.conftool.Paper;
-import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.TeiNamespace;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
+import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.user.User;
 import org.adho.dhconvalidator.util.DocumentUtil;
 
 /**
@@ -308,6 +308,11 @@ public class CommonOutputConverter implements OutputConverter {
 			for (String picturePath : externalPicturesPaths) {
 				byte[] pictureData = zipResult.getExternalResource(picturePath);
 				BufferedImage bimg = ImageIO.read(new ByteArrayInputStream(pictureData));
+				
+				if (bimg == null) {
+					throw new IOException(Messages.getString("CommonOutputConverter.imageparsingerror"));
+				}
+				
 				int width = bimg.getWidth();
 				int height = bimg.getHeight();
 				

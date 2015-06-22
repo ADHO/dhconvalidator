@@ -2,7 +2,8 @@
  * Copyright (c) 2015 http://www.adho.org/
  * License: see LICENSE file
  */
-package org.adho.dhconvalidator.conftool;
+package org.adho.dhconvalidator.user;
+
 
 
 /**

@@ -10,7 +10,7 @@ package org.adho.dhconvalidator.conftool;
  * @author marco.petris@web.de
  *
  */
-public enum ExportType {
+enum ExportType {
 	/**
 	 * all papers for a specific user 
 	 */

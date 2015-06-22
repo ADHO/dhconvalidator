@@ -13,13 +13,15 @@ import nu.xom.Element;
 import nu.xom.Elements;
 
 import org.adho.dhconvalidator.Messages;
+import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.user.User;
 
 /**
  * Maps a ConfTool User result document to a {@link User} or a list of Users.
  * @author marco.petris@web.de
  *
  */
-public class DocumentToUserMapper {
+class DocumentToUserMapper {
 
 	public User getUser(Document document) {
 		List<User> users = getUsers(document);
@@ -75,7 +77,9 @@ public class DocumentToUserMapper {
 		String statusList = 
 				userElement.getFirstChildElement("status").getValue(); //$NON-NLS-1$
 		
-		return new User(userId, firstName, lastName, email, statusList.contains("admin"));  //$NON-NLS-1$
+		return new User(userId, firstName, lastName, email, 
+			statusList.contains("admin") //$NON-NLS-1$
+				|| email.equals(PropertyKey.developeradmin.getValue("not set")));  //$NON-NLS-1$
 
 	}
 	

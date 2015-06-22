@@ -13,11 +13,11 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Nodes;
 
-import org.adho.dhconvalidator.conftool.Paper;
-import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.TeiNamespace;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
+import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.user.User;
 import org.adho.dhconvalidator.util.DocumentUtil;
 
 /**

@@ -7,9 +7,9 @@ package org.adho.dhconvalidator.ui;
 import java.io.IOException;
 
 import org.adho.dhconvalidator.Messages;
-import org.adho.dhconvalidator.conftool.ConfToolClient;
-import org.adho.dhconvalidator.conftool.ConfToolClient.AuthenticationException;
-import org.adho.dhconvalidator.conftool.User;
+import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.user.User;
+import org.adho.dhconvalidator.user.UserProvider;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.VaadinSession;
@@ -62,12 +62,12 @@ public class LoginPanel extends CenterPanel {
 	 * @param pass
 	 */
 	protected void authenticate(String username, char[] pass) {
-		ConfToolClient confToolClient = new ConfToolClient();
+		UserProvider userProvider = PropertyKey.getUserProviderInstance();
 		try {
-			User user = confToolClient.authenticate(username, pass);
+			User user = userProvider.authenticate(username, pass);
 
 			user = 
-				confToolClient.getDetailedUser(user);
+				userProvider.getDetailedUser(user);
 			
 			VaadinSession.getCurrent().setAttribute(
 				SessionStorageKey.USER.name(), user);
@@ -75,7 +75,7 @@ public class LoginPanel extends CenterPanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 			UI.getCurrent().setContent(new LoginResultPanel(e.getLocalizedMessage()));
-		} catch (AuthenticationException a) {
+		} catch (UserProvider.AuthenticationException a) {
 			a.printStackTrace();
 			UI.getCurrent().setContent(new LoginResultPanel(a.getLocalizedMessage()));
 		}

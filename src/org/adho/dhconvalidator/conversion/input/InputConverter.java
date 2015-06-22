@@ -6,8 +6,8 @@ package org.adho.dhconvalidator.conversion.input;
 
 import java.io.IOException;
 
-import org.adho.dhconvalidator.conftool.Paper;
-import org.adho.dhconvalidator.conftool.User;
+import org.adho.dhconvalidator.paper.Paper;
+import org.adho.dhconvalidator.user.User;
 
 /**
  * A converter that makes changes to the input file but keeps the input format.

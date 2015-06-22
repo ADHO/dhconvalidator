@@ -2,12 +2,14 @@
  * Copyright (c) 2015 http://www.adho.org/
  * License: see LICENSE file
  */
-package org.adho.dhconvalidator.conftool;
+package org.adho.dhconvalidator.user;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import org.adho.dhconvalidator.properties.PropertyKey;
 
 /**
  * A list of all ConfTool users.
@@ -32,9 +34,9 @@ public enum UserList {
 	}
 
 	private void load() {
-		ConfToolClient confToolClient = new ConfToolClient();
+		UserProvider userProvider = PropertyKey.getUserProviderInstance();
 		users.clear();
-		users.addAll(confToolClient.getUsers());
+		users.addAll(userProvider.getUsers());
 	}
 
 	/**

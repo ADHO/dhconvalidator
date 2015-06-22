@@ -18,12 +18,12 @@ import nu.xom.XPathContext;
 
 import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conftool.ConfToolClient;
-import org.adho.dhconvalidator.conftool.Paper;
-import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.Type;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
+import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.user.User;
 import org.adho.dhconvalidator.util.DocumentUtil;
 
 /**
@@ -95,7 +95,7 @@ public class OdtInputConverter implements InputConverter {
 		
 		Document metaDoc = zipFs.getDocument("meta.xml"); //$NON-NLS-1$
 		Integer paperId = getPaperIdFromMeta(metaDoc);
-		paper = new ConfToolClient().getPaper(user, paperId);
+		paper = PropertyKey.getPaperProviderInstance().getPaper(user, paperId);
 
 		injectTitleIntoMeta(metaDoc, paper.getTitle());
 		injectAuthorsIntoMeta(metaDoc, paper.getAuthorsAndAffiliations());

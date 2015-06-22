@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import nu.xom.Document;
 
-import org.adho.dhconvalidator.conftool.Paper;
-import org.adho.dhconvalidator.conftool.User;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
+import org.adho.dhconvalidator.paper.Paper;
+import org.adho.dhconvalidator.user.User;
 
 /**
  * An Ouptput converter refines the TEI result of OxGarage.
