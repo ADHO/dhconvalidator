@@ -35,7 +35,13 @@ public class DemoPaperProvider implements PaperProvider {
 	@Override
 	public Paper getPaper(User user, Integer paperId) throws IOException {
 		return new Paper(
-				paperId, "DHConvalidator - Test", Collections.singletonList(user), 
+				paperId, 
+				"DHConvalidator - Test", 
+				Collections.singletonList(new User(
+						user.getFirstName(), 
+						user.getLastName(), 
+						"University of Hamburg", 
+						user.getEmail())), 
 				"Digital Humanities", "Software Testing", "Long Paper");
 	}
 
