@@ -4,6 +4,8 @@
  */
 package org.adho.dhconvalidator.conftool;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.user.User;
 import org.adho.dhconvalidator.user.UserProvider;
 import org.adho.dhconvalidator.util.DocumentUtil;
+import org.apache.commons.io.IOUtils;
 import org.restlet.Context;
 import org.restlet.data.Method;
 import org.restlet.representation.Representation;
@@ -302,5 +305,43 @@ public class ConfToolClient implements UserProvider, PaperProvider {
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
+	}
+
+	public void downloadPaper(Paper paper) {
+		String nonce = getNonce();
+		
+		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
+		urlBuilder.append("?page=downloadPaper"); //$NON-NLS-1$
+		urlBuilder.append("&nonce="); //$NON-NLS-1$
+		urlBuilder.append(nonce);
+		urlBuilder.append("&passhash="); //$NON-NLS-1$
+		urlBuilder.append(getPassHash(nonce));
+		urlBuilder.append("&form_id="); //$NON-NLS-1$
+		urlBuilder.append(paper.getPaperId());
+		urlBuilder.append("&form_version=first"); //$NON-NLS-1$
+		ClientResource client = 
+				new ClientResource(Context.getCurrent(), Method.GET, urlBuilder.toString());
+		
+		Representation result = client.get();
+		
+		try (InputStream resultStream = result.getStream()) {
+			User author = paper.getAuthorsAndAffiliations().iterator().next();
+			String title = "/home/mp/test/" + author.getLastName()+"_"+author.getFirstName()+"_"+paper.getTitle().replaceAll("[^a-zA-Z_0-9]", "_");
+			if (title.length() > 70) {
+				title = title.substring(0, 70);
+			}
+			File file = new File(title);
+			if (file.exists()) {
+				file.delete();
+			}
+			file.createNewFile();
+			
+			try (FileOutputStream fos = new FileOutputStream(file)) {
+				IOUtils.copy(resultStream, fos);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

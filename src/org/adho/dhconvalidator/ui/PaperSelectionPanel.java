@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.adho.dhconvalidator.Messages;
+import org.adho.dhconvalidator.conftool.ConfToolClient;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.paper.Paper;
@@ -28,7 +29,10 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 
@@ -43,6 +47,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 	private Button btGenerate;
 	private InputConverter inputConverter;
 	private Label postDownloadLabel;
+	private Button btDownloadPaper;
 
 	/**
 	 * @param inputConverter the InputConverter to be used for template generation
@@ -51,6 +56,33 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		super(true, ServicesViewName.templates);
 		this.inputConverter = inputConverter;
 		initComponents();
+		initActions();
+		
+	}
+
+	private void initActions() {
+		if (btDownloadPaper != null) {
+			btDownloadPaper.addClickListener(new ClickListener() {
+				
+				@Override
+				public void buttonClick(ClickEvent event) {
+					downloadPaper();
+				}
+			});
+		}
+	}
+
+	private void downloadPaper() {
+		Set<Paper> selection = (Set<Paper>) paperTable.getValue();
+		
+		if (!selection.isEmpty()) {
+			
+			ConfToolClient confToolClient = new ConfToolClient();
+			for (Paper paper : selection) {
+				confToolClient.downloadPaper(paper);
+			}
+		}
+
 	}
 
 	/**
@@ -116,6 +148,14 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		addCenteredComponent(info);
 		addCenteredComponent(paperTable);
 		addCenteredComponent(btGenerate);
+		User user = (User) VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name());
+		if (user.isAdmin()) {
+			btDownloadPaper = new Button("Download Paper");
+			btDownloadPaper.setStyleName(BaseTheme.BUTTON_LINK);
+			btDownloadPaper.addStyleName("plain-link"); //$NON-NLS-1$
+
+			addCenteredComponent(btDownloadPaper);
+		}
 		
 		postDownloadLabel = 
 				new Label(
