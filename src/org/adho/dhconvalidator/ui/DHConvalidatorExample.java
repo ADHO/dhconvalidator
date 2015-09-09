@@ -18,7 +18,6 @@ import com.vaadin.server.Page;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.communication.PushMode;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -41,7 +40,7 @@ public class DHConvalidatorExample extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
 		try {
-			Messages.setLocale(VaadinSession.getCurrent().getLocale());
+			Messages.setLocaleProvider(VaadinSessionLocaleProvider.INSTANCE);
 
 			VerticalLayout content = new VerticalLayout();
 			content.setMargin(true);

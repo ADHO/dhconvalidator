@@ -10,7 +10,6 @@ import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.UI;
 
@@ -26,7 +25,8 @@ import com.vaadin.ui.UI;
 public class DHConvalidatorLogin extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
-		Messages.setLocale(VaadinSession.getCurrent().getLocale());
+		Messages.setLocaleProvider(VaadinSessionLocaleProvider.INSTANCE);
+
 		final LoginPanel loginPanel = new LoginPanel();
 		
 		setContent(loginPanel);

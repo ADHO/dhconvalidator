@@ -38,7 +38,8 @@ public class DHConvalidatorServices extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
-		Messages.setLocale(VaadinSession.getCurrent().getLocale());
+		
+		Messages.setLocaleProvider(VaadinSessionLocaleProvider.INSTANCE);
 
 		backgroundService = new UIBackgroundService(true);
 		

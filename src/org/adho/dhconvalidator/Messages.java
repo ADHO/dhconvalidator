@@ -16,19 +16,34 @@ import java.util.ResourceBundle;
  *
  */
 public class Messages {
+	
+	/**
+	 * A provider for a session specific locale.
+	 *
+	 */
+	public static interface LocaleProvider {
+		public Locale getLocale();
+	}
+	
 	private static final String BUNDLE_NAME = "org.adho.dhconvalidator.messages"; //$NON-NLS-1$
 	
-	private static InheritableThreadLocal<Locale> LOCALE = new InheritableThreadLocal<>();
+	private static LocaleProvider localeProvider;
 
 	private Messages() {
 	}
 
 	public static String getString(String key) {
 		try {
-			Locale locale = LOCALE.get();
+			Locale locale = null;
+			
+			if (localeProvider != null) {
+				locale = localeProvider.getLocale();
+			}
+			
 			if (locale == null) {
 				locale = Locale.ENGLISH;
 			}
+			
 			return ResourceBundle
 					.getBundle(BUNDLE_NAME, locale).getString(key);
 		} catch (MissingResourceException e) {
@@ -38,10 +53,16 @@ public class Messages {
 
 	public static String getString(String key, Object... params) {
 		try {
-			Locale locale = LOCALE.get();
+			Locale locale = null;
+			
+			if (localeProvider != null) {
+				locale = localeProvider.getLocale();
+			}
+			
 			if (locale == null) {
 				locale = Locale.ENGLISH;
 			}
+			
 			return MessageFormat.format(ResourceBundle
 					.getBundle(BUNDLE_NAME, locale).getString(key), params);
 		} catch (MissingResourceException e) {
@@ -49,7 +70,7 @@ public class Messages {
 		}
 	}
 	
-	public static void setLocale(Locale locale) {
-		LOCALE.set(locale);
+	public static void setLocaleProvider(LocaleProvider localeProvider) {
+		Messages.localeProvider = localeProvider;
 	}
 }
