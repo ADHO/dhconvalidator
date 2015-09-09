@@ -12,6 +12,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Nodes;
 
+import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conversion.TeiNamespace;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 import org.adho.dhconvalidator.paper.Paper;
@@ -69,7 +70,8 @@ public class OdtOutputConverter extends CommonOutputConverter {
 				divBibliogrElement.appendChild(listBiblElement);
 				
 				Element listBiblHeadElement = new Element("head", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-				listBiblHeadElement.appendChild("Bibliography"); //$NON-NLS-1$
+				listBiblHeadElement.appendChild(Messages.getString(
+						"Converter.bibliography")); //$NON-NLS-1$
 				listBiblElement.appendChild(listBiblHeadElement);
 				
 				for (int i=0; i<bibParagrElements.size(); i++) {
