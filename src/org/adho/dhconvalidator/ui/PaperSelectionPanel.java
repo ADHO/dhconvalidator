@@ -157,7 +157,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 					idx++;
 				}
 				postDownloadLabel.setVisible(true);
-				UI.getCurrent().push();
+//				UI.getCurrent().push();
 				
 				return new ByteArrayInputStream(zipFs.toZipData());
 			} catch (IOException e) {

@@ -214,7 +214,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 					// clean everything for the new conversion
 					cleanUp();
 					progressBar.setVisible(true);
-					UI.getCurrent().push();
+//					UI.getCurrent().push();
 				}
 			}
 		});
@@ -384,7 +384,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 					SessionStorageKey.ZIPRESULT.name());
 			logArea.setValue("");
 			confToolLabel.setVisible(true);
-			UI.getCurrent().push();
+//			UI.getCurrent().push();
 
 			return new ByteArrayInputStream(result.toZipData());
 		} catch (IOException e) {

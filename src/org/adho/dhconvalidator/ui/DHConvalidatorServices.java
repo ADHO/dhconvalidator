@@ -32,7 +32,7 @@ import de.catma.backgroundservice.BackgroundService;
  */
 @Theme("dhconvalidator")
 @PreserveOnRefresh
-@Push(value=PushMode.MANUAL, transport=Transport.LONG_POLLING)
+//@Push(value=PushMode.MANUAL, transport=Transport.LONG_POLLING)
 public class DHConvalidatorServices extends UI {
 	
 	private BackgroundService backgroundService;
@@ -42,7 +42,7 @@ public class DHConvalidatorServices extends UI {
 		
 		Messages.setLocaleProvider(VaadinSessionLocaleProvider.INSTANCE);
 
-		backgroundService = new UIBackgroundService(true);
+		backgroundService = new UIBackgroundService(false);
 		
 		// are we logged in?
 		if ((VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name())) == null) {

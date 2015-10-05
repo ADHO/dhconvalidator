@@ -24,7 +24,7 @@
 		<dependency org="com.vaadin" name="vaadin-themes" rev="&vaadin.version;" />
 
 		<!-- Push support -->
-		<dependency org="com.vaadin" name="vaadin-push" rev="&vaadin.version;" />
+		<!--<dependency org="com.vaadin" name="vaadin-push" rev="&vaadin.version;" />-->s
 
 		<!-- Precompiled DefaultWidgetSet -->
 		<dependency org="com.vaadin" name="vaadin-client-compiled"

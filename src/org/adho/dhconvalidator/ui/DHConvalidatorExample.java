@@ -35,7 +35,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 @Theme("dhconvalidator")
 @PreserveOnRefresh
-@Push(value=PushMode.MANUAL, transport=Transport.LONG_POLLING)
+//@Push(value=PushMode.MANUAL, transport=Transport.LONG_POLLING)
 public class DHConvalidatorExample extends UI {
 
 	@Override

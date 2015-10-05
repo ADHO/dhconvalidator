@@ -22,7 +22,7 @@ import com.vaadin.ui.UI;
  */
 @Theme("dhconvalidator")
 @PreserveOnRefresh
-@Push(value=PushMode.MANUAL, transport=Transport.LONG_POLLING)
+//@Push(value=PushMode.MANUAL, transport=Transport.LONG_POLLING)
 public class DHConvalidatorLogin extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
