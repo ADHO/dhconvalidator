@@ -93,6 +93,10 @@ public enum PropertyKey {
 	 * an extra admin account for development purposes, bypassing user management
 	 */
 	developeradmin,
+	/**
+	 * true->show only accepted users to admin
+	 */
+	showOnlyAcceptedUsers,
 	;
 
 	

@@ -11,6 +11,7 @@ import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.communication.PushMode;
+import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.ui.UI;
 
 /**
@@ -21,7 +22,7 @@ import com.vaadin.ui.UI;
  */
 @Theme("dhconvalidator")
 @PreserveOnRefresh
-@Push(value=PushMode.MANUAL)
+@Push(value=PushMode.MANUAL, transport=Transport.LONG_POLLING)
 public class DHConvalidatorLogin extends UI {
 	@Override
 	protected void init(VaadinRequest request) {

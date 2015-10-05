@@ -279,7 +279,7 @@ public class ConfToolClient implements UserProvider, PaperProvider {
 			List<User> result = new ArrayList<>();
 			
 			for (User user : allUsers) {
-				if (user.isAdmin() || acceptedUsers.contains(user)) {
+				if (user.isAdmin() || acceptedUsers.contains(user) || !PropertyKey.showOnlyAcceptedUsers.isTrue()) {
 					result.add(user);
 				}
 			}

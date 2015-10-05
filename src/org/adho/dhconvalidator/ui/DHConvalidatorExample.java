@@ -20,6 +20,7 @@ import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.communication.PushMode;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
@@ -34,7 +35,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 @Theme("dhconvalidator")
 @PreserveOnRefresh
-@Push(value=PushMode.MANUAL)
+@Push(value=PushMode.MANUAL, transport=Transport.LONG_POLLING)
 public class DHConvalidatorExample extends UI {
 
 	@Override

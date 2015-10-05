@@ -19,6 +19,7 @@ import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.communication.PushMode;
+import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.ui.UI;
 
 import de.catma.backgroundservice.BackgroundService;
@@ -31,7 +32,7 @@ import de.catma.backgroundservice.BackgroundService;
  */
 @Theme("dhconvalidator")
 @PreserveOnRefresh
-@Push(value=PushMode.MANUAL)
+@Push(value=PushMode.MANUAL, transport=Transport.LONG_POLLING)
 public class DHConvalidatorServices extends UI {
 	
 	private BackgroundService backgroundService;
