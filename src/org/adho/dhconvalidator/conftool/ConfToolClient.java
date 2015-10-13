@@ -6,14 +6,11 @@ package org.adho.dhconvalidator.conftool;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-
-import nu.xom.Builder;
-import nu.xom.Document;
-import nu.xom.Element;
 
 import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.paper.PaperProvider;
@@ -28,6 +25,10 @@ import org.restlet.resource.ClientResource;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
+
+import nu.xom.Builder;
+import nu.xom.Document;
+import nu.xom.Element;
 
 /**
  * A client that talks to the ConfTool REST interface.
@@ -216,10 +217,10 @@ public class ConfToolClient implements UserProvider, PaperProvider {
 		urlBuilder.append("&passhash="); //$NON-NLS-1$
 		urlBuilder.append(getPassHash(nonce));
 		urlBuilder.append("&user="); //$NON-NLS-1$
-		urlBuilder.append(user);
+		urlBuilder.append(URLEncoder.encode(user, "UTF-8"));
 		urlBuilder.append("&command=login"); //$NON-NLS-1$
 		urlBuilder.append("&password="); //$NON-NLS-1$
-		urlBuilder.append(pass);
+		urlBuilder.append(URLEncoder.encode(String.valueOf(pass), "UTF-8"));
 		
 		ClientResource client = 
 				new ClientResource(Context.getCurrent(), Method.GET, urlBuilder.toString());
