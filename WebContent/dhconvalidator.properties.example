@@ -1,10 +1,10 @@
-version=1.13
+version=1.14
 logConversionStepOutput=false
 conftool_shared_pass=MyPass
 conftool_login_url=https://www.conftool.net/demo/dh2015_26a/
 conftool_rest_url=https://www.conftool.net/demo/dh2015_26a/rest.php
-# oxgarage_url=http://85.214.78.116:8080/ege-webservice/
-oxgarage_url=http://www.tei-c.org/ege-webservice/
+oxgarage_url=http://admin.digitalhumanities.it:8080/ege-webservice/
+# oxgarage_url=http://www.tei-c.org/ege-webservice/
 tei_image_location=/Pictures
 image_min_resolution_width=200
 image_min_resolution_height=100
