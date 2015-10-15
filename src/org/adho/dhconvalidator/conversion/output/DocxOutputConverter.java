@@ -7,12 +7,6 @@ package org.adho.dhconvalidator.conversion.output;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-import nu.xom.Attribute;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Elements;
-import nu.xom.Nodes;
-
 import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conversion.TeiNamespace;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
@@ -20,6 +14,13 @@ import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.user.User;
 import org.adho.dhconvalidator.util.DocumentUtil;
+
+import nu.xom.Attribute;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Elements;
+import nu.xom.Node;
+import nu.xom.Nodes;
 
 /**
  * Converts the TEI that results from docx conversion.
@@ -271,13 +272,11 @@ public class DocxOutputConverter extends CommonOutputConverter {
 						"/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title",  //$NON-NLS-1$
 						xPathContext);
 		
-		Element docTitle = 
-				DocumentUtil.tryFirstMatch(
-					document, 
-					"/tei:TEI/tei:text/tei:front/tei:titlePage/tei:docTitle",  //$NON-NLS-1$
-					xPathContext);
+		Nodes subTitleResults = document.query(
+				"//tei:p[@rend='DH-Subtitle']",  //$NON-NLS-1$
+				xPathContext);
 		
-		if (docTitle != null) {
+		if (subTitleResults.size() > 0) {
 			String title = paper.getTitle();
 			
 			Element titleStmtElement = (Element) titleElement.getParent();
@@ -290,15 +289,15 @@ public class DocxOutputConverter extends CommonOutputConverter {
 			
 			titleElement.getParent().removeChild(titleElement);
 			complexTitle.appendChild(titleElement);
-			Elements titleParts = docTitle.getChildElements("titlePart", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 			
-			for (int i=0; i<titleParts.size(); i++) {
-				Element dhSubtitleElement = titleParts.get(i);
+			for (int i=0; i<subTitleResults.size(); i++) {
+				Node subtitleNode = subTitleResults.get(i);
+				
 				Element subtitleElement = new Element("title", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
 				subtitleElement.addAttribute(new Attribute("type", "sub")); //$NON-NLS-1$ //$NON-NLS-2$
-				subtitleElement.appendChild(dhSubtitleElement.getValue());
+				subtitleElement.appendChild(subtitleNode.getValue());
 				complexTitle.appendChild(subtitleElement);
-				dhSubtitleElement.getParent().removeChild(dhSubtitleElement);
+				subtitleNode.getParent().removeChild(subtitleNode);
 			}
 		}
 		else {

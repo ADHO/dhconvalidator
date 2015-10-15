@@ -119,20 +119,6 @@ public class DocxInputConverter implements InputConverter {
 		// strip the template sections
 		ParagraphParser paragraphParser = new ParagraphParser();
 		paragraphParser.stripTemplateSections(document, xPathContext);
-		
-		Element subtitleStyleElement =
-			DocumentUtil.tryFirstMatch(
-				document, "/w:document/w:body/w:p/w:pPr/w:pStyle[@w:val='DH-Subtitle']",  //$NON-NLS-1$
-				xPathContext);
-
-		if (subtitleStyleElement != null) {
-			
-			//we put the subtitle as a preliminary title and handle the 
-			// title stuff later when merging with the ConfTool data
-			subtitleStyleElement.getAttribute(
-					"val",  //$NON-NLS-1$
-					DocxInputConverter.Namespace.MAIN.toUri()).setValue("Title"); //$NON-NLS-1$
-		}
 	}
 
 	/**
