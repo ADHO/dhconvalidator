@@ -62,7 +62,7 @@ public class OdtInputConverter implements InputConverter {
 			return name;
 		}
 	}
-	private static final String TEMPLATE = "template/DH_template_v2.ott"; //$NON-NLS-1$
+	private static final String TEMPLATE = "template/DH_template_v3.ott"; //$NON-NLS-1$
 	private static final String CONFTOOLPAPERID_ATTRIBUTENAME = "ConfToolPaperID"; //$NON-NLS-1$
 	
 	private XPathContext xPathContext;
