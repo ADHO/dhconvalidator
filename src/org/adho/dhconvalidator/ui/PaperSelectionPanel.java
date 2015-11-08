@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.adho.dhconvalidator.Messages;
+import org.adho.dhconvalidator.conversion.Converter;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.paper.Paper;
@@ -150,8 +151,15 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 				ZipFs zipFs = new ZipFs();
 				int idx = 1;
 				for (Paper paper : selection) {
+					
+					String title = paper.getTitle().replaceAll("[^0-9a-zA-Z]", "_"); //$NON-NLS-1$ //$NON-NLS-2$ 
+					
+					if (title.length() > PropertyKey.maxfilenamelength.getValue(Converter.DEFAULT_MAX_FILE_LENGTH)) {
+						title = title.substring(0, Converter.DEFAULT_MAX_FILE_LENGTH);
+					}
+					
 					zipFs.putDocument(
-						idx + "_" + paper.getTitle().replaceAll("[^0-9a-zA-Z]", "_") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						idx + "_" + title //$NON-NLS-1$
 							+ "." +inputConverter.getFileExtension(),  //$NON-NLS-1$
 						inputConverter.getPersonalizedTemplate(paper));
 					idx++;

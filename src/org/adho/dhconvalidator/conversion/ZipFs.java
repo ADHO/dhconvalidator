@@ -131,4 +131,8 @@ public class ZipFs {
 	public void putDocument(String path, byte[] document) {
 		content.put(path, document);
 	}
+
+	public void rename(String oldName, String newName) {
+		content.put(newName, content.remove(oldName));
+	}
 }

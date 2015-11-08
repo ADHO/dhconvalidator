@@ -4,17 +4,23 @@
  */
 package org.adho.dhconvalidator.conftool;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.paper.PaperProvider;
 import org.adho.dhconvalidator.properties.PropertyKey;
+import org.adho.dhconvalidator.ui.PropertyProvider;
 import org.adho.dhconvalidator.user.User;
 import org.adho.dhconvalidator.user.UserProvider;
 import org.adho.dhconvalidator.util.DocumentUtil;
@@ -29,6 +35,7 @@ import com.google.common.hash.Hashing;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.XPathContext;
 
 /**
  * A client that talks to the ConfTool REST interface.
@@ -146,6 +153,34 @@ public class ConfToolClient implements UserProvider, PaperProvider {
 	private String getNonce() {
 		Date date = new Date(new Date().getTime()*60);
 		return String.valueOf(date.getTime());
+	}
+	
+	private ZipFs getDhcFile(User user, Paper paper) throws IOException {
+		String nonce = getNonce();
+		
+		// see: ConfTool REST interface specification
+
+		StringBuilder urlBuilder = new StringBuilder(confToolUrl);
+		urlBuilder.append("?page=downloadPaper"); //$NON-NLS-1$
+		urlBuilder.append("&nonce="); //$NON-NLS-1$
+		urlBuilder.append(nonce);
+		urlBuilder.append("&passhash="); //$NON-NLS-1$
+		urlBuilder.append(getPassHash(nonce));
+		urlBuilder.append("&form_id="); //$NON-NLS-1$
+		urlBuilder.append(paper.getPaperId());
+		
+		ClientResource client = 
+				new ClientResource(Context.getCurrent(), Method.GET, urlBuilder.toString());
+		
+		Representation result = client.get();
+		
+		try (InputStream resultStream = result.getStream()) {
+			return new ZipFs(resultStream);
+		}
+		catch (Exception e) {
+			throw new IOException(e);
+		}
+
 	}
 	
 	private Document getExportData(ExportType type, User user, String status) throws IOException {
@@ -293,10 +328,59 @@ public class ConfToolClient implements UserProvider, PaperProvider {
 	}
 	
 	// testing
-	public static void main(String[] args) {
-////		} catch (IOException e) {
-//		e.printStackTrace();
-//	}		try {
+	public static void main(String[] args) throws Exception {
+		XPathContext context = new XPathContext("xhtml", "http://www.w3.org/1999/xhtml");
+		Properties properties = new Properties();
+		properties.load(new FileInputStream(args[0]));
+		PropertyProvider.setProperties(properties);
+		
+		ConfToolClient client = new ConfToolClient();
+		
+		List<User> users = client.getUsers();
+		for (User user : users) {
+			List<Paper> papers = client.getPapers(user);
+			for (Paper paper : papers) {
+				String inputFilename = 
+						user.getLastName().toUpperCase() + "_" + user.getFirstName() 
+						+ "_" + paper.getTitle();
+				inputFilename = inputFilename.replaceAll("[^a-zA-Z_0-9]", "_");
+
+				if (inputFilename.length() > 60) {
+					System.out.println(user);
+					System.out.println(paper);
+					
+					ZipFs zipFs = client.getDhcFile(user, paper);
+					try {
+						String newTitle = inputFilename.substring(0, 60);
+	
+						Document htmlFile = zipFs.getDocument(inputFilename + ".html");
+						Element linkElement = DocumentUtil.getFirstMatch(
+							htmlFile, "//xhtml:a[@href='"
+							+ inputFilename + ".xml" 
+							+"']", context);
+						
+						linkElement.getAttribute("href").setValue(newTitle+".xml");
+						
+						zipFs.putDocument(inputFilename +".html", htmlFile);
+						zipFs.rename(inputFilename+".html", newTitle + ".html");
+						zipFs.rename(inputFilename+".xml", newTitle + ".xml");
+						
+						try (FileOutputStream fos = new FileOutputStream(new File(args[1], newTitle + ".dhc"))) {
+							fos.write(zipFs.toZipData());
+						}
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+						try (FileOutputStream fos = new FileOutputStream(new File(args[1]+"failed/", inputFilename + ".dhc"))) {
+							fos.write(zipFs.toZipData());
+						}
+					}
+				}
+			}
+		}
+		
+		
+//		try {
 //			System.out.println(
 //				new ConfToolClient(args[0], args[1].toCharArray()).getExportData(ExportType.subsumed_authors, null, "p");
 //				.toXML());

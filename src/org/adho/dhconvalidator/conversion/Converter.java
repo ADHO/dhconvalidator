@@ -47,6 +47,8 @@ import org.xml.sax.XMLReader;
  */
 public class Converter {
 	
+	public static final int DEFAULT_MAX_FILE_LENGTH = 60;
+	
 	private static String XHTML_NAMESPACE_URI = "http://www.w3.org/1999/xhtml";
 	private static String XHTML_NAMESPACE = "xhtml";
 	private XPathContext xPathContext;
@@ -86,6 +88,12 @@ public class Converter {
 		inputFilename = 
 			user.getLastName().toUpperCase() + "_" + user.getFirstName() + "_" + paper.getTitle();
 		inputFilename = inputFilename.replaceAll("[^a-zA-Z_0-9]", "_");
+		
+		int maxfilenamelength = PropertyKey.maxfilenamelength.getValue(DEFAULT_MAX_FILE_LENGTH);
+		
+		if (inputFilename.length() > maxfilenamelength) {
+			inputFilename = inputFilename.substring(0, maxfilenamelength);
+		}
 		
 		progressListener.setProgress(Messages.getString("Converter.progress2")); //$NON-NLS-1$
 		// do the OxGarage conversion

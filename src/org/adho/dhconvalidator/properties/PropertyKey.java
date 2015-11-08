@@ -97,8 +97,26 @@ public enum PropertyKey {
 	 * true->show only accepted users to admin
 	 */
 	showOnlyAcceptedUsers,
+	/**
+	 * maximum length for the output filename(s)
+	 */
+	maxfilenamelength,
 	;
 
+	/**
+	 * @param defaultOnNullValue dafault value returned instead of <code>null</code>
+	 * @return the value of this property or if value is <code>null</code> the defaultOnNullValue
+	 * @throws NumberFormatException in case the loaded value is not null and not convertible to int
+	 */
+	public Integer getValue(Integer defaultOnNullValue) {
+		String value = getValue();
+		if (value==null) {
+			return defaultOnNullValue;
+		}
+		else {
+			return Integer.valueOf(value);
+		}
+	}
 	
 	/**
 	 * @param defaultOnNullValue dafault value returned instead of <code>null</code>
