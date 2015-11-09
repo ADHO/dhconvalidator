@@ -6,19 +6,19 @@ package org.adho.dhconvalidator.conversion.output;
 
 import java.io.IOException;
 
-import nu.xom.Attribute;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Elements;
-import nu.xom.Nodes;
-
-import org.adho.dhconvalidator.Messages;
+import org.adho.dhconvalidator.conversion.SubmissionLanguage;
 import org.adho.dhconvalidator.conversion.TeiNamespace;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.user.User;
 import org.adho.dhconvalidator.util.DocumentUtil;
+
+import nu.xom.Attribute;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Elements;
+import nu.xom.Nodes;
 
 /**
  * Converts the TEI that results from odt conversion.
@@ -36,14 +36,15 @@ public class OdtOutputConverter extends CommonOutputConverter {
 		super.convert(document, user, paper);
 		
 		makeComplexTitleStatement(document);
-		makeBibliography(document);
+		makeBibliography(document, paper.getSubmissionLanguage());
 	}
 
 	/**
 	 * Creates a proper back matter bibliography.
 	 * @param document
+	 * @param submissionLanguage the language of the submission
 	 */
-	private void makeBibliography(Document document) {
+	private void makeBibliography(Document document, SubmissionLanguage submissionLanguage) {
 		Nodes searchResult = 
 				document.query(
 					"//tei:div[@type='div1' and @rend='DH-BibliographyHeading']",  //$NON-NLS-1$
@@ -70,8 +71,7 @@ public class OdtOutputConverter extends CommonOutputConverter {
 				divBibliogrElement.appendChild(listBiblElement);
 				
 				Element listBiblHeadElement = new Element("head", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-				listBiblHeadElement.appendChild(Messages.getString(
-						"Converter.bibliography")); //$NON-NLS-1$
+				listBiblHeadElement.appendChild(submissionLanguage.getBibliographyTranslation());
 				listBiblElement.appendChild(listBiblHeadElement);
 				
 				for (int i=0; i<bibParagrElements.size(); i++) {

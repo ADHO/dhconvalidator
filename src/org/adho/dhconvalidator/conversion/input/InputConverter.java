@@ -6,6 +6,7 @@ package org.adho.dhconvalidator.conversion.input;
 
 import java.io.IOException;
 
+import org.adho.dhconvalidator.conversion.SubmissionLanguage;
 import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.user.User;
 
@@ -27,10 +28,11 @@ public interface InputConverter {
 	byte[] convert(byte[] sourceData, User user) throws IOException;
 	/**
 	 * @param paper
+	 * @param submissionLanguage the language and corresponding settings of the submission
 	 * @return a template file for the given paper.
 	 * @throws IOException in case of any failure
 	 */
-	public byte[] getPersonalizedTemplate(Paper paper) throws IOException;
+	public byte[] getPersonalizedTemplate(Paper paper, SubmissionLanguage submissionLanguage) throws IOException;
 	/**
 	 * @return the file extension of the input format
 	 */

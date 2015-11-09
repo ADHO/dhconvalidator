@@ -7,11 +7,13 @@ package org.adho.dhconvalidator.ui;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conversion.Converter;
+import org.adho.dhconvalidator.conversion.SubmissionLanguage;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
 import org.adho.dhconvalidator.paper.Paper;
@@ -26,12 +28,13 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.UI;
 
 /**
  * A panel that displays the available papers for template generation.
@@ -44,6 +47,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 	private Button btGenerate;
 	private InputConverter inputConverter;
 	private Label postDownloadLabel;
+	private ComboBox languages;
 
 	/**
 	 * @param inputConverter the InputConverter to be used for template generation
@@ -88,6 +92,12 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 			Messages.getString("PaperSelectionPanel.hintMsg"), //$NON-NLS-1$
 			ContentMode.HTML); 
 		
+		languages = 
+				new ComboBox(Messages.getString("PaperSelectionPanel.language"), //$NON-NLS-1$
+						Arrays.asList(SubmissionLanguage.values()));
+		languages.setNullSelectionAllowed(false);
+		languages.setValue(SubmissionLanguage.ENGLISH);
+		
 		paperTable = new Table(Messages.getString("PaperSelectionPanel.tableTitle")); //$NON-NLS-1$
 		paperTable.setSelectable(true);
 		paperTable.setMultiSelect(true);
@@ -115,6 +125,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 		new FileDownloader(templateStreamResource).extend(btGenerate);
 		
 		addCenteredComponent(info);
+		addCenteredComponent(languages);
 		addCenteredComponent(paperTable);
 		addCenteredComponent(btGenerate);
 		
@@ -157,11 +168,13 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 					if (title.length() > PropertyKey.maxfilenamelength.getValue(Converter.DEFAULT_MAX_FILE_LENGTH)) {
 						title = title.substring(0, Converter.DEFAULT_MAX_FILE_LENGTH);
 					}
+					SubmissionLanguage submissionLanguage = 
+							(SubmissionLanguage) languages.getValue();
 					
 					zipFs.putDocument(
 						idx + "_" + title //$NON-NLS-1$
 							+ "." +inputConverter.getFileExtension(),  //$NON-NLS-1$
-						inputConverter.getPersonalizedTemplate(paper));
+						inputConverter.getPersonalizedTemplate(paper, submissionLanguage));
 					idx++;
 				}
 				postDownloadLabel.setVisible(true);

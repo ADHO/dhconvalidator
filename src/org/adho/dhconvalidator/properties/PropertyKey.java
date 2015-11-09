@@ -101,6 +101,8 @@ public enum PropertyKey {
 	 * maximum length for the output filename(s)
 	 */
 	maxfilenamelength,
+	templateFileDE,
+	templateFileEN,
 	;
 
 	/**

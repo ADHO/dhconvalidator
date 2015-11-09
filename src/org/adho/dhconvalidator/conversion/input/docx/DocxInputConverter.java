@@ -15,6 +15,7 @@ import nu.xom.Nodes;
 import nu.xom.XPathContext;
 
 import org.adho.dhconvalidator.Messages;
+import org.adho.dhconvalidator.conversion.SubmissionLanguage;
 import org.adho.dhconvalidator.conversion.Type;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
@@ -29,6 +30,14 @@ import org.adho.dhconvalidator.util.DocumentUtil;
  * A converter for Microsoft docx format.
  * 
  * @author marco.petris@web.de
+ *
+ */
+/**
+ * @author mp
+ *
+ */
+/**
+ * @author mp
  *
  */
 public class DocxInputConverter implements InputConverter {
@@ -57,7 +66,7 @@ public class DocxInputConverter implements InputConverter {
 		}
 	}
 
-	private static final String TEMPLATE = "template/DH_template_v4.docx"; //$NON-NLS-1$
+	private static final String TEMPLATE_SUFFIX = ".docx"; //$NON-NLS-1$
 	
 	private XPathContext xPathContext;
 	private Paper paper;
@@ -93,7 +102,8 @@ public class DocxInputConverter implements InputConverter {
 		Document customPropDoc = zipFs.getDocument("docProps/custom.xml"); //$NON-NLS-1$
 		Integer paperId = getPaperIdFromMeta(customPropDoc);
 		paper = PropertyKey.getPaperProviderInstance().getPaper(user, paperId);
-
+		paper.setSubmissionLanguage(getSubmissionLanguageFromMeta(customPropDoc));
+		
 		return zipFs.toZipData();
 	}
 
@@ -154,6 +164,19 @@ public class DocxInputConverter implements InputConverter {
 		
 	}
 
+	private SubmissionLanguage getSubmissionLanguageFromMeta(Document customPropDoc) throws IOException {
+		Element propertyElement = 
+				DocumentUtil.tryFirstMatch(
+					customPropDoc, 
+					"//*[@name='SubmissionLanguage']/vt:lpwstr",  //$NON-NLS-1$
+					xPathContext);
+		if (propertyElement == null) {
+			throw new IOException("DocxInputConverter.submissionLanguageNotFound"); //$NON-NLS-1$
+		}
+		
+		return SubmissionLanguage.valueOf(propertyElement.getValue());
+	}
+	
 	private Integer getPaperIdFromMeta(Document customPropDoc) throws IOException {
 		Element propertyElement = 
 				DocumentUtil.tryFirstMatch(
@@ -173,13 +196,14 @@ public class DocxInputConverter implements InputConverter {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#getPersonalizedTemplate(org.adho.dhconvalidator.conftool.Paper)
+	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#getPersonalizedTemplate(org.adho.dhconvalidator.paper.Paper, org.adho.dhconvalidator.conversion.SubmissionLanguage)
 	 */
 	@Override
-	public byte[] getPersonalizedTemplate(Paper paper) throws IOException {
+	public byte[] getPersonalizedTemplate(Paper paper, SubmissionLanguage submissionLanguage) throws IOException {
+		String templateFile = submissionLanguage.getTemplatePropertyKey().getValue() + TEMPLATE_SUFFIX;
 		ZipFs zipFs = 
 			new ZipFs(
-				Thread.currentThread().getContextClassLoader().getResourceAsStream(TEMPLATE));
+				Thread.currentThread().getContextClassLoader().getResourceAsStream(templateFile));
 		Document document = zipFs.getDocument("word/document.xml"); //$NON-NLS-1$
 		
 		injectTitleIntoContent(document, paper.getTitle());
@@ -198,6 +222,7 @@ public class DocxInputConverter implements InputConverter {
 		Document customPropDoc = zipFs.getDocument("docProps/custom.xml"); //$NON-NLS-1$
 		
 		injectPaperIdIntoMeta(customPropDoc, paper.getPaperId());
+		injectSubmissionLanguageIntoMeta(customPropDoc, submissionLanguage);
 		
 		zipFs.putDocument("docProps/custom.xml", customPropDoc); //$NON-NLS-1$
 		
@@ -236,6 +261,22 @@ public class DocxInputConverter implements InputConverter {
 		propertyElement.appendChild(String.valueOf(paperId));
 	}
 
+	/**
+	 * Injects the paperID into the meta data.
+	 * @param customPropDoc
+	 * @param paperId
+	 */
+	private void injectSubmissionLanguageIntoMeta(Document customPropDoc, SubmissionLanguage submissionLanguage) {
+		Element propertyElement = 
+			DocumentUtil.getFirstMatch(
+				customPropDoc, 
+				"//*[@name='SubmissionLanguage']/vt:lpwstr",  //$NON-NLS-1$
+				xPathContext);
+
+		propertyElement.removeChildren();
+		propertyElement.appendChild(submissionLanguage.name());
+	}
+	
 	/**
 	 * Injects authors into the readonly authors section. 
 	 * @param document

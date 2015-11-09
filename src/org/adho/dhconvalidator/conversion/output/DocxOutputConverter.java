@@ -7,7 +7,7 @@ package org.adho.dhconvalidator.conversion.output;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-import org.adho.dhconvalidator.Messages;
+import org.adho.dhconvalidator.conversion.SubmissionLanguage;
 import org.adho.dhconvalidator.conversion.TeiNamespace;
 import org.adho.dhconvalidator.conversion.oxgarage.ZipResult;
 import org.adho.dhconvalidator.paper.Paper;
@@ -40,7 +40,7 @@ public class DocxOutputConverter extends CommonOutputConverter {
 		cleanupParagraphRendAttribute(document);
 		cleanupGraphics(document);
 		
-		makeBibliography(document);
+		makeBibliography(document, paper.getSubmissionLanguage());
 		cleanupBoldAndItalicsRendition(document);
 		removeFrontSection(document);
 		makeQuotations(document);
@@ -168,7 +168,7 @@ public class DocxOutputConverter extends CommonOutputConverter {
 		}
 	}
 
-	private void makeBibliography(Document document) {
+	private void makeBibliography(Document document, SubmissionLanguage submissionLanguage) {
 		Nodes searchResult = 
 				document.query(
 					"//tei:p[@rend='DH-BibliographyHeading']",  //$NON-NLS-1$
@@ -203,8 +203,7 @@ public class DocxOutputConverter extends CommonOutputConverter {
 				
 				Element listBiblHeadElement = 
 						new Element("head", TeiNamespace.TEI.toUri()); //$NON-NLS-1$
-				listBiblHeadElement.appendChild(Messages.getString(
-						"Converter.bibliography")); //$NON-NLS-1$
+				listBiblHeadElement.appendChild(submissionLanguage.getBibliographyTranslation());
 				listBiblElement.appendChild(listBiblHeadElement);
 				
 			

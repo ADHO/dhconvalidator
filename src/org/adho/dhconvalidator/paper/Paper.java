@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.adho.dhconvalidator.conversion.SubmissionLanguage;
 import org.adho.dhconvalidator.user.User;
 
 /**
@@ -24,6 +25,7 @@ public class Paper {
 	private List<String> keywords;
 	private String contributionType;
 	private List<String> topics;
+	private SubmissionLanguage submissionLanguage;
 	
 	public Paper(Integer paperId, String title, List<User> authors, String keywords, String topics,
 			String contributionType) {
@@ -95,4 +97,15 @@ public class Paper {
 		return topics;
 	}
 
+
+	public SubmissionLanguage getSubmissionLanguage() {
+		return submissionLanguage;
+	}
+
+
+	public void setSubmissionLanguage(SubmissionLanguage submissionLanguage) {
+		this.submissionLanguage = submissionLanguage;
+	}
+
+	
 }

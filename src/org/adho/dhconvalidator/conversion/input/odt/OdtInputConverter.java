@@ -9,15 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nu.xom.Attribute;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Node;
-import nu.xom.Nodes;
-import nu.xom.XPathContext;
-
 import org.adho.dhconvalidator.Messages;
-import org.adho.dhconvalidator.conftool.ConfToolClient;
+import org.adho.dhconvalidator.conversion.SubmissionLanguage;
 import org.adho.dhconvalidator.conversion.Type;
 import org.adho.dhconvalidator.conversion.ZipFs;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
@@ -25,6 +18,13 @@ import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.user.User;
 import org.adho.dhconvalidator.util.DocumentUtil;
+
+import nu.xom.Attribute;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Node;
+import nu.xom.Nodes;
+import nu.xom.XPathContext;
 
 /**
  * An InputConverter for the OASIS odt format.
@@ -62,8 +62,9 @@ public class OdtInputConverter implements InputConverter {
 			return name;
 		}
 	}
-	private static final String TEMPLATE = "template/DH_template_v3.ott"; //$NON-NLS-1$
+	private static final String TEMPLATE_SUFFIX = ".ott"; //$NON-NLS-1$
 	private static final String CONFTOOLPAPERID_ATTRIBUTENAME = "ConfToolPaperID"; //$NON-NLS-1$
+	private static final String SUBMISSIONLANGUAGE_ATTRIBUTENAME = "SubmissioLanguage"; //$NON-NLS-1$
 	
 	private XPathContext xPathContext;
 	private Paper paper; //holds the paper loaded during conversion
@@ -96,7 +97,8 @@ public class OdtInputConverter implements InputConverter {
 		Document metaDoc = zipFs.getDocument("meta.xml"); //$NON-NLS-1$
 		Integer paperId = getPaperIdFromMeta(metaDoc);
 		paper = PropertyKey.getPaperProviderInstance().getPaper(user, paperId);
-
+		paper.setSubmissionLanguage(getSubmissionLanguageFromMeta(metaDoc));
+		
 		injectTitleIntoMeta(metaDoc, paper.getTitle());
 		injectAuthorsIntoMeta(metaDoc, paper.getAuthorsAndAffiliations());
 		
@@ -309,6 +311,22 @@ public class OdtInputConverter implements InputConverter {
 		}
 	}
 
+	private SubmissionLanguage getSubmissionLanguageFromMeta(Document metaDoc) throws IOException {
+		Nodes searchResult = 
+			metaDoc.query(
+				"/office:document-meta/office:meta/meta:user-defined[@meta:name='" //$NON-NLS-1$
+						+SUBMISSIONLANGUAGE_ATTRIBUTENAME+"']",  //$NON-NLS-1$
+				xPathContext);
+	
+		if (searchResult.size() == 1) {
+			Element submissionLanguageElement = (Element) searchResult.get(0);
+			return SubmissionLanguage.valueOf(submissionLanguageElement.getValue());
+		}
+		else {
+			throw new IOException(
+				Messages.getString("OdtInputConverter.invalidmeta2")); //$NON-NLS-1$
+		}
+	}
 	/**
 	 * We remove all adhoc paragraph styles as they are not supported
 	 * and might be used to create fake chapter titles.
@@ -345,12 +363,13 @@ public class OdtInputConverter implements InputConverter {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#getPersonalizedTemplate(org.adho.dhconvalidator.conftool.Paper)
+	 * @see org.adho.dhconvalidator.conversion.input.InputConverter#getPersonalizedTemplate(org.adho.dhconvalidator.paper.Paper, org.adho.dhconvalidator.conversion.SubmissionLanguage)
 	 */
-	public byte[] getPersonalizedTemplate(Paper paper) throws IOException {
+	public byte[] getPersonalizedTemplate(Paper paper, SubmissionLanguage submissionLanguage) throws IOException {
+		String templateFile = submissionLanguage.getTemplatePropertyKey().getValue() + TEMPLATE_SUFFIX;
 		ZipFs zipFs = 
 			new ZipFs(
-				Thread.currentThread().getContextClassLoader().getResourceAsStream(TEMPLATE));
+				Thread.currentThread().getContextClassLoader().getResourceAsStream(templateFile));
 		Document contentDoc = zipFs.getDocument("content.xml"); //$NON-NLS-1$
 		
 		injectTitleIntoContent(contentDoc, paper.getTitle());
@@ -363,7 +382,7 @@ public class OdtInputConverter implements InputConverter {
 		injectTitleIntoMeta(metaDoc, paper.getTitle());
 		injectAuthorsIntoMeta(metaDoc, paper.getAuthorsAndAffiliations());
 		injectPaperIdIntoMeta(metaDoc, paper.getPaperId());
-		
+		injectSubmissionLanguageIntoMeta(metaDoc, submissionLanguage);
 		zipFs.putDocument("meta.xml", metaDoc); //$NON-NLS-1$
 		
 		return zipFs.toZipData();
@@ -411,6 +430,36 @@ public class OdtInputConverter implements InputConverter {
 		
 	}
 
+	/**
+	 * Injects the Submission language into the meta data of the template.
+	 * @param metaDoc
+	 * @param paperId
+	 */
+	private void injectSubmissionLanguageIntoMeta(Document metaDoc, SubmissionLanguage submissionLanguage) {
+		Nodes searchResult = 
+			metaDoc.query(
+				"/office:document-meta/office:meta/meta:user-defined[@meta:name='" //$NON-NLS-1$
+						+SUBMISSIONLANGUAGE_ATTRIBUTENAME+"']",  //$NON-NLS-1$
+				xPathContext);
+		
+		if (searchResult.size() != 0) {
+			for (int i=0; i<searchResult.size(); i++) {
+				Node n = searchResult.get(i);
+				n.getParent().removeChild(n);
+			}
+		}
+		
+		Element submissionLanguageElement = 
+				new Element("meta:user-defined", Namespace.META.toUri()); //$NON-NLS-1$
+		submissionLanguageElement.addAttribute(
+			new Attribute("meta:name", Namespace.META.toUri(), SUBMISSIONLANGUAGE_ATTRIBUTENAME)); //$NON-NLS-1$
+		submissionLanguageElement.appendChild(submissionLanguage.name());
+		
+		Element metaElement = metaDoc.getRootElement()
+				.getFirstChildElement("meta", Namespace.OFFICE.toUri()); //$NON-NLS-1$
+		metaElement.appendChild(submissionLanguageElement);
+		
+	}
 	/**
 	 * Injects the authors of the paper into the meta data.
 	 * @param metaDoc

@@ -18,3 +18,5 @@ showOnlyAcceptedPapers=false
 showOnlyAcceptedUsers=false
 userProviderClass=org.adho.dhconvalidator.conftool.ConfToolClient
 paperProviderClass=org.adho.dhconvalidator.conftool.ConfToolClient
+templateFileDE=template/DH_template_DHd2016_de
+templateFileEN=template/DH_template_DHd2016_en
