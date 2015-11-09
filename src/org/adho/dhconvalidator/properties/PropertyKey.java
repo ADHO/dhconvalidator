@@ -103,6 +103,7 @@ public enum PropertyKey {
 	maxfilenamelength,
 	templateFileDE,
 	templateFileEN,
+	defaultSubmissionLanguage,
 	;
 
 	/**

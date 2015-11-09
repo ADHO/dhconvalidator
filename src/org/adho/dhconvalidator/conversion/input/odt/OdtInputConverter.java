@@ -323,8 +323,8 @@ public class OdtInputConverter implements InputConverter {
 			return SubmissionLanguage.valueOf(submissionLanguageElement.getValue());
 		}
 		else {
-			throw new IOException(
-				Messages.getString("OdtInputConverter.invalidmeta2")); //$NON-NLS-1$
+			return SubmissionLanguage.valueOf(
+					PropertyKey.defaultSubmissionLanguage.getValue("ENGLISH"));
 		}
 	}
 	/**

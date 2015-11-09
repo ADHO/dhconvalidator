@@ -171,7 +171,7 @@ public class DocxInputConverter implements InputConverter {
 					"//*[@name='SubmissionLanguage']/vt:lpwstr",  //$NON-NLS-1$
 					xPathContext);
 		if (propertyElement == null) {
-			throw new IOException("DocxInputConverter.submissionLanguageNotFound"); //$NON-NLS-1$
+			return SubmissionLanguage.valueOf(PropertyKey.defaultSubmissionLanguage.getValue("ENGLISH"));
 		}
 		
 		return SubmissionLanguage.valueOf(propertyElement.getValue());

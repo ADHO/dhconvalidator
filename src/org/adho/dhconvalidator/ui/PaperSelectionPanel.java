@@ -96,7 +96,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 				new ComboBox(Messages.getString("PaperSelectionPanel.language"), //$NON-NLS-1$
 						Arrays.asList(SubmissionLanguage.values()));
 		languages.setNullSelectionAllowed(false);
-		languages.setValue(SubmissionLanguage.ENGLISH);
+		languages.setValue(SubmissionLanguage.valueOf(PropertyKey.defaultSubmissionLanguage.getValue(SubmissionLanguage.ENGLISH.name())));
 		
 		paperTable = new Table(Messages.getString("PaperSelectionPanel.tableTitle")); //$NON-NLS-1$
 		paperTable.setSelectable(true);

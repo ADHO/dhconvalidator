@@ -1,4 +1,4 @@
-version=1.15
+version=1.16
 logConversionStepOutput=false
 conftool_shared_pass=MyPass
 conftool_login_url=https://www.conftool.net/demo/dh2015_26a/
@@ -20,3 +20,4 @@ userProviderClass=org.adho.dhconvalidator.conftool.ConfToolClient
 paperProviderClass=org.adho.dhconvalidator.conftool.ConfToolClient
 templateFileDE=template/DH_template_DHd2016_de
 templateFileEN=template/DH_template_DHd2016_en
+defaultSubmissionLanguage=ENGLISH
