@@ -24,7 +24,10 @@
 		<dependency org="com.vaadin" name="vaadin-themes" rev="&vaadin.version;" />
 
 		<!-- Push support -->
-		<!--<dependency org="com.vaadin" name="vaadin-push" rev="&vaadin.version;" />-->s
+		<!--<dependency org="com.vaadin" name="vaadin-push" rev="&vaadin.version;" />-->
+		
+		<!-- Servlet 3.0 API -->
+		<dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" conf="nodeploy->default" />
 
 		<!-- Precompiled DefaultWidgetSet -->
 		<dependency org="com.vaadin" name="vaadin-client-compiled"

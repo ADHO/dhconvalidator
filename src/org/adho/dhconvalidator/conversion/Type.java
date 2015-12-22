@@ -41,4 +41,18 @@ public enum Type {
 	public String getExtension() {
 		return extension;
 	}
+	
+	/**
+	 * @param ext extension to test
+	 * @return <code>true</code> if one Type has the specified extension
+	 */
+	public static boolean hasExtension(String ext) {
+		for (Type type : Type.values()) {
+			if (type.getExtension().equals(ext)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }

@@ -6,6 +6,7 @@ package org.adho.dhconvalidator.conversion;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -13,15 +14,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.validation.SchemaFactory;
-
-import nu.xom.Attribute;
-import nu.xom.Builder;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Nodes;
-import nu.xom.ParsingException;
-import nu.xom.Serializer;
-import nu.xom.XPathContext;
 
 import org.adho.dhconvalidator.Messages;
 import org.adho.dhconvalidator.conversion.input.InputConverter;
@@ -37,6 +29,15 @@ import org.adho.dhconvalidator.util.DocumentLog;
 import org.adho.dhconvalidator.util.DocumentUtil;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+
+import nu.xom.Attribute;
+import nu.xom.Builder;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Nodes;
+import nu.xom.ParsingException;
+import nu.xom.Serializer;
+import nu.xom.XPathContext;
 
 /**
  * The converter that handles all steps to convert some input data to
@@ -85,20 +86,23 @@ public class Converter {
 		InputConverter	inputConverter = inputConverterFactory.createInputConverter();
 		sourceData = inputConverter.convert(sourceData, user);		
 		Paper paper = inputConverter.getPaper();
-		inputFilename = 
+		
+		String inputFilenameExtension = getFilenameExtension(inputFilename);
+		
+		String computedFilename = 
 			user.getLastName().toUpperCase() + "_" + user.getFirstName() + "_" + paper.getTitle();
-		inputFilename = inputFilename.replaceAll("[^a-zA-Z_0-9]", "_");
+		computedFilename = computedFilename.replaceAll("[^a-zA-Z_0-9]", "_");
 		
 		int maxfilenamelength = PropertyKey.maxfilenamelength.getValue(DEFAULT_MAX_FILE_LENGTH);
 		
-		if (inputFilename.length() > maxfilenamelength) {
-			inputFilename = inputFilename.substring(0, maxfilenamelength);
+		if (computedFilename.length() > maxfilenamelength) {
+			computedFilename = computedFilename.substring(0, maxfilenamelength);
 		}
 		
 		progressListener.setProgress(Messages.getString("Converter.progress2")); //$NON-NLS-1$
 		// do the OxGarage conversion
 		OxGarageConversionClient oxGarageConversionClient = new OxGarageConversionClient(oxGarageBaseURL);
-		String xmlFileName = inputFilename + ".xml";
+		String xmlFileName = computedFilename + ".xml";
 		ZipResult zipResult = new ZipResult(oxGarageConversionClient.convert(
 				sourceData, 
 				toTeiConversionPath, 
@@ -155,12 +159,36 @@ public class Converter {
 		
 		// add the HTML to the result
 		zipResult.putResource(
-			inputFilename + ".html", 
+			computedFilename + ".html", 
 			contentAsXhtml.getBytes("UTF-8"));
+		
+		// add original input file to the result
+		zipResult.putResource(
+			computedFilename + "." + inputFilenameExtension,
+			sourceData);
 		
 		return zipResult;
 	}
 	
+	/**
+	 * @param filename 
+	 * @return the extension present in the given filename if it is one 
+	 * of {@link Type Type's} extensions, "unknown" otherwise.
+	 */
+	private String getFilenameExtension(String filename) {
+		if (filename.contains(".")) {
+			int extensionStart = filename.lastIndexOf(".")+1;
+			
+			if (filename.length() > extensionStart) {
+				String extension = filename.substring(extensionStart);
+				if (Type.hasExtension(extension)) {
+					return extension;
+				}
+			}
+		}
+		return "unknown";
+	}
+
 	private void setHtmlToXmlLink(Document xHtmlDoc, String xmlFileName) {
 		Element titleDivElement = 
 				DocumentUtil.getFirstMatch(
