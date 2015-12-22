@@ -1,4 +1,4 @@
-version=1.16
+version=1.17
 logConversionStepOutput=false
 conftool_shared_pass=MyPass
 conftool_login_url=https://www.conftool.net/demo/dh2015_26a/
