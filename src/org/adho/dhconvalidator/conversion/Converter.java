@@ -83,7 +83,7 @@ public class Converter {
 		// do input conversion to prepare the data for the OxGarage service
 		InputConverterFactory inputConverterFactory = toTeiConversionPath.getInputConverterFactory();
 		InputConverter	inputConverter = inputConverterFactory.createInputConverter();
-		sourceData = inputConverter.convert(sourceData, user);		
+		byte[] convertedInputData = inputConverter.convert(sourceData, user);		
 		Paper paper = inputConverter.getPaper();
 		
 		String inputFilenameExtension = getFilenameExtension(inputFilename);
@@ -103,7 +103,7 @@ public class Converter {
 		OxGarageConversionClient oxGarageConversionClient = new OxGarageConversionClient(oxGarageBaseURL);
 		String xmlFileName = computedFilename + ".xml";
 		ZipResult zipResult = new ZipResult(oxGarageConversionClient.convert(
-				sourceData, 
+				convertedInputData, 
 				toTeiConversionPath, 
 				toTeiConversionPath.getDefaultProperties()),
 				xmlFileName); //$NON-NLS-1$

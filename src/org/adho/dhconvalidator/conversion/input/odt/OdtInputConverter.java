@@ -92,6 +92,7 @@ public class OdtInputConverter implements InputConverter {
 		makeHeaderElement(contentDoc);
 		stripTemplateSections(contentDoc);
 		makeReferencesChapter(contentDoc);
+		cleanupFigureDescriptions(contentDoc);
 		embedExternalFormulae(contentDoc, zipFs);
 		
 		Document metaDoc = zipFs.getDocument("meta.xml"); //$NON-NLS-1$
@@ -104,6 +105,22 @@ public class OdtInputConverter implements InputConverter {
 		
 		zipFs.putDocument("content.xml", contentDoc); //$NON-NLS-1$
 		return zipFs.toZipData();
+	}
+
+	/**
+	 * We do not support svg descriptions as they are not directly visible in the 
+	 * original document and therefore tend to confuse users.
+	 * 
+	 * @param contentDoc
+	 */
+	private void cleanupFigureDescriptions(Document contentDoc) {
+		Nodes searchResult = 
+				contentDoc.query("//text:p/draw:frame/svg:desc", xPathContext); //$NON-NLS-1$
+		
+		for (int i=0; i<searchResult.size(); i++) {
+			Element svgDescElement = (Element)searchResult.get(i);
+			svgDescElement.getParent().removeChild(svgDescElement);
+		}
 	}
 
 	/**
