@@ -3,6 +3,7 @@
 .settings
 testdata
 build
+WebContent/dhconvalidator_*.properties
 WebContent/dhconvalidator.properties
 WebContent/VAADIN/themes/dhconvalidator/styles.css
 WebContent/VAADIN/widgetsets
