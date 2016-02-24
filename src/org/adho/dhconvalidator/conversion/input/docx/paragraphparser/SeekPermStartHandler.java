@@ -28,7 +28,10 @@ public class SeekPermStartHandler implements StateHandler {
 		
 		// found an editable paragraph?
 		if (matchElement.getFirstChildElement("permStart", Namespace.MAIN.toUri()) != null) { //$NON-NLS-1$
-			return State.INPERM; // yes, so change state
+			if (matchElement.getFirstChildElement("permEnd", Namespace.MAIN.toUri()) != null) { //$NON-NLS-1$
+				return State.SEEKPERMSTART; // yes, but since permEnd is also present we continue searching the next editable paragraph
+			}
+			return State.INPERM; // yes, so change state to search the end of the section
 		}
 		else if (DocumentUtil.hasMatch(
 					matchElement, "w:pPr/w:pStyle[@w:val='DH-BibliographyHeading']", xPathContext) //$NON-NLS-1$

@@ -32,14 +32,6 @@ import org.adho.dhconvalidator.util.DocumentUtil;
  * @author marco.petris@web.de
  *
  */
-/**
- * @author mp
- *
- */
-/**
- * @author mp
- *
- */
 public class DocxInputConverter implements InputConverter {
 	/**
 	 * Namespaces used during conversion. public only as an implementation side effect.
@@ -93,6 +85,7 @@ public class DocxInputConverter implements InputConverter {
 		cleanupParagraphStyles(document);
 		stripTemplateSections(document);
 		ensureNumberedHeading(document);
+		moveSubtitleSectionToDocumentEnd(document);
 		
 		zipFs.putDocument("word/document.xml", document); //$NON-NLS-1$
 
@@ -105,6 +98,36 @@ public class DocxInputConverter implements InputConverter {
 		paper.setSubmissionLanguage(getSubmissionLanguageFromMeta(customPropDoc));
 		
 		return zipFs.toZipData();
+	}
+
+	//TODO: this is a hack to prevent OxGarage from removing the sections with style DH-Subtitle during conversion
+	// needs to be fixed in the Stylesheet profile when an OxGarage test instance is available
+	private void moveSubtitleSectionToDocumentEnd(Document document) {
+		Element bodyElement = DocumentUtil.getFirstMatch(document, "//w:body", xPathContext);
+		
+		Nodes searchResult = document.query("//w:pStyle[@w:val='DH-Subtitle']", xPathContext); //$NON-NLS-1$
+		for (int i=0; i<searchResult.size(); i++) {
+			Element styleElement = (Element) searchResult.get(i);
+			Element wElement = (Element)styleElement.getParent().getParent();
+			// move subtitle section
+			wElement.getParent().removeChild(wElement);
+			bodyElement.appendChild(wElement);
+
+			// move corresponding permEnd as well if needed
+			Element permStart = wElement.getFirstChildElement("permStart", Namespace.MAIN.toUri());
+			if (permStart != null) {
+				Element permEnd = 
+					DocumentUtil.getFirstMatch(
+						document, 
+						"//w:permEnd[@w:id='" + permStart.getAttributeValue("id", Namespace.MAIN.toUri()) + "']", 
+						xPathContext);
+				
+				if (!permEnd.getParent().equals(wElement)) {
+					permEnd.getParent().removeChild(permEnd);
+					bodyElement.appendChild(permEnd);
+				}
+			}
+		}
 	}
 
 	/**
