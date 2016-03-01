@@ -57,6 +57,21 @@ public class CommonOutputConverter implements OutputConverter {
 		makeProfileDesc(document, paper);
 		makeFigureHead(document);
 		removeRevisions(document);
+		adjustTableHeads(document);
+	}
+
+	private void adjustTableHeads(Document document) {
+		Nodes searchResult = 
+				document.query(
+					"//tei:table/tei:head",  //$NON-NLS-1$
+					xPathContext);
+		
+		for (int i=0; i<searchResult.size(); i++) {
+			Element tableHeadElement = (Element)searchResult.get(i);
+			Element parentElement = (Element)tableHeadElement.getParent();
+			parentElement.removeChild(tableHeadElement);
+			parentElement.insertChild(tableHeadElement, 0);
+		}		
 	}
 
 	/**
