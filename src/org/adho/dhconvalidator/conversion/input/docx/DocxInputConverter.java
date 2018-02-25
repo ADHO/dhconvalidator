@@ -33,12 +33,9 @@ public class DocxInputConverter implements InputConverter {
   /** Namespaces used during conversion. public only as an implementation side effect. */
   public enum Namespace {
     MAIN("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main"),
-    // //$NON-NLS-2$
     DOCPROPSVTYPES("vt", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"),
-    // //$NON-NLS-2$
     RELS("rels", "http://schemas.openxmlformats.org/package/2006/relationships"),
-  // //$NON-NLS-2$
-  ;
+    ;
     private String name;
     private String uri;
 
