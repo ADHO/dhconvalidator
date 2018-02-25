@@ -9,44 +9,42 @@ import com.vaadin.ui.HorizontalLayout;
 
 /**
  * A header with logout-, back- and about-links.
- * 
- * @author marco.petris@web.de
  *
+ * @author marco.petris@web.de
  */
 public class HeaderPanel extends HorizontalLayout {
-	
-	private BackLink backLink;
 
-	public HeaderPanel(ServicesViewName backstepService) {
-		initComponents(backstepService);
-	}
+  private BackLink backLink;
 
-	/**
-	 * Setup UI.
-	 * @param backstepService 
-	 */
-	private void initComponents(ServicesViewName backstepService) {
-		setSpacing(true);
-		
-		setWidth("100%"); //$NON-NLS-1$
+  public HeaderPanel(ServicesViewName backstepService) {
+    initComponents(backstepService);
+  }
 
-		backLink = new BackLink(backstepService);
-		addComponent(backLink);
-		setComponentAlignment(backLink, Alignment.TOP_LEFT);
-		
-		AboutLink aboutLink = new AboutLink();
-		addComponent(aboutLink);
-		setComponentAlignment(aboutLink, Alignment.TOP_RIGHT);
-		setExpandRatio(aboutLink, 1.0f);
+  /**
+   * Setup UI.
+   *
+   * @param backstepService
+   */
+  private void initComponents(ServicesViewName backstepService) {
+    setSpacing(true);
 
-		LogoutLink logoutLink = new LogoutLink();
-		addComponent(logoutLink);
-		setComponentAlignment(logoutLink, Alignment.TOP_RIGHT);
-				
-	}
-	
-	public BackLink getBackLink() {
-		return backLink;
-	}
+    setWidth("100%"); // $NON-NLS-1$
 
+    backLink = new BackLink(backstepService);
+    addComponent(backLink);
+    setComponentAlignment(backLink, Alignment.TOP_LEFT);
+
+    AboutLink aboutLink = new AboutLink();
+    addComponent(aboutLink);
+    setComponentAlignment(aboutLink, Alignment.TOP_RIGHT);
+    setExpandRatio(aboutLink, 1.0f);
+
+    LogoutLink logoutLink = new LogoutLink();
+    addComponent(logoutLink);
+    setComponentAlignment(logoutLink, Alignment.TOP_RIGHT);
+  }
+
+  public BackLink getBackLink() {
+    return backLink;
+  }
 }

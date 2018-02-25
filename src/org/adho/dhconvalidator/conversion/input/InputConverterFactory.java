@@ -6,12 +6,10 @@ package org.adho.dhconvalidator.conversion.input;
 
 /**
  * A factory that creates {@link InputConverter}s.
- * @author marco.petris@web.de
  *
+ * @author marco.petris@web.de
  */
 public interface InputConverterFactory {
-	/**
-	 * @return the created input converter
-	 */
-	public InputConverter createInputConverter();
+  /** @return the created input converter */
+  public InputConverter createInputConverter();
 }

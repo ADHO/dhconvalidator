@@ -1,6 +1,6 @@
-/*   
+/*
  *   CATMA Computer Aided Text Markup and Analysis
- *   
+ *
  *   Copyright (C) 2009  University Of Hamburg
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 package de.catma.backgroundservice;
 
@@ -23,10 +23,8 @@ package de.catma.backgroundservice;
  * A listener for progress.
  *
  * @author Marco Petris
- *
  */
 public interface ProgressListener {
-	
-	public void setProgress(String value, Object... args);
 
+  public void setProgress(String value, Object... args);
 }

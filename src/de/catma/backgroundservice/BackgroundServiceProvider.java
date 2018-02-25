@@ -1,6 +1,6 @@
-/*   
+/*
  *   CATMA Computer Aided Text Markup and Analysis
- *   
+ *
  *   Copyright (C) 2009-2013  University Of Hamburg
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -19,10 +19,8 @@
 package de.catma.backgroundservice;
 
 public interface BackgroundServiceProvider {
-	public BackgroundService getBackgroundService();
-	
-	public <T> void submit( 
-			String caption,
-			ProgressCallable<T> callable, 
-			ExecutionListener<T> listener);
+  public BackgroundService getBackgroundService();
+
+  public <T> void submit(
+      String caption, ProgressCallable<T> callable, ExecutionListener<T> listener);
 }

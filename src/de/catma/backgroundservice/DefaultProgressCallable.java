@@ -1,6 +1,6 @@
-/*   
+/*
  *   CATMA Computer Aided Text Markup and Analysis
- *   
+ *
  *   Copyright (C) 2009  University Of Hamburg
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -15,34 +15,29 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */   
+ */
 
 package de.catma.backgroundservice;
 
 /**
- * Default implementation of a {@link ProgressCallable}. It adds a field 
- * to maintain the instance of the {@link ProgressListener}.
+ * Default implementation of a {@link ProgressCallable}. It adds a field to maintain the instance of
+ * the {@link ProgressListener}.
  *
  * @author Marco Petris
- *
  * @param <V>
  */
-public abstract class DefaultProgressCallable<V> 
-	implements ProgressCallable<V> {
-	private ProgressListener progressListener;
-	
-	/* (non-Javadoc)
-	 * @see de.catma.backgroundservice.ProgressCallable#setProgressListener(de.catma.backgroundservice.ProgressListener)
-	 */
-	public void setProgressListener( ProgressListener progressListener ) {
-		this.progressListener = progressListener;
-	}
-	
-	/**
-	 * @return the progress listener
-	 */
-	public ProgressListener getProgressListener() {
-		return progressListener;
-	}
-	
+public abstract class DefaultProgressCallable<V> implements ProgressCallable<V> {
+  private ProgressListener progressListener;
+
+  /* (non-Javadoc)
+   * @see de.catma.backgroundservice.ProgressCallable#setProgressListener(de.catma.backgroundservice.ProgressListener)
+   */
+  public void setProgressListener(ProgressListener progressListener) {
+    this.progressListener = progressListener;
+  }
+
+  /** @return the progress listener */
+  public ProgressListener getProgressListener() {
+    return progressListener;
+  }
 }

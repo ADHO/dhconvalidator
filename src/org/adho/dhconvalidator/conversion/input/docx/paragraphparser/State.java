@@ -6,28 +6,22 @@ package org.adho.dhconvalidator.conversion.input.docx.paragraphparser;
 
 /**
  * States of the ParagraphParser.
- * 
- * @author marco.petris@web.de
  *
+ * @author marco.petris@web.de
  */
 enum State {
-	/**
-	 * Seeking the start of an editable section.
-	 */
-	SEEKPERMSTART(new SeekPermStartHandler()),
-	/**
-	 * Within an editable section.
-	 */
-	INPERM(new InPermHandler()),
-	;
-	private StateHandler stateHandler;
+  /** Seeking the start of an editable section. */
+  SEEKPERMSTART(new SeekPermStartHandler()),
+  /** Within an editable section. */
+  INPERM(new InPermHandler()),
+  ;
+  private StateHandler stateHandler;
 
-	private State(StateHandler stateHandler) {
-		this.stateHandler = stateHandler;
-	}
-	
-	public StateHandler getStateHandler() {
-		return stateHandler;
-	}
-	
+  private State(StateHandler stateHandler) {
+    this.stateHandler = stateHandler;
+  }
+
+  public StateHandler getStateHandler() {
+    return stateHandler;
+  }
 }

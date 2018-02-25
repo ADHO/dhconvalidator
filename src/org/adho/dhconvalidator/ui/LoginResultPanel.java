@@ -4,9 +4,6 @@
  */
 package org.adho.dhconvalidator.ui;
 
-import org.adho.dhconvalidator.Messages;
-import org.adho.dhconvalidator.user.User;
-
 import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -16,85 +13,82 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
+import org.adho.dhconvalidator.Messages;
+import org.adho.dhconvalidator.user.User;
 
 /**
- * A panel that displays the result of the Login. 
- * 
- * @author marco.petris@web.de
+ * A panel that displays the result of the Login.
  *
+ * @author marco.petris@web.de
  */
 public class LoginResultPanel extends CenterPanel {
 
-	private Button btContinue;
-	private Button btRetry;
-	private Button logoutLink;
+  private Button btContinue;
+  private Button btRetry;
+  private Button logoutLink;
 
-	/**
-	 * Authentication succesfull
-	 */
-	public LoginResultPanel() {
-		this(null);
-	}
-	
-	/**
-	 * @param errorMessage authentication error
-	 */
-	public LoginResultPanel(String errorMessage) {
-		super(false);
-		initComponents(errorMessage);
-		initActions();
-	}
+  /** Authentication succesfull */
+  public LoginResultPanel() {
+    this(null);
+  }
 
-	/**
-	 * Setup behaviour.
-	 */
-	private void initActions() {
-		btRetry.addClickListener(new ClickListener() {
-			
-			@Override
-			public void buttonClick(ClickEvent event) {
-				UI.getCurrent().setContent(new LoginPanel());
-			}
-		});
-	}
+  /** @param errorMessage authentication error */
+  public LoginResultPanel(String errorMessage) {
+    super(false);
+    initComponents(errorMessage);
+    initActions();
+  }
 
-	/**
-	 * Setup UI.
-	 * @param errorMessage
-	 */
-	private void initComponents(String errorMessage) {
-		logoutLink = new LogoutLink();
-		logoutLink.setVisible(false);
+  /** Setup behaviour. */
+  private void initActions() {
+    btRetry.addClickListener(
+        new ClickListener() {
 
-		User user = 
-			(User)VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name());
-		
-		// if authencication has been successful we open up a new tab to show the DHConvalidator services
-		btContinue = new Button(Messages.getString("LoginResultPanel.continue")); //$NON-NLS-1$
-		new BrowserWindowOpener(DHConvalidatorServices.class).extend(btContinue);
-		
-		btRetry = new Button(Messages.getString("LoginResultPanel.retry")); //$NON-NLS-1$
-		btRetry.setVisible(false);
-		
-		Label infoLabel = new Label("", ContentMode.HTML);
-		if (errorMessage != null) {
-			infoLabel.setValue(
-				Messages.getString("LoginResultPanel.authenticationFailure", errorMessage)); //$NON-NLS-1$
-			btContinue.setVisible(false);
-			btRetry.setVisible(true);
-		}
-		else {
-			infoLabel.setValue(
-				Messages.getString(
-						"LoginResultPanel.greeting", //$NON-NLS-1$
-						user.getFirstName(), 
-						user.getLastName())); 
-			logoutLink.setVisible(true);
-		}
-		
-		addCenteredComponent(logoutLink, Alignment.TOP_RIGHT);
-		addCenteredComponent(infoLabel);
-		addCenteredComponent(btContinue);
-		addCenteredComponent(btRetry);
-	}
+          @Override
+          public void buttonClick(ClickEvent event) {
+            UI.getCurrent().setContent(new LoginPanel());
+          }
+        });
+  }
+
+  /**
+   * Setup UI.
+   *
+   * @param errorMessage
+   */
+  private void initComponents(String errorMessage) {
+    logoutLink = new LogoutLink();
+    logoutLink.setVisible(false);
+
+    User user = (User) VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name());
+
+    // if authencication has been successful we open up a new tab to show the DHConvalidator
+    // services
+    btContinue = new Button(Messages.getString("LoginResultPanel.continue")); // $NON-NLS-1$
+    new BrowserWindowOpener(DHConvalidatorServices.class).extend(btContinue);
+
+    btRetry = new Button(Messages.getString("LoginResultPanel.retry")); // $NON-NLS-1$
+    btRetry.setVisible(false);
+
+    Label infoLabel = new Label("", ContentMode.HTML);
+    if (errorMessage != null) {
+      infoLabel.setValue(
+          Messages.getString(
+              "LoginResultPanel.authenticationFailure", errorMessage)); // $NON-NLS-1$
+      btContinue.setVisible(false);
+      btRetry.setVisible(true);
+    } else {
+      infoLabel.setValue(
+          Messages.getString(
+              "LoginResultPanel.greeting", // $NON-NLS-1$
+              user.getFirstName(),
+              user.getLastName()));
+      logoutLink.setVisible(true);
+    }
+
+    addCenteredComponent(logoutLink, Alignment.TOP_RIGHT);
+    addCenteredComponent(infoLabel);
+    addCenteredComponent(btContinue);
+    addCenteredComponent(btRetry);
+  }
 }

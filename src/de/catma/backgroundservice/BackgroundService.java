@@ -1,6 +1,6 @@
-/*   
+/*
  *   CATMA Computer Aided Text Markup and Analysis
- *   
+ *
  *   Copyright (C) 2009  University Of Hamburg
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -15,35 +15,29 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */   
-
+ */
 
 package de.catma.backgroundservice;
 
-
 /**
- * Executes background tasks. An  {@link ExecutionListener} is notified when 
- * the task is done. The notification takes place in the initiating Thread.<br>
+ * Executes background tasks. An {@link ExecutionListener} is notified when the task is done. The
+ * notification takes place in the initiating Thread.<br>
  * <br>
  *
  * @author Marco Petris
- *
  */
 public interface BackgroundService {
-		
-	/**
-	 * @param <T> the type of the {@link ExecutionListener} and 
-	 * 		the {@link ProgressCallable}.
-	 *  
-	 * @param callable the task which should be done in the background 
-	 * @param listener this one will be notified when the task is 
-	 * 		done (within the initiating thread)
-	 * @param progressListener the listener for progress. The implementer 
-	 *		of the {@link ProgressCallable} which defines the task can
-	 *		call this listener to notify progress to the initiating thread.
-	 */
-	public <T> void submit( 
-			final ProgressCallable<T> callable, 
-			final ExecutionListener<T> listener,
-			final ProgressListener progressListener);	
+
+  /**
+   * @param <T> the type of the {@link ExecutionListener} and the {@link ProgressCallable}.
+   * @param callable the task which should be done in the background
+   * @param listener this one will be notified when the task is done (within the initiating thread)
+   * @param progressListener the listener for progress. The implementer of the {@link
+   *     ProgressCallable} which defines the task can call this listener to notify progress to the
+   *     initiating thread.
+   */
+  public <T> void submit(
+      final ProgressCallable<T> callable,
+      final ExecutionListener<T> listener,
+      final ProgressListener progressListener);
 }

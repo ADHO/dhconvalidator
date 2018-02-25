@@ -27,58 +27,47 @@ package org.adho.dhconvalidator.util;
  * A simple implementation of a pair: two elements grouped together.
  *
  * @author Marco Petris
- *
  */
-public class Pair<V,T> {
-    private V first;
-    private T second;
+public class Pair<V, T> {
+  private V first;
+  private T second;
 
-    /**
-     * Empty pair.
-     */
-    public Pair() {
-    }
+  /** Empty pair. */
+  public Pair() {}
 
-    /**
-     * Constructor
-     * @param first first value
-     * @param second second value
-     */
-    public Pair(V first, T second) {
-        this.first = first;
-        this.second = second;
-    }
+  /**
+   * Constructor
+   *
+   * @param first first value
+   * @param second second value
+   */
+  public Pair(V first, T second) {
+    this.first = first;
+    this.second = second;
+  }
 
-    /**
-     * @return first value
-     */
-    public V getFirst() {
-        return first;
-    }
+  /** @return first value */
+  public V getFirst() {
+    return first;
+  }
 
-    /**
-     * @return second value
-     */
-    public T getSecond() {
-        return second;
-    }
+  /** @return second value */
+  public T getSecond() {
+    return second;
+  }
 
-    /**
-     * @param first first value
-     */
-    public void setFirst(V first) {
-        this.first = first;
-    }
+  /** @param first first value */
+  public void setFirst(V first) {
+    this.first = first;
+  }
 
-    /**
-     * @param second second value
-     */
-    public void setSecond(T second) {
-        this.second = second;
-    }
-    
-    @Override
-    public String toString() {
-    	return "[" + getFirst() + "," + getSecond() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-    }
+  /** @param second second value */
+  public void setSecond(T second) {
+    this.second = second;
+  }
+
+  @Override
+  public String toString() {
+    return "[" + getFirst() + "," + getSecond() + "]"; // $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+  }
 }

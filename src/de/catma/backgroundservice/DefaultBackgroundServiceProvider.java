@@ -1,6 +1,6 @@
-/*   
+/*
  *   CATMA Computer Aided Text Markup and Analysis
- *   
+ *
  *   Copyright (C) 2009-2013  University Of Hamburg
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -18,22 +18,20 @@
  */
 package de.catma.backgroundservice;
 
-public class DefaultBackgroundServiceProvider implements
-		BackgroundServiceProvider {
-	
-	private BackgroundService dummy = new DefaultBackgroundService(null, false);
-	private ProgressListener progressListener = new LogProgressListener();
+public class DefaultBackgroundServiceProvider implements BackgroundServiceProvider {
 
-	@Override
-	public BackgroundService getBackgroundService() {
-		return dummy;
-	}
+  private BackgroundService dummy = new DefaultBackgroundService(null, false);
+  private ProgressListener progressListener = new LogProgressListener();
 
-	@Override
-	public <T> void submit(String caption, ProgressCallable<T> callable,
-			ExecutionListener<T> listener) {
-		progressListener.setProgress(caption);
-		dummy.submit(callable, listener, progressListener);
-	}
+  @Override
+  public BackgroundService getBackgroundService() {
+    return dummy;
+  }
 
+  @Override
+  public <T> void submit(
+      String caption, ProgressCallable<T> callable, ExecutionListener<T> listener) {
+    progressListener.setProgress(caption);
+    dummy.submit(callable, listener, progressListener);
+  }
 }

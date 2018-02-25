@@ -6,13 +6,10 @@ package org.adho.dhconvalidator.conversion.output;
 
 /**
  * A factory for Ouputconverters.
- * 
- * @author marco.petris@web.de
  *
+ * @author marco.petris@web.de
  */
 public interface OutputConverterFactory {
-	/**
-	 * @return the created OutputConverter.
-	 */
-	public OutputConverter createOutputConverter();
+  /** @return the created OutputConverter. */
+  public OutputConverter createOutputConverter();
 }

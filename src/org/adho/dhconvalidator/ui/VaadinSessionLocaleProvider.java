@@ -4,31 +4,27 @@
  */
 package org.adho.dhconvalidator.ui;
 
-import java.util.Locale;
-
-import org.adho.dhconvalidator.Messages.LocaleProvider;
-
 import com.vaadin.server.VaadinSession;
+import java.util.Locale;
+import org.adho.dhconvalidator.Messages.LocaleProvider;
 
 /**
  * Provides locale from {@link VaadinSession}.
- * 
- * @author marco.petris@web.de
  *
+ * @author marco.petris@web.de
  */
 public enum VaadinSessionLocaleProvider implements LocaleProvider {
+  INSTANCE,
+  ;
 
-	INSTANCE,
-	;
-	
-	@Override
-	public Locale getLocale() {
-		VaadinSession session = VaadinSession.getCurrent();
-		
-		if (session != null) {
-			return session.getLocale();
-		}
-		
-		return null;
-	}
+  @Override
+  public Locale getLocale() {
+    VaadinSession session = VaadinSession.getCurrent();
+
+    if (session != null) {
+      return session.getLocale();
+    }
+
+    return null;
+  }
 }

@@ -1,6 +1,6 @@
-/*   
+/*
  *   CATMA Computer Aided Text Markup and Analysis
- *   
+ *
  *   Copyright (C) 2009-2013  University Of Hamburg
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -22,18 +22,16 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class LogProgressListener implements ProgressListener {
-	
-	private Logger logger = Logger.getLogger(LogProgressListener.class.getName());
 
-	public void setProgress(String value, Object... args) {
-		logger.info(
-			value + ((args != null)? (" " +Arrays.toString(args)):"")); //$NON-NLS-1$ //$NON-NLS-2$
-	}
+  private Logger logger = Logger.getLogger(LogProgressListener.class.getName());
 
-	public void setException(Throwable t) {
-		logger.log(Level.SEVERE, "error during job execution", t); //$NON-NLS-1$
-	}
+  public void setProgress(String value, Object... args) {
+    logger.info(
+        value + ((args != null) ? (" " + Arrays.toString(args)) : "")); // $NON-NLS-1$ //$NON-NLS-2$
+  }
 
+  public void setException(Throwable t) {
+    logger.log(Level.SEVERE, "error during job execution", t); // $NON-NLS-1$
+  }
 }
