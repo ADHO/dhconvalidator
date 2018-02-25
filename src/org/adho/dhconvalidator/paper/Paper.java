@@ -53,7 +53,7 @@ public class Paper {
 
   @Override
   public String toString() {
-    return "#" + paperId + "[" + title + "]"; // $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    return "#" + paperId + "[" + title + "]";
   }
 
   /** @return a list of authors */
@@ -71,7 +71,7 @@ public class Paper {
       return Collections.emptyList();
     }
     ArrayList<String> result = new ArrayList<>();
-    for (String item : items.split(",")) { // $NON-NLS-1$
+    for (String item : items.split(",")) {
       result.add(item.trim());
     }
     return result;

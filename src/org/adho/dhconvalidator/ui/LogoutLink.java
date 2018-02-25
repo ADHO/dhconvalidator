@@ -22,9 +22,9 @@ import org.adho.dhconvalidator.Messages;
 public class LogoutLink extends Button {
 
   public LogoutLink() {
-    super(Messages.getString("LogoutLink.title")); // $NON-NLS-1$
+    super(Messages.getString("LogoutLink.title"));
     setStyleName(BaseTheme.BUTTON_LINK);
-    addStyleName("plain-link"); // $NON-NLS-1$
+    addStyleName("plain-link");
     addClickListener(
         new ClickListener() {
 
@@ -46,7 +46,7 @@ public class LogoutLink extends Button {
               try {
                 p.reload();
               } catch (Exception e) {
-                Logger.getLogger(""); // $NON-NLS-1$
+                Logger.getLogger("");
               }
             }
           }

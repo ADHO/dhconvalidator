@@ -76,10 +76,8 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
     }
 
     Label infoLabel =
-        new Label(
-            Messages.getString("ServiceSelectionPanel.intro"), // $NON-NLS-1$
-            ContentMode.HTML);
-    infoLabel.setWidth("600px"); // $NON-NLS-1$
+        new Label(Messages.getString("ServiceSelectionPanel.intro"), ContentMode.HTML);
+    infoLabel.setWidth("600px");
     addCenteredComponent(infoLabel);
 
     VerticalLayout option1Panel = new VerticalLayout();
@@ -88,13 +86,10 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
     addCenteredComponent(option1Panel);
 
     Label option1Label =
-        new Label(
-            Messages.getString("ServiceSelectionPanel.option1Info"), // $NON-NLS-1$
-            ContentMode.HTML);
+        new Label(Messages.getString("ServiceSelectionPanel.option1Info"), ContentMode.HTML);
     option1Panel.addComponent(option1Label);
 
-    btTemplateGeneration =
-        new Button(Messages.getString("ServiceSelectionPanel.option1")); // $NON-NLS-1$
+    btTemplateGeneration = new Button(Messages.getString("ServiceSelectionPanel.option1"));
     option1Panel.addComponent(btTemplateGeneration);
 
     VerticalLayout option2Panel = new VerticalLayout();
@@ -102,12 +97,10 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
     addCenteredComponent(option2Panel);
 
     Label option2Label =
-        new Label(
-            Messages.getString("ServiceSelectionPanel.option2Info"), // $NON-NLS-1$
-            ContentMode.HTML);
+        new Label(Messages.getString("ServiceSelectionPanel.option2Info"), ContentMode.HTML);
     option2Panel.addComponent(option2Label);
 
-    btConversion = new Button(Messages.getString("ServiceSelectionPanel.option2")); // $NON-NLS-1$
+    btConversion = new Button(Messages.getString("ServiceSelectionPanel.option2"));
     option2Panel.addComponent(btConversion);
 
     VerticalLayout option3Panel = new VerticalLayout();
@@ -116,17 +109,15 @@ public class ServiceSelectionPanel extends CenterPanel implements View {
     addCenteredComponent(option3Panel);
 
     Label option3Label =
-        new Label(
-            Messages.getString("ServiceSelectionPanel.option3Info"), // $NON-NLS-1$
-            ContentMode.HTML);
+        new Label(Messages.getString("ServiceSelectionPanel.option3Info"), ContentMode.HTML);
     option3Panel.addComponent(option3Label);
 
-    btConfTool = new Button(Messages.getString("ServiceSelectionPanel.option3")); // $NON-NLS-1$
+    btConfTool = new Button(Messages.getString("ServiceSelectionPanel.option3"));
     option3Panel.addComponent(btConfTool);
   }
 
   @Override
   public void enter(ViewChangeEvent event) {
-    Page.getCurrent().setTitle(Messages.getString("ServiceSelectionPanel.title")); // $NON-NLS-1$
+    Page.getCurrent().setTitle(Messages.getString("ServiceSelectionPanel.title"));
   }
 }

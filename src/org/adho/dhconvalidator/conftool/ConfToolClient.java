@@ -74,14 +74,14 @@ public class ConfToolClient implements UserProvider, PaperProvider {
     String nonce = getNonce();
 
     StringBuilder urlBuilder = new StringBuilder(confToolUrl);
-    urlBuilder.append("?page=remoteLogin"); // $NON-NLS-1$
-    urlBuilder.append("&nonce="); // $NON-NLS-1$
+    urlBuilder.append("?page=remoteLogin");
+    urlBuilder.append("&nonce=");
     urlBuilder.append(nonce);
-    urlBuilder.append("&passhash="); // $NON-NLS-1$
+    urlBuilder.append("&passhash=");
     urlBuilder.append(getPassHash(nonce));
-    urlBuilder.append("&user="); // $NON-NLS-1$
+    urlBuilder.append("&user=");
     urlBuilder.append(user);
-    urlBuilder.append("&command=request"); // $NON-NLS-1$
+    urlBuilder.append("&command=request");
 
     ClientResource client =
         new ClientResource(Context.getCurrent(), Method.GET, urlBuilder.toString());
@@ -155,12 +155,12 @@ public class ConfToolClient implements UserProvider, PaperProvider {
     // see: ConfTool REST interface specification
 
     StringBuilder urlBuilder = new StringBuilder(confToolUrl);
-    urlBuilder.append("?page=downloadPaper"); // $NON-NLS-1$
-    urlBuilder.append("&nonce="); // $NON-NLS-1$
+    urlBuilder.append("?page=downloadPaper");
+    urlBuilder.append("&nonce=");
     urlBuilder.append(nonce);
-    urlBuilder.append("&passhash="); // $NON-NLS-1$
+    urlBuilder.append("&passhash=");
     urlBuilder.append(getPassHash(nonce));
-    urlBuilder.append("&form_id="); // $NON-NLS-1$
+    urlBuilder.append("&form_id=");
     urlBuilder.append(paper.getPaperId());
 
     ClientResource client =
@@ -181,22 +181,21 @@ public class ConfToolClient implements UserProvider, PaperProvider {
     // see: ConfTool REST interface specification
 
     StringBuilder urlBuilder = new StringBuilder(confToolUrl);
-    urlBuilder.append("?page=adminExport"); // $NON-NLS-1$
-    urlBuilder.append("&nonce="); // $NON-NLS-1$
+    urlBuilder.append("?page=adminExport");
+    urlBuilder.append("&nonce=");
     urlBuilder.append(nonce);
-    urlBuilder.append("&passhash="); // $NON-NLS-1$
+    urlBuilder.append("&passhash=");
     urlBuilder.append(getPassHash(nonce));
-    urlBuilder.append("&export_select="); // $NON-NLS-1$
+    urlBuilder.append("&export_select=");
     urlBuilder.append(type.name());
-    urlBuilder.append("&form_include_deleted=0"); // $NON-NLS-1$
-    urlBuilder.append("&form_export_format=xml"); // $NON-NLS-1$
-    urlBuilder.append("&form_export_header=default"); // $NON-NLS-1$
-    urlBuilder.append("&cmd_create_export=Create Export File"); // $NON-NLS-1$
+    urlBuilder.append("&form_include_deleted=0");
+    urlBuilder.append("&form_export_format=xml");
+    urlBuilder.append("&form_export_header=default");
+    urlBuilder.append("&cmd_create_export=Create Export File");
     if (type.equals(ExportType.papers)) {
-      urlBuilder.append("&form_export_papers_options[]=authors_extended_columns"); // $NON-NLS-1$
-      urlBuilder.append("&form_export_papers_options[]=authors_extended_email"); // $NON-NLS-1$
-      urlBuilder.append(
-          "&form_export_papers_options[]=authors_extended_organisations"); // $NON-NLS-1$
+      urlBuilder.append("&form_export_papers_options[]=authors_extended_columns");
+      urlBuilder.append("&form_export_papers_options[]=authors_extended_email");
+      urlBuilder.append("&form_export_papers_options[]=authors_extended_organisations");
     }
 
     if (status != null) {
@@ -205,7 +204,7 @@ public class ConfToolClient implements UserProvider, PaperProvider {
     }
 
     if (user != null) {
-      urlBuilder.append("&form_userID="); // $NON-NLS-1$
+      urlBuilder.append("&form_userID=");
       urlBuilder.append(user.getUserId());
     }
 
@@ -238,15 +237,15 @@ public class ConfToolClient implements UserProvider, PaperProvider {
     // see: ConfTool REST interface specification
 
     StringBuilder urlBuilder = new StringBuilder(confToolUrl);
-    urlBuilder.append("?page=remoteLogin"); // $NON-NLS-1$
-    urlBuilder.append("&nonce="); // $NON-NLS-1$
+    urlBuilder.append("?page=remoteLogin");
+    urlBuilder.append("&nonce=");
     urlBuilder.append(nonce);
-    urlBuilder.append("&passhash="); // $NON-NLS-1$
+    urlBuilder.append("&passhash=");
     urlBuilder.append(getPassHash(nonce));
-    urlBuilder.append("&user="); // $NON-NLS-1$
+    urlBuilder.append("&user=");
     urlBuilder.append(URLEncoder.encode(user, "UTF-8"));
-    urlBuilder.append("&command=login"); // $NON-NLS-1$
-    urlBuilder.append("&password="); // $NON-NLS-1$
+    urlBuilder.append("&command=login");
+    urlBuilder.append("&password=");
     urlBuilder.append(URLEncoder.encode(String.valueOf(pass), "UTF-8"));
 
     ClientResource client =
@@ -269,12 +268,12 @@ public class ConfToolClient implements UserProvider, PaperProvider {
   }
 
   private String getUserId(Document resultDoc) {
-    Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/id"); // $NON-NLS-1$
+    Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/id");
     return resultElement.getValue();
   }
 
   private String getUserName(Document resultDoc) {
-    Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/username"); // $NON-NLS-1$
+    Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/username");
     return resultElement.getValue();
   }
 
@@ -283,12 +282,12 @@ public class ConfToolClient implements UserProvider, PaperProvider {
   }
 
   private boolean getLoginResult(Document resultDoc) {
-    Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/result"); // $NON-NLS-1$
+    Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/result");
     return Boolean.valueOf(resultElement.getValue());
   }
 
   private String getMessage(Document resultDoc) {
-    Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/message"); // $NON-NLS-1$
+    Element resultElement = DocumentUtil.getFirstMatch(resultDoc, "/login/message");
     return resultElement.getValue();
   }
 

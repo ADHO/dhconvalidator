@@ -98,11 +98,11 @@ public class ConverterPanel extends VerticalLayout implements View {
               // do we have data?
               if (uploadData.length == 0) {
                 Notification.show(
-                    Messages.getString("ConverterPanel.fileSelectionTitle"), // $NON-NLS-1$
-                    Messages.getString("ConverterPanel.fileSelectionMsg"), // $NON-NLS-1$
+                    Messages.getString("ConverterPanel.fileSelectionTitle"),
+                    Messages.getString("ConverterPanel.fileSelectionMsg"),
                     Type.TRAY_NOTIFICATION);
               } else {
-                appendLogMessage(Messages.getString("ConverterPanel.progress1")); // $NON-NLS-1$
+                appendLogMessage(Messages.getString("ConverterPanel.progress1"));
 
                 // ok, let's do the conversion in the background
                 ((DHConvalidatorServices) UI.getCurrent())
@@ -139,55 +139,10 @@ public class ConverterPanel extends VerticalLayout implements View {
                         },
                         new ExecutionListener<Pair<ZipResult, String>>() {
                           @Override
-                          public void done(Pair<ZipResult, String> result) {
-                            // back to GUI foreground at this point
-                            String originalExtension =
-                                filename.substring(filename.lastIndexOf('.') + 1);
-
-                            filename =
-                                result
-                                        .getFirst()
-                                        .getDocumentName()
-                                        .substring(
-                                            0, result.getFirst().getDocumentName().lastIndexOf('.'))
-                                    + "."
-                                    + originalExtension;
-
-                            // we store the result in the session for the
-                            // ExternalResourceRequestHandler
-                            VaadinSession.getCurrent()
-                                .setAttribute(
-                                    SessionStorageKey.ZIPRESULT.name(), result.getFirst());
-
-                            appendLogMessage(
-                                Messages.getString("ConverterPanel.progress2")); // $NON-NLS-1$
-
-                            preview.setValue(result.getSecond());
-                            resultCaption.setValue(
-                                Messages.getString(
-                                    "ConverterPanel.previewTitle", filename)); // $NON-NLS-1$
-                            prepareForResultDownload();
-                            progressBar.setVisible(false);
-                          }
+                          public void done(Pair<ZipResult, String> result) {}
 
                           @Override
-                          public void error(Throwable t) {
-                            // an error during background conversion
-                            LOGGER.log(
-                                Level.SEVERE,
-                                Messages.getString("ConverterPanel.conversionErrorMsg"),
-                                t); // $NON-NLS-1$
-                            String message = t.getLocalizedMessage();
-                            if (message == null) {
-                              message =
-                                  Messages.getString(
-                                      "ConverterPanel.conversionErrorNullReplacement"); // $NON-NLS-1$
-                            }
-                            appendLogMessage(
-                                Messages.getString(
-                                    "ConverterPanel.errorLogMsg", message)); // $NON-NLS-1$
-                            progressBar.setVisible(false);
-                          }
+                          public void error(Throwable t) {}
                         },
                         new ProgressListener() {
 
@@ -201,18 +156,12 @@ public class ConverterPanel extends VerticalLayout implements View {
               // we don't expect many problems at this point since the main work takes place in the
               // background
               // but just in case
-              LOGGER.log(
-                  Level.SEVERE,
-                  Messages.getString("ConverterPanel.syncErrorMsg"),
-                  e); // $NON-NLS-1$
+              LOGGER.log(Level.SEVERE, Messages.getString("ConverterPanel.syncErrorMsg"), e);
               String message = e.getLocalizedMessage();
               if (message == null) {
-                message =
-                    Messages.getString(
-                        "ConverterPanel.conversionErrorNullReplacement"); // $NON-NLS-1$
+                message = Messages.getString("ConverterPanel.conversionErrorNullReplacement");
               }
-              appendLogMessage(
-                  Messages.getString("ConverterPanel.errorLogMsg", message)); // $NON-NLS-1$
+              appendLogMessage(Messages.getString("ConverterPanel.errorLogMsg", message));
             }
           }
         });
@@ -235,8 +184,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 
           @Override
           public void uploadFailed(FailedEvent event) {
-            resultCaption.setValue(
-                Messages.getString("ConverterPanel.previewTitle", filename)); // $NON-NLS-1$
+            resultCaption.setValue(Messages.getString("ConverterPanel.previewTitle", filename));
             progressBar.setVisible(false);
           }
         });
@@ -260,7 +208,7 @@ public class ConverterPanel extends VerticalLayout implements View {
                 return createResultStream();
               }
             },
-            filename.substring(0, filename.lastIndexOf('.')) + ".dhc"); // $NON-NLS-1$
+            filename.substring(0, filename.lastIndexOf('.')) + ".dhc");
 
     resultStreamResource.setCacheTime(0);
 
@@ -272,9 +220,9 @@ public class ConverterPanel extends VerticalLayout implements View {
 
   private void appendLogMessage(String logmesssage) {
     StringBuilder logBuilder =
-        new StringBuilder((logArea.getValue() == null) ? "" : logArea.getValue()); // $NON-NLS-1$
+        new StringBuilder((logArea.getValue() == null) ? "" : logArea.getValue());
 
-    logBuilder.append("<br>"); // $NON-NLS-1$
+    logBuilder.append("<br>");
     logBuilder.append(logmesssage);
     logArea.setReadOnly(false);
     logArea.setValue(logBuilder.toString());
@@ -289,15 +237,12 @@ public class ConverterPanel extends VerticalLayout implements View {
     HeaderPanel headerPanel = new HeaderPanel(null);
     addComponent(headerPanel);
 
-    Label title = new Label(Messages.getString("ConverterPanel.title")); // $NON-NLS-1$
-    title.addStyleName("title-caption"); // $NON-NLS-1$
+    Label title = new Label(Messages.getString("ConverterPanel.title"));
+    title.addStyleName("title-caption");
     addComponent(title);
     setComponentAlignment(title, Alignment.TOP_LEFT);
 
-    Label info =
-        new Label(
-            Messages.getString("ConverterPanel.info"), // $NON-NLS-1$
-            ContentMode.HTML);
+    Label info = new Label(Messages.getString("ConverterPanel.info"), ContentMode.HTML);
     addComponent(info);
 
     HorizontalLayout inputPanel = new HorizontalLayout();
@@ -306,7 +251,7 @@ public class ConverterPanel extends VerticalLayout implements View {
 
     upload =
         new Upload(
-            Messages.getString("ConverterPanel.uploadCaption"), // $NON-NLS-1$
+            Messages.getString("ConverterPanel.uploadCaption"),
             new Receiver() {
               @Override
               public OutputStream receiveUpload(String filename, String mimeType) {
@@ -326,11 +271,11 @@ public class ConverterPanel extends VerticalLayout implements View {
     progressBar.setVisible(false);
     inputPanel.addComponent(progressBar);
     inputPanel.setComponentAlignment(progressBar, Alignment.MIDDLE_CENTER);
-    progressBar.addStyleName("converterpanel-progressbar"); // $NON-NLS-1$
+    progressBar.addStyleName("converterpanel-progressbar");
 
-    resultCaption = new Label(Messages.getString("ConverterPanel.previewTitle2")); // $NON-NLS-1$
-    resultCaption.setWidth("100%"); // $NON-NLS-1$
-    resultCaption.addStyleName("converterpanel-resultcaption"); // $NON-NLS-1$
+    resultCaption = new Label(Messages.getString("ConverterPanel.previewTitle2"));
+    resultCaption.setWidth("100%");
+    resultCaption.addStyleName("converterpanel-resultcaption");
     addComponent(resultCaption);
     setComponentAlignment(resultCaption, Alignment.MIDDLE_CENTER);
 
@@ -339,43 +284,39 @@ public class ConverterPanel extends VerticalLayout implements View {
     resultPanel.setSizeFull();
     setExpandRatio(resultPanel, 1.0f);
 
-    preview = new Label("", ContentMode.HTML); // $NON-NLS-1$
-    preview.addStyleName("tei-preview"); // $NON-NLS-1$
+    preview = new Label("", ContentMode.HTML);
+    preview.addStyleName("tei-preview");
     resultPanel.addComponent(preview);
     VerticalLayout rightPanel = new VerticalLayout();
     rightPanel.setMargin(new MarginInfo(false, false, true, true));
     rightPanel.setSpacing(true);
     resultPanel.addComponent(rightPanel);
 
-    logArea = new Label("", ContentMode.HTML); // $NON-NLS-1$
+    logArea = new Label("", ContentMode.HTML);
     logArea.setSizeFull();
     logArea.setReadOnly(true);
     rightPanel.addComponent(logArea);
 
-    downloadInfo = new Label(Messages.getString("ConverterPanel.downloadMsg")); // $NON-NLS-1$
+    downloadInfo = new Label(Messages.getString("ConverterPanel.downloadMsg"));
     rightPanel.addComponent(downloadInfo);
     downloadInfo.setVisible(false);
 
-    btDownloadResult =
-        new Button(Messages.getString("ConverterPanel.downloadBtCaption")); // $NON-NLS-1$
+    btDownloadResult = new Button(Messages.getString("ConverterPanel.downloadBtCaption"));
     btDownloadResult.setVisible(false);
     rightPanel.addComponent(btDownloadResult);
     rightPanel.setComponentAlignment(btDownloadResult, Alignment.BOTTOM_CENTER);
-    btDownloadResult.setHeight("50px"); // $NON-NLS-1$
+    btDownloadResult.setHeight("50px");
 
-    rightPanel.addComponent(
-        new Label(Messages.getString("ConverterPanel.exampleMsg"))); // $NON-NLS-1$
-    Button btExample =
-        new Button(Messages.getString("ConverterPanel.exampleButtonCaption")); // $NON-NLS-1$
+    rightPanel.addComponent(new Label(Messages.getString("ConverterPanel.exampleMsg")));
+    Button btExample = new Button(Messages.getString("ConverterPanel.exampleButtonCaption"));
     btExample.setStyleName(BaseTheme.BUTTON_LINK);
-    btExample.addStyleName("plain-link"); // $NON-NLS-1$
+    btExample.addStyleName("plain-link");
     rightPanel.addComponent(btExample);
 
     confToolLabel =
         new Label(
             Messages.getString(
-                "ConverterPanel.gotoConfToolMsg", // $NON-NLS-1$
-                PropertyKey.conftool_login_url.getValue()),
+                "ConverterPanel.gotoConfToolMsg", PropertyKey.conftool_login_url.getValue()),
             ContentMode.HTML);
     confToolLabel.setVisible(false);
     confToolLabel.addStyleName("postDownloadInfoRedAndBold");
@@ -398,8 +339,8 @@ public class ConverterPanel extends VerticalLayout implements View {
     } catch (IOException e) {
       e.printStackTrace();
       Notification.show(
-          Messages.getString("ConverterPanel.resultCreationErrorTitle"), // $NON-NLS-1$
-          Messages.getString("ConverterPanel.resultCreationErrorMsg"), // $NON-NLS-1$
+          Messages.getString("ConverterPanel.resultCreationErrorTitle"),
+          Messages.getString("ConverterPanel.resultCreationErrorMsg"),
           Type.ERROR_MESSAGE);
       return null;
     }
@@ -412,15 +353,15 @@ public class ConverterPanel extends VerticalLayout implements View {
   public void enter(ViewChangeEvent event) {
     VaadinSession.getCurrent().setAttribute(SessionStorageKey.ZIPRESULT.name(), null);
     cleanUp();
-    resultCaption.setValue(Messages.getString("ConverterPanel.previewTitle2")); // $NON-NLS-1$
-    Page.getCurrent().setTitle(Messages.getString("ConverterPanel.pageTitle")); // $NON-NLS-1$
+    resultCaption.setValue(Messages.getString("ConverterPanel.previewTitle2"));
+    Page.getCurrent().setTitle(Messages.getString("ConverterPanel.pageTitle"));
   }
 
   private void cleanUp() {
     btDownloadResult.setVisible(false);
     downloadInfo.setVisible(false);
-    preview.setValue(""); // $NON-NLS-1$
-    logArea.setValue(""); // $NON-NLS-1$
+    preview.setValue("");
+    logArea.setValue("");
     confToolLabel.setVisible(false);
   }
 }

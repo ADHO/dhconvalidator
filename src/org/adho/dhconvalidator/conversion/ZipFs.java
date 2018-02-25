@@ -73,10 +73,7 @@ public class ZipFs {
     try {
       byte[] documentData = content.get(path);
       if (documentData == null) {
-        throw new IOException(
-            Messages.getString(
-                "ZipFs.invalidDocument", // $NON-NLS-1$
-                path));
+        throw new IOException(Messages.getString("ZipFs.invalidDocument", path));
       }
       return builder.build(new ByteArrayInputStream(content.get(path)));
     } catch (ParsingException e) {

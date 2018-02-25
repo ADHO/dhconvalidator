@@ -20,9 +20,8 @@ public class InPermHandler implements StateHandler {
   public State handleParagraph(Element matchElement, Document document, XPathContext xPathContext) {
 
     // are we still in an editable section?
-    if (matchElement.getLocalName().equals("permEnd") // $NON-NLS-1$
-        || matchElement.getFirstChildElement("permEnd", Namespace.MAIN.toUri())
-            != null) { // $NON-NLS-1$
+    if (matchElement.getLocalName().equals("permEnd")
+        || matchElement.getFirstChildElement("permEnd", Namespace.MAIN.toUri()) != null) {
       // editable section ends here, start searching for the next one
       return State.SEEKPERMSTART;
     }

@@ -17,9 +17,9 @@ import org.adho.dhconvalidator.Messages;
 public class AboutLink extends Button {
 
   public AboutLink() {
-    super(Messages.getString("AboutLink.title")); // $NON-NLS-1$
+    super(Messages.getString("AboutLink.title"));
     setStyleName(BaseTheme.BUTTON_LINK);
-    addStyleName("plain-link"); // $NON-NLS-1$
+    addStyleName("plain-link");
     addClickListener(
         new ClickListener() {
 

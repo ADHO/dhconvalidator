@@ -79,7 +79,7 @@ public class Converter {
       ConversionProgressListener progressListener)
       throws IOException {
 
-    progressListener.setProgress(Messages.getString("Converter.progress1")); // $NON-NLS-1$
+    progressListener.setProgress(Messages.getString("Converter.progress1"));
     // do input conversion to prepare the data for the OxGarage service
     InputConverterFactory inputConverterFactory = toTeiConversionPath.getInputConverterFactory();
     InputConverter inputConverter = inputConverterFactory.createInputConverter();
@@ -98,7 +98,7 @@ public class Converter {
       computedFilename = computedFilename.substring(0, maxfilenamelength);
     }
 
-    progressListener.setProgress(Messages.getString("Converter.progress2")); // $NON-NLS-1$
+    progressListener.setProgress(Messages.getString("Converter.progress2"));
     // do the OxGarage conversion
     OxGarageConversionClient oxGarageConversionClient =
         new OxGarageConversionClient(oxGarageBaseURL);
@@ -109,14 +109,13 @@ public class Converter {
                 convertedInputData,
                 toTeiConversionPath,
                 toTeiConversionPath.getDefaultProperties()),
-            xmlFileName); // $NON-NLS-1$
+            xmlFileName);
 
     document = zipResult.getDocument();
 
-    DocumentLog.logConversionStepOutput(
-        Messages.getString("Converter.log1"), document.toXML()); // $NON-NLS-1$
+    DocumentLog.logConversionStepOutput(Messages.getString("Converter.log1"), document.toXML());
 
-    progressListener.setProgress(Messages.getString("Converter.progress3")); // $NON-NLS-1$
+    progressListener.setProgress(Messages.getString("Converter.progress3"));
     // do the post processing to tweak the resulting TEI
     OutputConverterFactory outputConverterFactory = toTeiConversionPath.getOutputConverterFactory();
     OutputConverter outputConverter = outputConverterFactory.createOutputConverter();
@@ -130,11 +129,10 @@ public class Converter {
     serializer.write(document);
 
     DocumentLog.logConversionStepOutput(
-        Messages.getString("Converter.log2"),
-        conversionResultDocBuffer.toString("UTF-8")); // $NON-NLS-1$ //$NON-NLS-2$
+        Messages.getString("Converter.log2"), conversionResultDocBuffer.toString("UTF-8"));
     validateDocument(conversionResultDocBuffer, progressListener);
 
-    progressListener.setProgress(Messages.getString("Converter.progress4")); // $NON-NLS-1$
+    progressListener.setProgress(Messages.getString("Converter.progress4"));
 
     // do the conversion to HTML via OxGarage
     Document xHtmlDoc =
@@ -155,10 +153,9 @@ public class Converter {
     serializer = new Serializer(xHtmlBuffer);
     serializer.setIndent(2);
     serializer.write(xHtmlDoc);
-    this.contentAsXhtml = xHtmlBuffer.toString("UTF-8"); // $NON-NLS-1$
+    this.contentAsXhtml = xHtmlBuffer.toString("UTF-8");
 
-    DocumentLog.logConversionStepOutput(
-        Messages.getString("Converter.log3"), contentAsXhtml); // $NON-NLS-1$
+    DocumentLog.logConversionStepOutput(Messages.getString("Converter.log3"), contentAsXhtml);
 
     // add the HTML to the result
     zipResult.putResource(computedFilename + ".html", contentAsXhtml.getBytes("UTF-8"));
@@ -252,7 +249,7 @@ public class Converter {
       ByteArrayOutputStream bos, ConversionProgressListener progressListener) throws IOException {
     if (PropertyKey.performSchemaValidation.isTrue()) {
       try {
-        progressListener.setProgress(Messages.getString("Converter.progress5")); // $NON-NLS-1$
+        progressListener.setProgress(Messages.getString("Converter.progress5"));
         SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setValidating(false);
         factory.setNamespaceAware(true);
@@ -260,10 +257,9 @@ public class Converter {
         URL xsdResource =
             Thread.currentThread()
                 .getContextClassLoader()
-                .getResource("/schema/dhconvalidator.xsd"); // $NON-NLS-1$
+                .getResource("/schema/dhconvalidator.xsd");
 
-        SchemaFactory schemaFactory =
-            SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema"); // $NON-NLS-1$
+        SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
         factory.setSchema(schemaFactory.newSchema(xsdResource));
 
         SAXParser parser = factory.newSAXParser();

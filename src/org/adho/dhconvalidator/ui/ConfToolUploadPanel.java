@@ -21,7 +21,7 @@ public class ConfToolUploadPanel extends CenterPanel implements View {
             Messages.getString(
                 "ConfToolUploadPanel.info", PropertyKey.conftool_login_url.getValue()),
             ContentMode.HTML);
-    infoLabel.setWidth("600px"); // $NON-NLS-1$
+    infoLabel.setWidth("600px");
     addCenteredComponent(infoLabel);
   }
 

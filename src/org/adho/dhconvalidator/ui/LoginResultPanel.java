@@ -64,25 +64,21 @@ public class LoginResultPanel extends CenterPanel {
 
     // if authencication has been successful we open up a new tab to show the DHConvalidator
     // services
-    btContinue = new Button(Messages.getString("LoginResultPanel.continue")); // $NON-NLS-1$
+    btContinue = new Button(Messages.getString("LoginResultPanel.continue"));
     new BrowserWindowOpener(DHConvalidatorServices.class).extend(btContinue);
 
-    btRetry = new Button(Messages.getString("LoginResultPanel.retry")); // $NON-NLS-1$
+    btRetry = new Button(Messages.getString("LoginResultPanel.retry"));
     btRetry.setVisible(false);
 
     Label infoLabel = new Label("", ContentMode.HTML);
     if (errorMessage != null) {
       infoLabel.setValue(
-          Messages.getString(
-              "LoginResultPanel.authenticationFailure", errorMessage)); // $NON-NLS-1$
+          Messages.getString("LoginResultPanel.authenticationFailure", errorMessage));
       btContinue.setVisible(false);
       btRetry.setVisible(true);
     } else {
       infoLabel.setValue(
-          Messages.getString(
-              "LoginResultPanel.greeting", // $NON-NLS-1$
-              user.getFirstName(),
-              user.getLastName()));
+          Messages.getString("LoginResultPanel.greeting", user.getFirstName(), user.getLastName()));
       logoutLink.setVisible(true);
     }
 

@@ -41,14 +41,11 @@ public class DHConvalidatorServices extends UI {
     if ((VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name())) == null) {
       // no, show login box then
       setContent(new LoginPanel());
-      Page.getCurrent()
-          .setTitle(Messages.getString("DHConvalidatorServices.loginTitle")); // $NON-NLS-1$
+      Page.getCurrent().setTitle(Messages.getString("DHConvalidatorServices.loginTitle"));
     } else {
       // add available services and navigation
       Navigator navigator = new Navigator(this, this);
-      navigator.addView(
-          "", // $NON-NLS-1$
-          new ServiceSelectionPanel());
+      navigator.addView("", new ServiceSelectionPanel());
       navigator.addView(
           ServicesViewName.odt.name(), new PaperSelectionPanel(new OdtInputConverter()));
       navigator.addView(
@@ -66,10 +63,9 @@ public class DHConvalidatorServices extends UI {
                 new ExternalResourceRequestHandler(PropertyKey.tei_image_location.getValue()));
       } catch (IOException e) {
         throw new IllegalStateException(
-            Messages.getString("DHConvalidatorServices.errorExampleFiles"), e); // $NON-NLS-1$
+            Messages.getString("DHConvalidatorServices.errorExampleFiles"), e);
       }
-      Page.getCurrent()
-          .setTitle(Messages.getString("DHConvalidatorServices.servicesTitle")); // $NON-NLS-1$
+      Page.getCurrent().setTitle(Messages.getString("DHConvalidatorServices.servicesTitle"));
     }
   }
 

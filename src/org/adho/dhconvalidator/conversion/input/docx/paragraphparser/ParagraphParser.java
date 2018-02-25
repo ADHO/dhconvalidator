@@ -20,8 +20,7 @@ public class ParagraphParser {
   public void stripTemplateSections(Document document, XPathContext xPathContext) {
     // grab all paragraphs and loose permEnds (permStart is always inside a paragraph)
     Nodes searchResult =
-        document.query(
-            "/w:document/w:body/w:p | /w:document/w:body/w:permEnd", xPathContext); // $NON-NLS-1$
+        document.query("/w:document/w:body/w:p | /w:document/w:body/w:permEnd", xPathContext);
 
     // we start by looking for the first editable section start
     State currentState = State.SEEKPERMSTART;

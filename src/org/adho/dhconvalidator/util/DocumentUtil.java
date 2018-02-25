@@ -34,8 +34,7 @@ public class DocumentUtil {
       return (Element) nodes.get(0);
     }
 
-    throw new IllegalStateException(
-        Messages.getString("DocumentUtil.unexpectedResult")); // $NON-NLS-1$
+    throw new IllegalStateException(Messages.getString("DocumentUtil.unexpectedResult"));
   }
 
   /**
@@ -52,8 +51,7 @@ public class DocumentUtil {
       return (Element) nodes.get(0);
     }
 
-    throw new IllegalStateException(
-        Messages.getString("DocumentUtil.unexpectedResult")); // $NON-NLS-1$
+    throw new IllegalStateException(Messages.getString("DocumentUtil.unexpectedResult"));
   }
 
   /**

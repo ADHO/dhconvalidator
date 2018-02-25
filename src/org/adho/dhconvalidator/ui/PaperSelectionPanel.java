@@ -69,43 +69,35 @@ public class PaperSelectionPanel extends CenterPanel implements View {
     } catch (IOException e) {
       e.printStackTrace();
       Notification.show(
-          Messages.getString("PaperSelectionPanel.error1Title"), // $NON-NLS-1$
-          Messages.getString(
-              "PaperSelectionPanel.conftoolerrormsg", // $NON-NLS-1$
-              e.getLocalizedMessage()),
+          Messages.getString("PaperSelectionPanel.error1Title"),
+          Messages.getString("PaperSelectionPanel.conftoolerrormsg", e.getLocalizedMessage()),
           Type.ERROR_MESSAGE);
     }
   }
 
   /** Setup UI. */
   private void initComponents() {
-    Label info =
-        new Label(
-            Messages.getString("PaperSelectionPanel.hintMsg"), // $NON-NLS-1$
-            ContentMode.HTML);
+    Label info = new Label(Messages.getString("PaperSelectionPanel.hintMsg"), ContentMode.HTML);
 
     languages =
         new ComboBox(
-            Messages.getString("PaperSelectionPanel.language"), // $NON-NLS-1$
+            Messages.getString("PaperSelectionPanel.language"),
             Arrays.asList(SubmissionLanguage.values()));
     languages.setNullSelectionAllowed(false);
     languages.setValue(
         SubmissionLanguage.valueOf(
             PropertyKey.defaultSubmissionLanguage.getValue(SubmissionLanguage.ENGLISH.name())));
 
-    paperTable = new Table(Messages.getString("PaperSelectionPanel.tableTitle")); // $NON-NLS-1$
+    paperTable = new Table(Messages.getString("PaperSelectionPanel.tableTitle"));
     paperTable.setSelectable(true);
     paperTable.setMultiSelect(true);
     paperTable.setPageLength(4);
-    paperTable.addContainerProperty("title", String.class, null); // $NON-NLS-1$
-    paperTable.setColumnHeader(
-        "title",
-        Messages.getString("PaperSelectionPanel.titleColumnTitle")); // $NON-NLS-1$ //$NON-NLS-2$
-    paperTable.setWidth("100%"); // $NON-NLS-1$
+    paperTable.addContainerProperty("title", String.class, null);
+    paperTable.setColumnHeader("title", Messages.getString("PaperSelectionPanel.titleColumnTitle"));
+    paperTable.setWidth("100%");
     paperTable.setImmediate(true);
 
-    btGenerate =
-        new Button(Messages.getString("PaperSelectionPanel.generateButtonCaption")); // $NON-NLS-1$
+    btGenerate = new Button(Messages.getString("PaperSelectionPanel.generateButtonCaption"));
     StreamResource templateStreamResource =
         new StreamResource(
             new StreamSource() {
@@ -114,7 +106,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
                 return createTemplates();
               }
             },
-            "your_personal_dh_templates.zip"); // $NON-NLS-1$
+            "your_personal_dh_templates.zip");
 
     templateStreamResource.setCacheTime(0);
     new FileDownloader(templateStreamResource).extend(btGenerate);
@@ -144,8 +136,8 @@ public class PaperSelectionPanel extends CenterPanel implements View {
 
     if (selection.isEmpty()) {
       Notification.show(
-          Messages.getString("PaperSelectionPanel.selectSubmissionTitle"), // $NON-NLS-1$
-          Messages.getString("PaperSelectionPanel.selectSubmissionMsg"), // $NON-NLS-1$
+          Messages.getString("PaperSelectionPanel.selectSubmissionTitle"),
+          Messages.getString("PaperSelectionPanel.selectSubmissionMsg"),
           Type.HUMANIZED_MESSAGE);
       return null;
     } else {
@@ -155,8 +147,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
         int idx = 1;
         for (Paper paper : selection) {
 
-          String title =
-              paper.getTitle().replaceAll("[^0-9a-zA-Z]", "_"); // $NON-NLS-1$ //$NON-NLS-2$
+          String title = paper.getTitle().replaceAll("[^0-9a-zA-Z]", "_");
 
           if (title.length()
               > PropertyKey.maxfilenamelength.getValue(Converter.DEFAULT_MAX_FILE_LENGTH)) {
@@ -165,11 +156,7 @@ public class PaperSelectionPanel extends CenterPanel implements View {
           SubmissionLanguage submissionLanguage = (SubmissionLanguage) languages.getValue();
 
           zipFs.putDocument(
-              idx
-                  + "_"
-                  + title // $NON-NLS-1$
-                  + "."
-                  + inputConverter.getFileExtension(), // $NON-NLS-1$
+              idx + "_" + title + "." + inputConverter.getFileExtension(),
               inputConverter.getPersonalizedTemplate(paper, submissionLanguage));
           idx++;
         }
@@ -180,8 +167,8 @@ public class PaperSelectionPanel extends CenterPanel implements View {
       } catch (IOException e) {
         e.printStackTrace();
         Notification.show(
-            Messages.getString("PaperSelectionPanel.templateCreationErrorTitle"), // $NON-NLS-1$
-            Messages.getString("PaperSelectionPanel.templateCreationErrorMsg"), // $NON-NLS-1$
+            Messages.getString("PaperSelectionPanel.templateCreationErrorTitle"),
+            Messages.getString("PaperSelectionPanel.templateCreationErrorMsg"),
             Type.ERROR_MESSAGE);
         return null;
       }
@@ -192,6 +179,6 @@ public class PaperSelectionPanel extends CenterPanel implements View {
   public void enter(ViewChangeEvent event) {
     // reload data
     initData();
-    Page.getCurrent().setTitle(Messages.getString("PaperSelectionPanel.title")); // $NON-NLS-1$
+    Page.getCurrent().setTitle(Messages.getString("PaperSelectionPanel.title"));
   }
 }

@@ -24,20 +24,16 @@ public class SeekPermStartHandler implements StateHandler {
   public State handleParagraph(Element matchElement, Document document, XPathContext xPathContext) {
 
     // found an editable paragraph?
-    if (matchElement.getFirstChildElement("permStart", Namespace.MAIN.toUri())
-        != null) { // $NON-NLS-1$
-      if (matchElement.getFirstChildElement("permEnd", Namespace.MAIN.toUri())
-          != null) { // $NON-NLS-1$
+    if (matchElement.getFirstChildElement("permStart", Namespace.MAIN.toUri()) != null) {
+      if (matchElement.getFirstChildElement("permEnd", Namespace.MAIN.toUri()) != null) {
         return State
             .SEEKPERMSTART; // yes, but since permEnd is also present we continue searching the next
-                            // editable paragraph
+        // editable paragraph
       }
       return State.INPERM; // yes, so change state to search the end of the section
     } else if (DocumentUtil.hasMatch(
-            matchElement,
-            "w:pPr/w:pStyle[@w:val='DH-BibliographyHeading']",
-            xPathContext) // $NON-NLS-1$
-        && (DocumentUtil.hasMatch(matchElement, "w:r", xPathContext))) { // $NON-NLS-1$
+            matchElement, "w:pPr/w:pStyle[@w:val='DH-BibliographyHeading']", xPathContext)
+        && (DocumentUtil.hasMatch(matchElement, "w:r", xPathContext))) {
       // the References section is not editable but we want to keep it and continue with searching
       return State.SEEKPERMSTART;
     } else {

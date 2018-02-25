@@ -75,19 +75,15 @@ public class LoginPanel extends CenterPanel {
   /** Setup UI. */
   private void initComponents() {
 
-    userNameInput =
-        new TextField(Messages.getString("LoginPanel.userName"), ""); // $NON-NLS-1$ //$NON-NLS-2$
+    userNameInput = new TextField(Messages.getString("LoginPanel.userName"), "");
     userNameInput.focus();
-    passwordInput =
-        new PasswordField(
-            Messages.getString("LoginPanel.password"), ""); // $NON-NLS-1$ //$NON-NLS-2$
+    passwordInput = new PasswordField(Messages.getString("LoginPanel.password"), "");
 
-    btLogin = new Button(Messages.getString("LoginPanel.login")); // $NON-NLS-1$
+    btLogin = new Button(Messages.getString("LoginPanel.login"));
     btLogin.setClickShortcut(KeyCode.ENTER);
 
-    Label caption =
-        new Label(Messages.getString("LoginPanel.title"), ContentMode.HTML); // $NON-NLS-1$
-    caption.addStyleName("login-caption"); // $NON-NLS-1$
+    Label caption = new Label(Messages.getString("LoginPanel.title"), ContentMode.HTML);
+    caption.addStyleName("login-caption");
     addCenteredComponent(caption);
     addCenteredComponent(userNameInput);
     addCenteredComponent(passwordInput);

@@ -27,10 +27,8 @@ public class PropertiesInitializerServlet extends HttpServlet {
     try {
       String propertiesFile =
           System.getProperties().containsKey("dhconvalidatorproperties")
-              ? System.getProperties()
-                  .getProperty( // $NON-NLS-1$
-                      "dhconvalidatorproperties")
-              : "dhconvalidator.properties"; // $NON-NLS-1$ //$NON-NLS-2$
+              ? System.getProperties().getProperty("dhconvalidatorproperties")
+              : "dhconvalidator.properties";
 
       Properties properties = new Properties();
 

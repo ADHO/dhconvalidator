@@ -33,7 +33,7 @@ public class ValidateConversionErrorHandler implements ErrorHandler {
   public void warning(SAXParseException arg0) throws SAXException {
     logger.log(
         Level.WARNING,
-        Messages.getString("ValidateConversionErrorHandler.validationWarning"), // $NON-NLS-1$
+        Messages.getString("ValidateConversionErrorHandler.validationWarning"),
         arg0);
   }
 }

@@ -36,7 +36,7 @@ import org.restlet.resource.ClientResource;
  */
 public class OxGarageConversionClient {
 
-  private static final String CONVERSION_OPERATION = "Conversions/"; // $NON-NLS-1$
+  private static final String CONVERSION_OPERATION = "Conversions/";
 
   private String baseURL;
 
@@ -59,7 +59,7 @@ public class OxGarageConversionClient {
     Serializer serializer = new Serializer(buffer);
     serializer.setIndent(2);
     serializer.write(convertToDocument(sourceData, conversionPath, properties));
-    return buffer.toString("UTF-8"); // $NON-NLS-1$
+    return buffer.toString("UTF-8");
   }
 
   /**
@@ -104,29 +104,29 @@ public class OxGarageConversionClient {
     String uri = baseURL + CONVERSION_OPERATION + conversionPath.getPath();
     // append conversion properties
     if (!properties.isEmpty()) {
-      Document propertyDoc = new Document(new Element("conversions")); // $NON-NLS-1$
-      Element conversion = new Element("conversion"); // $NON-NLS-1$
-      conversion.addAttribute(new Attribute("index", "0")); // $NON-NLS-1$ //$NON-NLS-2$
+      Document propertyDoc = new Document(new Element("conversions"));
+      Element conversion = new Element("conversion");
+      conversion.addAttribute(new Attribute("index", "0"));
       propertyDoc.getRootElement().appendChild(conversion);
 
       Enumeration<?> propertyNames = properties.propertyNames();
 
       while (propertyNames.hasMoreElements()) {
         String key = propertyNames.nextElement().toString();
-        Element property = new Element("property"); // $NON-NLS-1$
-        property.addAttribute(new Attribute("id", key)); // $NON-NLS-1$
+        Element property = new Element("property");
+        property.addAttribute(new Attribute("id", key));
         property.appendChild(properties.getProperty(key));
         conversion.appendChild(property);
       }
 
-      uri += "?properties=" + propertyDoc.getRootElement().toXML(); // $NON-NLS-1$
+      uri += "?properties=" + propertyDoc.getRootElement().toXML();
     }
 
     ClientResource client = new ClientResource(Context.getCurrent(), Method.POST, uri);
 
     FormDataSet form = new FormDataSet();
     form.setMultipart(true);
-    form.getEntries().add(new FormData("upload", sourceRep)); // $NON-NLS-1$
+    form.getEntries().add(new FormData("upload", sourceRep));
 
     Representation result = client.post(form);
     return result.getStream();
@@ -186,7 +186,7 @@ public class OxGarageConversionClient {
     Serializer serializer = new Serializer(buffer);
     serializer.setIndent(2);
     serializer.write(zipResult.getDocument());
-    return buffer.toString("UTF-8"); // $NON-NLS-1$
+    return buffer.toString("UTF-8");
   }
 
   /**

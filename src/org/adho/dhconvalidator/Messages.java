@@ -21,7 +21,7 @@ public class Messages {
     public Locale getLocale();
   }
 
-  private static final String BUNDLE_NAME = "org.adho.dhconvalidator.messages"; // $NON-NLS-1$
+  private static final String BUNDLE_NAME = "org.adho.dhconvalidator.messages";
 
   private static LocaleProvider localeProvider;
 

@@ -43,23 +43,18 @@ public class TemplateGeneratorPanel extends CenterPanel implements View {
 
   private void initComponents() {
     Label infoLabel =
-        new Label(
-            Messages.getString("TemplateGeneratorPanel.intro"), // $NON-NLS-1$
-            ContentMode.HTML);
-    infoLabel.setWidth("600px"); // $NON-NLS-1$
+        new Label(Messages.getString("TemplateGeneratorPanel.intro"), ContentMode.HTML);
+    infoLabel.setWidth("600px");
     addCenteredComponent(infoLabel);
 
-    btOdtTemplate =
-        new Button(Messages.getString("TemplateGeneratorPanel.odtButtonCaption")); // $NON-NLS-1$
+    btOdtTemplate = new Button(Messages.getString("TemplateGeneratorPanel.odtButtonCaption"));
 
-    btOdtTemplate.setDescription(
-        Messages.getString("TemplateGeneratorPanel.odtButtonDescription")); // $NON-NLS-1$
+    btOdtTemplate.setDescription(Messages.getString("TemplateGeneratorPanel.odtButtonDescription"));
     addCenteredComponent(btOdtTemplate);
 
-    btDocxTemplate =
-        new Button(Messages.getString("TemplateGeneratorPanel.docxButtonCaption")); // $NON-NLS-1$
+    btDocxTemplate = new Button(Messages.getString("TemplateGeneratorPanel.docxButtonCaption"));
     btDocxTemplate.setDescription(
-        Messages.getString("TemplateGeneratorPanel.docxButtonDescription")); // $NON-NLS-1$
+        Messages.getString("TemplateGeneratorPanel.docxButtonDescription"));
     addCenteredComponent(btDocxTemplate);
   }
 

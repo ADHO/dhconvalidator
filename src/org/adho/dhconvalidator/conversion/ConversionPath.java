@@ -27,7 +27,7 @@ public enum ConversionPath {
   /** .odt to TEI */
   ODT_TO_TEI(
       Type.ODT.getIdentifier() + Type.TEI.getIdentifier(),
-      "odt", // $NON-NLS-1$
+      "odt",
       new InputConverterFactory() {
         public InputConverter createInputConverter() {
           return new OdtInputConverter();
@@ -40,24 +40,22 @@ public enum ConversionPath {
           return new OdtOutputConverter();
         }
       },
-      new Pair<>("oxgarage.textOnly", "false"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("oxgarage.getImages", "true"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("oxgarage.getOnlineImages", "true"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator") // $NON-NLS-1$ //$NON-NLS-2$
-      ),
+      new Pair<>("oxgarage.textOnly", "false"),
+      new Pair<>("oxgarage.getImages", "true"),
+      new Pair<>("oxgarage.getOnlineImages", "true"),
+      new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator")),
   /** xHTML to TEI (not used currently) */
   XHTML_TO_TEI(
       Type.XHTML.getIdentifier() + Type.TEI.getIdentifier(),
-      "xhtml", // $NON-NLS-1$
-      new Pair<>("oxgarage.textOnly", "false"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("oxgarage.getImages", "false"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("oxgarage.getOnlineImages", "false"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator") // $NON-NLS-1$ //$NON-NLS-2$
-      ),
+      "xhtml",
+      new Pair<>("oxgarage.textOnly", "false"),
+      new Pair<>("oxgarage.getImages", "false"),
+      new Pair<>("oxgarage.getOnlineImages", "false"),
+      new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator")),
   /** .docx to TEI */
   DOCX_TO_TEI(
       Type.DOCX.getIdentifier() + Type.TEI.getIdentifier(),
-      "docx", // $NON-NLS-1$
+      "docx",
       new InputConverterFactory() {
         public InputConverter createInputConverter() {
           return new DocxInputConverter();
@@ -70,20 +68,18 @@ public enum ConversionPath {
           return new DocxOutputConverter();
         }
       },
-      new Pair<>("oxgarage.textOnly", "false"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("oxgarage.getImages", "true"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("oxgarage.getOnlineImages", "true"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator") // $NON-NLS-1$ //$NON-NLS-2$
-      ),
+      new Pair<>("oxgarage.textOnly", "false"),
+      new Pair<>("oxgarage.getImages", "true"),
+      new Pair<>("oxgarage.getOnlineImages", "true"),
+      new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator")),
   /** TEI to xHTML */
   TEI_TO_XHTML(
       Type.TEI.getIdentifier() + Type.XHTML.getIdentifier(),
-      "tei", // $NON-NLS-1$
-      new Pair<>("oxgarage.textOnly", "false"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("oxgarage.getImages", "false"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("oxgarage.getOnlineImages", "false"), // $NON-NLS-1$ //$NON-NLS-2$
-      new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator") // $NON-NLS-1$ //$NON-NLS-2$
-      ),
+      "tei",
+      new Pair<>("oxgarage.textOnly", "false"),
+      new Pair<>("oxgarage.getImages", "false"),
+      new Pair<>("oxgarage.getOnlineImages", "false"),
+      new Pair<>("pl.psnc.dl.ege.tei.profileNames", "dhconvalidator")),
   ;
 
   private String path;
@@ -170,7 +166,7 @@ public enum ConversionPath {
     }
 
     throw new IllegalArgumentException(
-        Messages.getString("ConversionPath.noConversionPathFound", filename)); // $NON-NLS-1$
+        Messages.getString("ConversionPath.noConversionPathFound", filename));
   }
 
   /** @return the factory for the {@link InputConverter} */

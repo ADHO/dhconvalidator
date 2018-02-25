@@ -77,17 +77,16 @@ public class UserSwitchPanel extends HorizontalLayout {
                             selectedUser.getEmail(),
                             true));
                 Notification.show(
-                    Messages.getString("UserSwitchPanel.notificationTitle"), // $NON-NLS-1$
+                    Messages.getString("UserSwitchPanel.notificationTitle"),
                     Messages.getString(
-                        "UserSwitchPanel.notificationContent", // $NON-NLS-1$
+                        "UserSwitchPanel.notificationContent",
                         selectedUser.getLastName(),
                         selectedUser.getFirstName(),
                         selectedUser.getEmail()),
                     Type.HUMANIZED_MESSAGE);
               }
             } else {
-              throw new IllegalStateException(
-                  Messages.getString("UserSwitchPanel.illegalState")); // $NON-NLS-1$
+              throw new IllegalStateException(Messages.getString("UserSwitchPanel.illegalState"));
             }
           }
         });
@@ -117,20 +116,19 @@ public class UserSwitchPanel extends HorizontalLayout {
   /** Setup UI. */
   private void initComponents() {
     List<User> users = UserList.INSTANCE.getUsers();
-    userSwitchBox = new ComboBox(Messages.getString("UserSwitchPanel.boxCaption")); // $NON-NLS-1$
+    userSwitchBox = new ComboBox(Messages.getString("UserSwitchPanel.boxCaption"));
     setUsers(users);
     User current = (User) VaadinSession.getCurrent().getAttribute(SessionStorageKey.USER.name());
     userSwitchBox.setValue(current);
 
-    userSwitchBox.setDescription(
-        Messages.getString("UserSwitchPanel.boxDescription")); // $NON-NLS-1$
+    userSwitchBox.setDescription(Messages.getString("UserSwitchPanel.boxDescription"));
     userSwitchBox.setNewItemsAllowed(false);
     userSwitchBox.setNullSelectionAllowed(false);
 
     addComponent(userSwitchBox);
-    btReload = new Button(Messages.getString("UserSwitchPanel.reloadCaption")); // $NON-NLS-1$
+    btReload = new Button(Messages.getString("UserSwitchPanel.reloadCaption"));
     btReload.setStyleName(BaseTheme.BUTTON_LINK);
-    btReload.addStyleName("plain-link"); // $NON-NLS-1$
+    btReload.addStyleName("plain-link");
 
     addComponent(btReload);
   }

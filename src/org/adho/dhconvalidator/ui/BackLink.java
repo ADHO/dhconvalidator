@@ -16,9 +16,9 @@ import org.adho.dhconvalidator.Messages;
  */
 public class BackLink extends Button {
   public BackLink(final ServicesViewName backstepService) {
-    super(Messages.getString("BackLink.title")); // $NON-NLS-1$
+    super(Messages.getString("BackLink.title"));
     setStyleName(BaseTheme.BUTTON_LINK);
-    addStyleName("plain-link"); // $NON-NLS-1$
+    addStyleName("plain-link");
     addClickListener(
         new ClickListener() {
 
@@ -26,7 +26,7 @@ public class BackLink extends Button {
           public void buttonClick(ClickEvent event) {
             UI.getCurrent()
                 .getNavigator()
-                .navigateTo((backstepService == null) ? "" : backstepService.name()); // $NON-NLS-1$
+                .navigateTo((backstepService == null) ? "" : backstepService.name());
           }
         });
   }

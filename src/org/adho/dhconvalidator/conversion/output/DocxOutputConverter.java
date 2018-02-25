@@ -51,15 +51,12 @@ public class DocxOutputConverter extends CommonOutputConverter {
    * @param document
    */
   private void removeSegs(Document document) {
-    Nodes searchResult =
-        document.query(
-            "//tei:seg", // $NON-NLS-1$
-            xPathContext);
+    Nodes searchResult = document.query("//tei:seg", xPathContext);
     for (int i = 0; i < searchResult.size(); i++) {
       Element segElement = (Element) searchResult.get(i);
       Element parentElement = (Element) segElement.getParent();
-      if (segElement.getAttribute("rend") != null) { // $NON-NLS-1$
-        segElement.setLocalName("hi"); // $NON-NLS-1$
+      if (segElement.getAttribute("rend") != null) {
+        segElement.setLocalName("hi");
       } else {
         int position = parentElement.indexOf(segElement);
         for (int j = 0; j < segElement.getChildCount(); j++) {
@@ -78,15 +75,12 @@ public class DocxOutputConverter extends CommonOutputConverter {
    * @param document
    */
   private void fixFormulae(Document document) {
-    Nodes searchResult =
-        document.query(
-            "//mml:math", // $NON-NLS-1$
-            xPathContext);
+    Nodes searchResult = document.query("//mml:math", xPathContext);
     for (int i = 0; i < searchResult.size(); i++) {
       Element mathElement = (Element) searchResult.get(i);
       Element parentElement = (Element) mathElement.getParent();
-      if (!parentElement.getLocalName().equals("formula")) { // $NON-NLS-1$
-        Element formulaElement = new Element("formula", TeiNamespace.TEI.toUri()); // $NON-NLS-1$
+      if (!parentElement.getLocalName().equals("formula")) {
+        Element formulaElement = new Element("formula", TeiNamespace.TEI.toUri());
         parentElement.replaceChild(mathElement, formulaElement);
         formulaElement.appendChild(mathElement.copy());
       }
@@ -94,72 +88,56 @@ public class DocxOutputConverter extends CommonOutputConverter {
   }
 
   private void renameImageDir(Document document) {
-    Nodes searchResult =
-        document.query(
-            "//tei:*[starts-with(@url, 'media/')]", // $NON-NLS-1$
-            xPathContext);
+    Nodes searchResult = document.query("//tei:*[starts-with(@url, 'media/')]", xPathContext);
 
     for (int i = 0; i < searchResult.size(); i++) {
       Element element = (Element) searchResult.get(i);
-      Attribute urlAttr = element.getAttribute("url"); // $NON-NLS-1$
+      Attribute urlAttr = element.getAttribute("url");
       urlAttr.setValue(
           urlAttr
               .getValue()
               .replaceFirst(
-                  Pattern.quote("media/"), // $NON-NLS-1$
+                  Pattern.quote("media/"),
                   PropertyKey.tei_image_location.getValue().substring(1) // skip leading slash
-                      + "/")); // $NON-NLS-1$
+                      + "/"));
     }
   }
 
   private void makeQuotations(Document document) {
-    Nodes searchResult =
-        document.query(
-            "//tei:p[@rend='DH-Quotation']", // $NON-NLS-1$
-            xPathContext);
+    Nodes searchResult = document.query("//tei:p[@rend='DH-Quotation']", xPathContext);
 
     for (int i = 0; i < searchResult.size(); i++) {
       Element element = (Element) searchResult.get(i);
-      element.setLocalName("quote"); // $NON-NLS-1$
-      element.removeAttribute(element.getAttribute("rend")); // $NON-NLS-1$
+      element.setLocalName("quote");
+      element.removeAttribute(element.getAttribute("rend"));
     }
   }
 
   private void removeFrontSection(Document document) {
-    Element frontElement =
-        DocumentUtil.tryFirstMatch(document, "//tei:front", xPathContext); // $NON-NLS-1$
+    Element frontElement = DocumentUtil.tryFirstMatch(document, "//tei:front", xPathContext);
     if (frontElement != null) {
       frontElement.getParent().removeChild(frontElement);
     }
   }
 
   private void cleanupBoldAndItalicsRendition(Document document) {
-    Nodes searchResult =
-        document.query(
-            "//*[@rend='Strong']", // $NON-NLS-1$
-            xPathContext);
+    Nodes searchResult = document.query("//*[@rend='Strong']", xPathContext);
 
     for (int i = 0; i < searchResult.size(); i++) {
       Element element = (Element) searchResult.get(i);
-      element.getAttribute("rend").setValue("bold"); // $NON-NLS-1$ //$NON-NLS-2$
+      element.getAttribute("rend").setValue("bold");
     }
 
-    searchResult =
-        document.query(
-            "//*[@rend='Emphasis']", // $NON-NLS-1$
-            xPathContext);
+    searchResult = document.query("//*[@rend='Emphasis']", xPathContext);
 
     for (int i = 0; i < searchResult.size(); i++) {
       Element element = (Element) searchResult.get(i);
-      element.getAttribute("rend").setValue("italic"); // $NON-NLS-1$ //$NON-NLS-2$
+      element.getAttribute("rend").setValue("italic");
     }
   }
 
   private void cleanupGraphics(Document document) {
-    Nodes searchResult =
-        document.query(
-            "//tei:graphic/tei:desc", // $NON-NLS-1$
-            xPathContext);
+    Nodes searchResult = document.query("//tei:graphic/tei:desc", xPathContext);
 
     for (int i = 0; i < searchResult.size(); i++) {
       Element descElement = (Element) searchResult.get(i);
@@ -168,10 +146,7 @@ public class DocxOutputConverter extends CommonOutputConverter {
   }
 
   private void makeBibliography(Document document, SubmissionLanguage submissionLanguage) {
-    Nodes searchResult =
-        document.query(
-            "//tei:p[@rend='DH-BibliographyHeading']", // $NON-NLS-1$
-            xPathContext);
+    Nodes searchResult = document.query("//tei:p[@rend='DH-BibliographyHeading']", xPathContext);
 
     if (searchResult.size() == 1) {
 
@@ -184,20 +159,19 @@ public class DocxOutputConverter extends CommonOutputConverter {
 
       if (children.size() > startPosition) {
         Element textElement =
-            DocumentUtil.getFirstMatch(document, "/tei:TEI/tei:text", xPathContext); // $NON-NLS-1$
+            DocumentUtil.getFirstMatch(document, "/tei:TEI/tei:text", xPathContext);
 
-        Element backElement = new Element("back", TeiNamespace.TEI.toUri()); // $NON-NLS-1$
+        Element backElement = new Element("back", TeiNamespace.TEI.toUri());
         textElement.appendChild(backElement);
 
-        Element divBibliogrElement = new Element("div", TeiNamespace.TEI.toUri()); // $NON-NLS-1$
-        divBibliogrElement.addAttribute(
-            new Attribute("type", "bibliogr")); // $NON-NLS-1$ //$NON-NLS-2$
+        Element divBibliogrElement = new Element("div", TeiNamespace.TEI.toUri());
+        divBibliogrElement.addAttribute(new Attribute("type", "bibliogr"));
         backElement.appendChild(divBibliogrElement);
 
-        Element listBiblElement = new Element("listBibl", TeiNamespace.TEI.toUri()); // $NON-NLS-1$
+        Element listBiblElement = new Element("listBibl", TeiNamespace.TEI.toUri());
         divBibliogrElement.appendChild(listBiblElement);
 
-        Element listBiblHeadElement = new Element("head", TeiNamespace.TEI.toUri()); // $NON-NLS-1$
+        Element listBiblHeadElement = new Element("head", TeiNamespace.TEI.toUri());
         listBiblHeadElement.appendChild(submissionLanguage.getBibliographyTranslation());
         listBiblElement.appendChild(listBiblHeadElement);
 
@@ -205,7 +179,7 @@ public class DocxOutputConverter extends CommonOutputConverter {
           Element bibEntryParagraphElement = children.get(i);
 
           bibEntryParagraphElement.getParent().removeChild(bibEntryParagraphElement);
-          bibEntryParagraphElement.setLocalName("bibl"); // $NON-NLS-1$
+          bibEntryParagraphElement.setLocalName("bibl");
           listBiblElement.appendChild(bibEntryParagraphElement);
         }
       }
@@ -220,11 +194,11 @@ public class DocxOutputConverter extends CommonOutputConverter {
    * @param document
    */
   private void cleanupParagraphRendAttribute(Document document) {
-    Nodes searchResult = document.query("//tei:p[@rend='DH-Default']", xPathContext); // $NON-NLS-1$
+    Nodes searchResult = document.query("//tei:p[@rend='DH-Default']", xPathContext);
 
     for (int i = 0; i < searchResult.size(); i++) {
       Element paragraphElement = (Element) searchResult.get(i);
-      paragraphElement.removeAttribute(paragraphElement.getAttribute("rend")); // $NON-NLS-1$
+      paragraphElement.removeAttribute(paragraphElement.getAttribute("rend"));
     }
   }
 
@@ -235,24 +209,19 @@ public class DocxOutputConverter extends CommonOutputConverter {
    */
   private void makeChapterAttributes(Document document) {
     Element bodyElement =
-        DocumentUtil.getFirstMatch(
-            document,
-            "/tei:TEI/tei:text/tei:body", // $NON-NLS-1$
-            xPathContext);
+        DocumentUtil.getFirstMatch(document, "/tei:TEI/tei:text/tei:body", xPathContext);
 
     insertChapterAttributes(bodyElement, 1);
   }
 
   private void insertChapterAttributes(Element parentElemnt, int depth) {
 
-    Nodes searchResult = parentElemnt.query("tei:div/tei:head", xPathContext); // $NON-NLS-1$
+    Nodes searchResult = parentElemnt.query("tei:div/tei:head", xPathContext);
 
     for (int i = 0; i < searchResult.size(); i++) {
       Element chapterElement = (Element) searchResult.get(i).getParent();
-      chapterElement.addAttribute(
-          new Attribute("type", "div" + depth)); // $NON-NLS-1$ //$NON-NLS-2$
-      chapterElement.addAttribute(
-          new Attribute("rend", "DH-Heading" + depth)); // $NON-NLS-1$ //$NON-NLS-2$
+      chapterElement.addAttribute(new Attribute("type", "div" + depth));
+      chapterElement.addAttribute(new Attribute("rend", "DH-Heading" + depth));
       insertChapterAttributes(chapterElement, depth + 1);
     }
   }
@@ -261,24 +230,19 @@ public class DocxOutputConverter extends CommonOutputConverter {
 
     Element titleElement =
         DocumentUtil.getFirstMatch(
-            document,
-            "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title", // $NON-NLS-1$
-            xPathContext);
+            document, "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title", xPathContext);
 
-    Nodes subTitleResults =
-        document.query(
-            "//tei:p[@rend='DH-Subtitle']", // $NON-NLS-1$
-            xPathContext);
+    Nodes subTitleResults = document.query("//tei:p[@rend='DH-Subtitle']", xPathContext);
 
     if (subTitleResults.size() > 0) {
       String title = paper.getTitle();
 
       Element titleStmtElement = (Element) titleElement.getParent();
-      Element complexTitle = new Element("title", TeiNamespace.TEI.toUri()); // $NON-NLS-1$
-      complexTitle.addAttribute(new Attribute("type", "full")); // $NON-NLS-1$ //$NON-NLS-2$
+      Element complexTitle = new Element("title", TeiNamespace.TEI.toUri());
+      complexTitle.addAttribute(new Attribute("type", "full"));
       titleStmtElement.insertChild(complexTitle, 0);
 
-      titleElement.addAttribute(new Attribute("type", "main")); // $NON-NLS-1$ //$NON-NLS-2$
+      titleElement.addAttribute(new Attribute("type", "main"));
       titleElement.appendChild(title);
 
       titleElement.getParent().removeChild(titleElement);
@@ -287,8 +251,8 @@ public class DocxOutputConverter extends CommonOutputConverter {
       for (int i = 0; i < subTitleResults.size(); i++) {
         Node subtitleNode = subTitleResults.get(i);
 
-        Element subtitleElement = new Element("title", TeiNamespace.TEI.toUri()); // $NON-NLS-1$
-        subtitleElement.addAttribute(new Attribute("type", "sub")); // $NON-NLS-1$ //$NON-NLS-2$
+        Element subtitleElement = new Element("title", TeiNamespace.TEI.toUri());
+        subtitleElement.addAttribute(new Attribute("type", "sub"));
         subtitleElement.appendChild(subtitleNode.getValue());
         complexTitle.appendChild(subtitleElement);
         subtitleNode.getParent().removeChild(subtitleNode);
@@ -303,8 +267,7 @@ public class DocxOutputConverter extends CommonOutputConverter {
    */
   @Override
   public void convert(ZipResult zipResult) throws IOException {
-    adjustImagePath(
-        zipResult, "media", PropertyKey.tei_image_location.getValue().substring(1)); // $NON-NLS-1$
+    adjustImagePath(zipResult, "media", PropertyKey.tei_image_location.getValue().substring(1));
     super.convert(zipResult);
   }
 }

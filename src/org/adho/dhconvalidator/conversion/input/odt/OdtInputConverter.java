@@ -32,17 +32,14 @@ import org.adho.dhconvalidator.util.DocumentUtil;
 public class OdtInputConverter implements InputConverter {
   /** Namespaces used during conversion. */
   private enum Namespace {
-    STYLE("style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0"), // $NON-NLS-1$ //$NON-NLS-2$
-    TEXT("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0"), // $NON-NLS-1$ //$NON-NLS-2$
-    DC("dc", "http://purl.org/dc/elements/1.1/"), // $NON-NLS-1$ //$NON-NLS-2$
-    OFFICE(
-        "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0"), // $NON-NLS-1$ //$NON-NLS-2$
-    META("meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0"), // $NON-NLS-1$ //$NON-NLS-2$
-    XLINK("xlink", "http://www.w3.org/1999/xlink"), // $NON-NLS-1$ //$NON-NLS-2$
-    DRAW("draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"), // $NON-NLS-1$ //$NON-NLS-2$
-    SVG(
-        "svg",
-        "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"), // $NON-NLS-1$ //$NON-NLS-2$
+    STYLE("style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0"),
+    TEXT("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0"),
+    DC("dc", "http://purl.org/dc/elements/1.1/"),
+    OFFICE("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0"),
+    META("meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0"),
+    XLINK("xlink", "http://www.w3.org/1999/xlink"),
+    DRAW("draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"),
+    SVG("svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"),
     ;
     private String name;
     private String uri;
@@ -61,9 +58,9 @@ public class OdtInputConverter implements InputConverter {
     }
   }
 
-  private static final String TEMPLATE_SUFFIX = ".ott"; // $NON-NLS-1$
-  private static final String CONFTOOLPAPERID_ATTRIBUTENAME = "ConfToolPaperID"; // $NON-NLS-1$
-  private static final String SUBMISSIONLANGUAGE_ATTRIBUTENAME = "SubmissioLanguage"; // $NON-NLS-1$
+  private static final String TEMPLATE_SUFFIX = ".ott";
+  private static final String CONFTOOLPAPERID_ATTRIBUTENAME = "ConfToolPaperID";
+  private static final String SUBMISSIONLANGUAGE_ATTRIBUTENAME = "SubmissioLanguage";
 
   private XPathContext xPathContext;
   private Paper paper; // holds the paper loaded during conversion
@@ -83,7 +80,7 @@ public class OdtInputConverter implements InputConverter {
   public byte[] convert(byte[] sourceData, User user) throws IOException {
     // unzip data
     ZipFs zipFs = new ZipFs(sourceData);
-    Document contentDoc = zipFs.getDocument("content.xml"); // $NON-NLS-1$
+    Document contentDoc = zipFs.getDocument("content.xml");
 
     cleanupParagraphStyles(contentDoc);
     makeHeaderElement(contentDoc);
@@ -92,7 +89,7 @@ public class OdtInputConverter implements InputConverter {
     cleanupFigureDescriptions(contentDoc);
     embedExternalFormulae(contentDoc, zipFs);
 
-    Document metaDoc = zipFs.getDocument("meta.xml"); // $NON-NLS-1$
+    Document metaDoc = zipFs.getDocument("meta.xml");
     Integer paperId = getPaperIdFromMeta(metaDoc);
     paper = PropertyKey.getPaperProviderInstance().getPaper(user, paperId);
     paper.setSubmissionLanguage(getSubmissionLanguageFromMeta(metaDoc));
@@ -100,7 +97,7 @@ public class OdtInputConverter implements InputConverter {
     injectTitleIntoMeta(metaDoc, paper.getTitle());
     injectAuthorsIntoMeta(metaDoc, paper.getAuthorsAndAffiliations());
 
-    zipFs.putDocument("content.xml", contentDoc); // $NON-NLS-1$
+    zipFs.putDocument("content.xml", contentDoc);
     return zipFs.toZipData();
   }
 
@@ -111,8 +108,7 @@ public class OdtInputConverter implements InputConverter {
    * @param contentDoc
    */
   private void cleanupFigureDescriptions(Document contentDoc) {
-    Nodes searchResult =
-        contentDoc.query("//text:p/draw:frame/svg:desc", xPathContext); // $NON-NLS-1$
+    Nodes searchResult = contentDoc.query("//text:p/draw:frame/svg:desc", xPathContext);
 
     for (int i = 0; i < searchResult.size(); i++) {
       Element svgDescElement = (Element) searchResult.get(i);
@@ -128,35 +124,30 @@ public class OdtInputConverter implements InputConverter {
    * @throws IOException
    */
   private void embedExternalFormulae(Document contentDoc, ZipFs zipFs) throws IOException {
-    Nodes searchResult = contentDoc.query("//draw:object", xPathContext); // $NON-NLS-1$
+    Nodes searchResult = contentDoc.query("//draw:object", xPathContext);
 
     for (int i = 0; i < searchResult.size(); i++) {
       Element drawObjectElement = (Element) searchResult.get(i);
       String contentPath =
-          drawObjectElement
-                  .getAttributeValue("href", Namespace.XLINK.toUri())
-                  .substring(2) // $NON-NLS-1$
-              + "/content.xml"; // $NON-NLS-1$
+          drawObjectElement.getAttributeValue("href", Namespace.XLINK.toUri()).substring(2)
+              + "/content.xml";
 
       Element parent = (Element) drawObjectElement.getParent();
 
       Document externalContentDoc = zipFs.getDocument(contentPath);
 
-      if (!externalContentDoc.getRootElement().getLocalName().equals("math")) { // $NON-NLS-1$
+      if (!externalContentDoc.getRootElement().getLocalName().equals("math")) {
         throw new IOException(
             Messages.getString(
-                "OdtInputConverter.matherror", // $NON-NLS-1$
-                externalContentDoc.getRootElement().getLocalName()));
+                "OdtInputConverter.matherror", externalContentDoc.getRootElement().getLocalName()));
       }
 
-      Element drawImageElement =
-          parent.getFirstChildElement("image", Namespace.DRAW.toUri()); // $NON-NLS-1$
+      Element drawImageElement = parent.getFirstChildElement("image", Namespace.DRAW.toUri());
       if (drawImageElement != null) {
         parent.removeChild(drawImageElement);
       }
 
-      Element svgDescElement =
-          parent.getFirstChildElement("desc", Namespace.SVG.toUri()); // $NON-NLS-1$
+      Element svgDescElement = parent.getFirstChildElement("desc", Namespace.SVG.toUri());
       if (svgDescElement != null) {
         parent.removeChild(svgDescElement);
       }
@@ -171,10 +162,7 @@ public class OdtInputConverter implements InputConverter {
    * @throws IOException
    */
   private void makeReferencesChapter(Document contentDoc) throws IOException {
-    Nodes searchResult =
-        contentDoc.query(
-            "//text:section[@text:name='References']", // $NON-NLS-1$
-            xPathContext);
+    Nodes searchResult = contentDoc.query("//text:section[@text:name='References']", xPathContext);
     if (searchResult.size() == 1) {
       Element referencesSectionElement = (Element) searchResult.get(0);
       Element parent = (Element) referencesSectionElement.getParent();
@@ -183,43 +171,34 @@ public class OdtInputConverter implements InputConverter {
       if (position == parent.getChildCount() - 1) {
         parent.removeChild(referencesSectionElement);
       } else { // or make it a proper chapter
-        Element headElement = new Element("text:h", Namespace.TEXT.toUri()); // $NON-NLS-1$
+        Element headElement = new Element("text:h", Namespace.TEXT.toUri());
+        headElement.addAttribute(new Attribute("text:outline-level", Namespace.TEXT.toUri(), "1"));
         headElement.addAttribute(
-            new Attribute(
-                "text:outline-level", Namespace.TEXT.toUri(), "1")); // $NON-NLS-1$ //$NON-NLS-2$
-        headElement.addAttribute(
-            new Attribute(
-                "text:style-name",
-                Namespace.TEXT.toUri(),
-                "DH-BibliographyHeading")); // $NON-NLS-1$ //$NON-NLS-2$
-        headElement.appendChild("Bibliography"); // $NON-NLS-1$
+            new Attribute("text:style-name", Namespace.TEXT.toUri(), "DH-BibliographyHeading"));
+        headElement.appendChild("Bibliography");
         parent.replaceChild(referencesSectionElement, headElement);
       }
     } else {
       throw new IOException(
-          Messages.getString(
-              "OdtInputConverter.sectionerror", searchResult.size())); // $NON-NLS-1$ //$NON-NLS-2$
+          Messages.getString("OdtInputConverter.sectionerror", searchResult.size()));
     }
   }
 
   private void makeHeaderElement(Document contentDoc) {
     Nodes searchResult =
         contentDoc.query(
-            "//office:text/text:p[starts-with(@text:style-name,'DH-Heading')]", // $NON-NLS-1$
-            xPathContext);
+            "//office:text/text:p[starts-with(@text:style-name,'DH-Heading')]", xPathContext);
 
     for (int i = 0; i < searchResult.size(); i++) {
       Element headElement = (Element) searchResult.get(i);
-      String styleName =
-          headElement.getAttributeValue("style-name", Namespace.TEXT.toUri()); // $NON-NLS-1$
+      String styleName = headElement.getAttributeValue("style-name", Namespace.TEXT.toUri());
       Integer level = 1;
-      if (!styleName.equals("DH-Heading")) { // $NON-NLS-1$
-        level = Integer.valueOf(styleName.substring("DH-Heading".length())); // $NON-NLS-1$
+      if (!styleName.equals("DH-Heading")) {
+        level = Integer.valueOf(styleName.substring("DH-Heading".length()));
       }
-      headElement.setLocalName("h"); // $NON-NLS-1$
+      headElement.setLocalName("h");
       headElement.addAttribute(
-          new Attribute(
-              "text:outline-level", Namespace.TEXT.toUri(), level.toString())); // $NON-NLS-1$
+          new Attribute("text:outline-level", Namespace.TEXT.toUri(), level.toString()));
     }
   }
 
@@ -230,71 +209,49 @@ public class OdtInputConverter implements InputConverter {
    */
   private void stripTemplateSections(Document contentDoc) {
     Nodes searchResult =
-        contentDoc.query(
-            "//text:section[@text:name='Authors from ConfTool']", // $NON-NLS-1$
-            xPathContext);
+        contentDoc.query("//text:section[@text:name='Authors from ConfTool']", xPathContext);
     if (searchResult.size() > 0) {
       removeNodes(searchResult);
     }
 
-    searchResult =
-        contentDoc.query(
-            "//text:section[@text:name='Guidelines']", // $NON-NLS-1$
-            xPathContext);
-
-    if (searchResult.size() > 0) {
-      removeNodes(searchResult);
-    }
-
-    searchResult =
-        contentDoc.query(
-            "//text:section[@text:name='Title from ConfTool']", // $NON-NLS-1$
-            xPathContext);
+    searchResult = contentDoc.query("//text:section[@text:name='Guidelines']", xPathContext);
 
     if (searchResult.size() > 0) {
       removeNodes(searchResult);
     }
 
     searchResult =
-        contentDoc.query(
-            "//text:section[@text:name='TitleInfoPre']", // $NON-NLS-1$
-            xPathContext);
+        contentDoc.query("//text:section[@text:name='Title from ConfTool']", xPathContext);
 
     if (searchResult.size() > 0) {
       removeNodes(searchResult);
     }
 
-    searchResult =
-        contentDoc.query(
-            "//text:section[@text:name='TitleInfoPost']", // $NON-NLS-1$
-            xPathContext);
+    searchResult = contentDoc.query("//text:section[@text:name='TitleInfoPre']", xPathContext);
 
     if (searchResult.size() > 0) {
       removeNodes(searchResult);
     }
 
-    searchResult =
-        contentDoc.query(
-            "//text:section[@text:name='AuthorsInfoPre']", // $NON-NLS-1$
-            xPathContext);
+    searchResult = contentDoc.query("//text:section[@text:name='TitleInfoPost']", xPathContext);
 
     if (searchResult.size() > 0) {
       removeNodes(searchResult);
     }
 
-    searchResult =
-        contentDoc.query(
-            "//text:section[@text:name='AuthorsInfoPost']", // $NON-NLS-1$
-            xPathContext);
+    searchResult = contentDoc.query("//text:section[@text:name='AuthorsInfoPre']", xPathContext);
 
     if (searchResult.size() > 0) {
       removeNodes(searchResult);
     }
 
-    searchResult =
-        contentDoc.query(
-            "//text:section[@text:name='EndOfDocInfo']", // $NON-NLS-1$
-            xPathContext);
+    searchResult = contentDoc.query("//text:section[@text:name='AuthorsInfoPost']", xPathContext);
+
+    if (searchResult.size() > 0) {
+      removeNodes(searchResult);
+    }
+
+    searchResult = contentDoc.query("//text:section[@text:name='EndOfDocInfo']", xPathContext);
 
     if (searchResult.size() > 0) {
       removeNodes(searchResult);
@@ -311,25 +268,25 @@ public class OdtInputConverter implements InputConverter {
   private Integer getPaperIdFromMeta(Document metaDoc) throws IOException {
     Nodes searchResult =
         metaDoc.query(
-            "/office:document-meta/office:meta/meta:user-defined[@meta:name='" // $NON-NLS-1$
+            "/office:document-meta/office:meta/meta:user-defined[@meta:name='"
                 + CONFTOOLPAPERID_ATTRIBUTENAME
-                + "']", // $NON-NLS-1$
+                + "']",
             xPathContext);
 
     if (searchResult.size() == 1) {
       Element confToolPaperIdElement = (Element) searchResult.get(0);
       return Integer.valueOf(confToolPaperIdElement.getValue());
     } else {
-      throw new IOException(Messages.getString("OdtInputConverter.invalidmeta")); // $NON-NLS-1$
+      throw new IOException(Messages.getString("OdtInputConverter.invalidmeta"));
     }
   }
 
   private SubmissionLanguage getSubmissionLanguageFromMeta(Document metaDoc) throws IOException {
     Nodes searchResult =
         metaDoc.query(
-            "/office:document-meta/office:meta/meta:user-defined[@meta:name='" // $NON-NLS-1$
+            "/office:document-meta/office:meta/meta:user-defined[@meta:name='"
                 + SUBMISSIONLANGUAGE_ATTRIBUTENAME
-                + "']", // $NON-NLS-1$
+                + "']",
             xPathContext);
 
     if (searchResult.size() == 1) {
@@ -350,32 +307,27 @@ public class OdtInputConverter implements InputConverter {
 
     Nodes styleResult =
         contentDoc.query(
-            "/office:document-content/office:automatic-styles/style:style[@style:family='paragraph']", // $NON-NLS-1$
+            "/office:document-content/office:automatic-styles/style:style[@style:family='paragraph']",
             xPathContext);
 
     for (int i = 0; i < styleResult.size(); i++) {
       Element styleNode = (Element) styleResult.get(i);
-      String adhocName =
-          styleNode.getAttributeValue("name", Namespace.STYLE.toUri()); // $NON-NLS-1$
+      String adhocName = styleNode.getAttributeValue("name", Namespace.STYLE.toUri());
       String definedName =
-          styleNode.getAttributeValue("parent-style-name", Namespace.STYLE.toUri()); // $NON-NLS-1$
+          styleNode.getAttributeValue("parent-style-name", Namespace.STYLE.toUri());
       paragraphStyleMapping.put(adhocName, definedName);
     }
 
     Nodes textResult =
-        contentDoc.query(
-            "/office:document-content/office:body/office:text/text:*", xPathContext); // $NON-NLS-1$
+        contentDoc.query("/office:document-content/office:body/office:text/text:*", xPathContext);
 
     for (int i = 0; i < textResult.size(); i++) {
       Element textNode = (Element) textResult.get(i);
-      String styleName =
-          textNode.getAttributeValue("style-name", Namespace.TEXT.toUri()); // $NON-NLS-1$
+      String styleName = textNode.getAttributeValue("style-name", Namespace.TEXT.toUri());
       if (styleName != null) {
         String definedName = paragraphStyleMapping.get(styleName);
         if (definedName != null) {
-          textNode
-              .getAttribute("style-name", Namespace.TEXT.toUri())
-              .setValue(definedName); // $NON-NLS-1$
+          textNode.getAttribute("style-name", Namespace.TEXT.toUri()).setValue(definedName);
         }
       }
     }
@@ -389,20 +341,20 @@ public class OdtInputConverter implements InputConverter {
     String templateFile = submissionLanguage.getTemplatePropertyKey().getValue() + TEMPLATE_SUFFIX;
     ZipFs zipFs =
         new ZipFs(Thread.currentThread().getContextClassLoader().getResourceAsStream(templateFile));
-    Document contentDoc = zipFs.getDocument("content.xml"); // $NON-NLS-1$
+    Document contentDoc = zipFs.getDocument("content.xml");
 
     injectTitleIntoContent(contentDoc, paper.getTitle());
     injectAuthorsIntoContent(contentDoc, paper.getAuthorsAndAffiliations());
     updateLinkToConverter(contentDoc, PropertyKey.base_url.getValue());
 
-    zipFs.putDocument("content.xml", contentDoc); // $NON-NLS-1$
+    zipFs.putDocument("content.xml", contentDoc);
 
-    Document metaDoc = zipFs.getDocument("meta.xml"); // $NON-NLS-1$
+    Document metaDoc = zipFs.getDocument("meta.xml");
     injectTitleIntoMeta(metaDoc, paper.getTitle());
     injectAuthorsIntoMeta(metaDoc, paper.getAuthorsAndAffiliations());
     injectPaperIdIntoMeta(metaDoc, paper.getPaperId());
     injectSubmissionLanguageIntoMeta(metaDoc, submissionLanguage);
-    zipFs.putDocument("meta.xml", metaDoc); // $NON-NLS-1$
+    zipFs.putDocument("meta.xml", metaDoc);
 
     return zipFs.toZipData();
   }
@@ -414,12 +366,9 @@ public class OdtInputConverter implements InputConverter {
             "//text:a[starts-with(@xlink:href, 'http://localhost:8080/dhconvalidator')]",
             xPathContext);
 
-    Attribute targetAttr =
-        converterLinkElement.getAttribute("href", Namespace.XLINK.toUri()); // $NON-NLS-1$
+    Attribute targetAttr = converterLinkElement.getAttribute("href", Namespace.XLINK.toUri());
     targetAttr.setValue(
-        targetAttr
-            .getValue()
-            .replace("http://localhost:8080/dhconvalidator/", baseURL)); // $NON-NLS-1$
+        targetAttr.getValue().replace("http://localhost:8080/dhconvalidator/", baseURL));
   }
 
   /**
@@ -431,9 +380,9 @@ public class OdtInputConverter implements InputConverter {
   private void injectPaperIdIntoMeta(Document metaDoc, Integer paperId) {
     Nodes searchResult =
         metaDoc.query(
-            "/office:document-meta/office:meta/meta:user-defined[@meta:name='" // $NON-NLS-1$
+            "/office:document-meta/office:meta/meta:user-defined[@meta:name='"
                 + CONFTOOLPAPERID_ATTRIBUTENAME
-                + "']", // $NON-NLS-1$
+                + "']",
             xPathContext);
 
     if (searchResult.size() != 0) {
@@ -443,17 +392,13 @@ public class OdtInputConverter implements InputConverter {
       }
     }
 
-    Element confToolPaperIdElement =
-        new Element("meta:user-defined", Namespace.META.toUri()); // $NON-NLS-1$
+    Element confToolPaperIdElement = new Element("meta:user-defined", Namespace.META.toUri());
     confToolPaperIdElement.addAttribute(
-        new Attribute(
-            "meta:name", Namespace.META.toUri(), CONFTOOLPAPERID_ATTRIBUTENAME)); // $NON-NLS-1$
+        new Attribute("meta:name", Namespace.META.toUri(), CONFTOOLPAPERID_ATTRIBUTENAME));
     confToolPaperIdElement.appendChild(String.valueOf(paperId));
 
     Element metaElement =
-        metaDoc
-            .getRootElement()
-            .getFirstChildElement("meta", Namespace.OFFICE.toUri()); // $NON-NLS-1$
+        metaDoc.getRootElement().getFirstChildElement("meta", Namespace.OFFICE.toUri());
     metaElement.appendChild(confToolPaperIdElement);
   }
 
@@ -467,9 +412,9 @@ public class OdtInputConverter implements InputConverter {
       Document metaDoc, SubmissionLanguage submissionLanguage) {
     Nodes searchResult =
         metaDoc.query(
-            "/office:document-meta/office:meta/meta:user-defined[@meta:name='" // $NON-NLS-1$
+            "/office:document-meta/office:meta/meta:user-defined[@meta:name='"
                 + SUBMISSIONLANGUAGE_ATTRIBUTENAME
-                + "']", // $NON-NLS-1$
+                + "']",
             xPathContext);
 
     if (searchResult.size() != 0) {
@@ -479,17 +424,13 @@ public class OdtInputConverter implements InputConverter {
       }
     }
 
-    Element submissionLanguageElement =
-        new Element("meta:user-defined", Namespace.META.toUri()); // $NON-NLS-1$
+    Element submissionLanguageElement = new Element("meta:user-defined", Namespace.META.toUri());
     submissionLanguageElement.addAttribute(
-        new Attribute(
-            "meta:name", Namespace.META.toUri(), SUBMISSIONLANGUAGE_ATTRIBUTENAME)); // $NON-NLS-1$
+        new Attribute("meta:name", Namespace.META.toUri(), SUBMISSIONLANGUAGE_ATTRIBUTENAME));
     submissionLanguageElement.appendChild(submissionLanguage.name());
 
     Element metaElement =
-        metaDoc
-            .getRootElement()
-            .getFirstChildElement("meta", Namespace.OFFICE.toUri()); // $NON-NLS-1$
+        metaDoc.getRootElement().getFirstChildElement("meta", Namespace.OFFICE.toUri());
     metaElement.appendChild(submissionLanguageElement);
   }
   /**
@@ -500,41 +441,34 @@ public class OdtInputConverter implements InputConverter {
    */
   private void injectAuthorsIntoMeta(Document metaDoc, List<User> authorsAndAffiliations) {
     Nodes searchResult =
-        metaDoc.query(
-            "/office:document-meta/office:meta/meta:initial-creator", // $NON-NLS-1$
-            xPathContext);
+        metaDoc.query("/office:document-meta/office:meta/meta:initial-creator", xPathContext);
     Element initialCreatorElement = null;
     if (searchResult.size() > 0) {
       initialCreatorElement = (Element) searchResult.get(0);
 
     } else {
-      initialCreatorElement =
-          new Element("meta:initial-creator", Namespace.META.toUri()); // $NON-NLS-1$
+      initialCreatorElement = new Element("meta:initial-creator", Namespace.META.toUri());
       Element metaElement =
-          metaDoc
-              .getRootElement()
-              .getFirstChildElement("meta", Namespace.OFFICE.toUri()); // $NON-NLS-1$
+          metaDoc.getRootElement().getFirstChildElement("meta", Namespace.OFFICE.toUri());
       metaElement.appendChild(initialCreatorElement);
     }
 
     initialCreatorElement.removeChildren();
     StringBuilder builder = new StringBuilder();
-    String conc = ""; // $NON-NLS-1$
+    String conc = "";
     for (User authorAffiliation : authorsAndAffiliations) {
       builder.append(conc);
       builder.append(authorAffiliation.getFirstName() + " " + authorAffiliation.getLastName());
-      builder.append(" ("); // $NON-NLS-1$
+      builder.append(" (");
       builder.append(authorAffiliation.getEmail());
       builder.append("), ");
       builder.append(authorAffiliation.getOrganizations());
-      conc = "; "; // $NON-NLS-1$
+      conc = "; ";
     }
     initialCreatorElement.appendChild(builder.toString());
 
     Nodes creatorSearchResult =
-        metaDoc.query(
-            "/office:document-meta/office:meta/dc:creator", // $NON-NLS-1$
-            xPathContext);
+        metaDoc.query("/office:document-meta/office:meta/dc:creator", xPathContext);
     if (creatorSearchResult.size() > 0) {
       creatorSearchResult.get(0).getParent().removeChild(creatorSearchResult.get(0));
     }
@@ -547,20 +481,15 @@ public class OdtInputConverter implements InputConverter {
    * @param title
    */
   private void injectTitleIntoMeta(Document metaDoc, String title) {
-    Nodes searchResult =
-        metaDoc.query(
-            "/office:document-meta/office:meta/dc:title", // $NON-NLS-1$
-            xPathContext);
+    Nodes searchResult = metaDoc.query("/office:document-meta/office:meta/dc:title", xPathContext);
     Element titleElement = null;
     if (searchResult.size() > 0) {
       titleElement = (Element) searchResult.get(0);
 
     } else {
-      titleElement = new Element("dc:title", Namespace.DC.toUri()); // $NON-NLS-1$
+      titleElement = new Element("dc:title", Namespace.DC.toUri());
       Element metaElement =
-          metaDoc
-              .getRootElement()
-              .getFirstChildElement("meta", Namespace.OFFICE.toUri()); // $NON-NLS-1$
+          metaDoc.getRootElement().getFirstChildElement("meta", Namespace.OFFICE.toUri());
       metaElement.appendChild(titleElement);
     }
     titleElement.removeChildren();
@@ -577,40 +506,34 @@ public class OdtInputConverter implements InputConverter {
   private void injectAuthorsIntoContent(Document contentDoc, List<User> authorsAndAffiliations)
       throws IOException {
     Nodes searchResult =
-        contentDoc.query(
-            "//text:section[@text:name='Authors from ConfTool']", // $NON-NLS-1$
-            xPathContext);
+        contentDoc.query("//text:section[@text:name='Authors from ConfTool']", xPathContext);
 
     if (searchResult.size() != 1) {
       throw new IOException(
-          Messages.getString(
-              "OdtInputConverter.sectionerror2", // $NON-NLS-1$
-              searchResult.size()));
+          Messages.getString("OdtInputConverter.sectionerror2", searchResult.size()));
     }
 
     if (!(searchResult.get(0) instanceof Element)) {
-      throw new IllegalStateException(
-          Messages.getString("OdtInputConverter.sectionerror3")); // $NON-NLS-1$
+      throw new IllegalStateException(Messages.getString("OdtInputConverter.sectionerror3"));
     }
 
     Element authorSectionElement = (Element) searchResult.get(0);
 
     authorSectionElement.removeChildren();
     for (User authorAffiliation : authorsAndAffiliations) {
-      Element authorParagraphElement = new Element("p", Namespace.TEXT.toUri()); // $NON-NLS-1$
+      Element authorParagraphElement = new Element("p", Namespace.TEXT.toUri());
       authorSectionElement.appendChild(authorParagraphElement);
       authorParagraphElement.appendChild(
           authorAffiliation.getFirstName()
               + " "
-              + authorAffiliation.getLastName() // $NON-NLS-1$
+              + authorAffiliation.getLastName()
               + " ("
               + authorAffiliation.getEmail()
               + ")"
-              + ", " // $NON-NLS-1$
+              + ", "
               + authorAffiliation.getOrganizations());
       authorParagraphElement.addAttribute(
-          new Attribute(
-              "text:style-name", Namespace.TEXT.toUri(), "P6")); // $NON-NLS-1$ //$NON-NLS-2$
+          new Attribute("text:style-name", Namespace.TEXT.toUri(), "P6"));
     }
   }
 
@@ -623,31 +546,25 @@ public class OdtInputConverter implements InputConverter {
    */
   private void injectTitleIntoContent(Document contentDoc, String title) throws IOException {
     Nodes searchResult =
-        contentDoc.query(
-            "//text:section[@text:name='Title from ConfTool']", // $NON-NLS-1$
-            xPathContext);
+        contentDoc.query("//text:section[@text:name='Title from ConfTool']", xPathContext);
 
     if (searchResult.size() != 1) {
       throw new IOException(
-          Messages.getString(
-              "OdtInputConverter.titleerror", // $NON-NLS-1$
-              searchResult.size()));
+          Messages.getString("OdtInputConverter.titleerror", searchResult.size()));
     }
 
     if (!(searchResult.get(0) instanceof Element)) {
-      throw new IllegalStateException(
-          Messages.getString("OdtInputConverter.titleerror2")); // $NON-NLS-1$
+      throw new IllegalStateException(Messages.getString("OdtInputConverter.titleerror2"));
     }
 
     Element titleSectionElement = (Element) searchResult.get(0);
 
     titleSectionElement.removeChildren();
-    Element titleParagraphElement = new Element("p", Namespace.TEXT.toUri()); // $NON-NLS-1$
+    Element titleParagraphElement = new Element("p", Namespace.TEXT.toUri());
     titleSectionElement.appendChild(titleParagraphElement);
     titleParagraphElement.appendChild(title);
     titleParagraphElement.addAttribute(
-        new Attribute(
-            "text:style-name", Namespace.TEXT.toUri(), "P1")); // $NON-NLS-1$ //$NON-NLS-2$
+        new Attribute("text:style-name", Namespace.TEXT.toUri(), "P1"));
   }
 
   /* (non-Javadoc)

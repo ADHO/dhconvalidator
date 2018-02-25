@@ -28,7 +28,7 @@ public class HeaderPanel extends HorizontalLayout {
   private void initComponents(ServicesViewName backstepService) {
     setSpacing(true);
 
-    setWidth("100%"); // $NON-NLS-1$
+    setWidth("100%");
 
     backLink = new BackLink(backstepService);
     addComponent(backLink);

@@ -30,16 +30,13 @@ class DocumentToUserMapper {
 
     Logger.getLogger(DocumentToUserMapper.class.getName())
         .warning(
-            Messages.getString(
-                "DocumentToUserMapper.warning", // $NON-NLS-1$
-                users.size(),
-                document.toString()));
+            Messages.getString("DocumentToUserMapper.warning", users.size(), document.toString()));
 
     return null;
   }
 
   public List<User> getUsers(Document document) {
-    Elements userElements = document.getRootElement().getChildElements("user"); // $NON-NLS-1$
+    Elements userElements = document.getRootElement().getChildElements("user");
     ArrayList<User> result = new ArrayList<>();
 
     for (int i = 0; i < userElements.size(); i++) {
@@ -50,8 +47,7 @@ class DocumentToUserMapper {
   }
 
   public List<User> getSubmittingAuthors(Document document) {
-    Elements userElements =
-        document.getRootElement().getChildElements("subsumed_author"); // $NON-NLS-1$
+    Elements userElements = document.getRootElement().getChildElements("subsumed_author");
     ArrayList<User> result = new ArrayList<>();
 
     for (int i = 0; i < userElements.size(); i++) {
@@ -65,24 +61,23 @@ class DocumentToUserMapper {
   }
 
   private User getUser(Element userElement) {
-    Integer userId =
-        Integer.valueOf(userElement.getFirstChildElement("personID").getValue()); // $NON-NLS-1$
-    String firstName = userElement.getFirstChildElement("firstname").getValue(); // $NON-NLS-1$
-    String lastName = userElement.getFirstChildElement("name").getValue(); // $NON-NLS-1$
-    String email = userElement.getFirstChildElement("email").getValue(); // $NON-NLS-1$
-    String statusList = userElement.getFirstChildElement("status").getValue(); // $NON-NLS-1$
+    Integer userId = Integer.valueOf(userElement.getFirstChildElement("personID").getValue());
+    String firstName = userElement.getFirstChildElement("firstname").getValue();
+    String lastName = userElement.getFirstChildElement("name").getValue();
+    String email = userElement.getFirstChildElement("email").getValue();
+    String statusList = userElement.getFirstChildElement("status").getValue();
 
     return new User(
         userId,
         firstName,
         lastName,
         email,
-        statusList.contains("admin") // $NON-NLS-1$
-            || email.equals(PropertyKey.developeradmin.getValue("not set"))); // $NON-NLS-1$
+        statusList.contains("admin")
+            || email.equals(PropertyKey.developeradmin.getValue("not set")));
   }
 
   private User getSubmittingAuthor(Element userElement) {
-    String userIdValue = userElement.getFirstChildElement("personID").getValue(); // $NON-NLS-1$
+    String userIdValue = userElement.getFirstChildElement("personID").getValue();
     // is this author also a ConfTool user with ID?
     if ((userIdValue == null) || userIdValue.isEmpty()) {
       return null; // no, so skip this one
@@ -91,12 +86,11 @@ class DocumentToUserMapper {
     userIdValue = userIdValue.replaceAll("\\D", ""); // the ID contains comments sometimes...
 
     Integer userId = Integer.valueOf(userIdValue);
-    String firstName = userElement.getFirstChildElement("firstname").getValue(); // $NON-NLS-1$
-    String lastName = userElement.getFirstChildElement("lastname").getValue(); // $NON-NLS-1$
-    String email = userElement.getFirstChildElement("email").getValue(); // $NON-NLS-1$
+    String firstName = userElement.getFirstChildElement("firstname").getValue();
+    String lastName = userElement.getFirstChildElement("lastname").getValue();
+    String email = userElement.getFirstChildElement("email").getValue();
 
-    String numberOfSubmissionsValue =
-        userElement.getFirstChildElement("submitter_of").getValue(); // $NON-NLS-1$
+    String numberOfSubmissionsValue = userElement.getFirstChildElement("submitter_of").getValue();
 
     if ((numberOfSubmissionsValue == null)
         || numberOfSubmissionsValue.isEmpty()

@@ -43,7 +43,7 @@ public class CenterPanel extends VerticalLayout {
       headerPanel = new HeaderPanel(backstepService);
       center.addComponent(headerPanel);
       Label title = new Label(getTitle());
-      title.addStyleName("title-caption"); // $NON-NLS-1$
+      title.addStyleName("title-caption");
       center.addComponent(title);
       center.setComponentAlignment(title, Alignment.TOP_LEFT);
     }
@@ -67,6 +67,6 @@ public class CenterPanel extends VerticalLayout {
   }
 
   protected String getTitle() {
-    return Messages.getString("CenterPanel.title"); // $NON-NLS-1$
+    return Messages.getString("CenterPanel.title");
   }
 }

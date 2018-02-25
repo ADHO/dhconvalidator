@@ -24,12 +24,11 @@ class DocumentToPaperMapper {
 
     List<Paper> result = new ArrayList<>();
 
-    Elements paperElements = document.getRootElement().getChildElements("paper"); // $NON-NLS-1$
+    Elements paperElements = document.getRootElement().getChildElements("paper");
 
     for (int i = 0; i < paperElements.size(); i++) {
       Element paperElement = paperElements.get(i);
-      Integer paperId =
-          Integer.valueOf(paperElement.getFirstChildElement("paperID").getValue()); // $NON-NLS-1$
+      Integer paperId = Integer.valueOf(paperElement.getFirstChildElement("paperID").getValue());
 
       List<User> authors = Lists.newArrayList();
 
@@ -38,19 +37,19 @@ class DocumentToPaperMapper {
 
       while ((authorsNameElement =
               paperElement.getFirstChildElement("authors_formatted_" + authorIndex + "_name"))
-          != null) { // $NON-NLS-1$ //$NON-NLS-2$
+          != null) {
         String name = authorsNameElement.getValue();
 
         if ((name != null) && (!name.isEmpty())) { // ConfTool sometimes reports empty authors...
           String organisations =
               paperElement
                   .getFirstChildElement("authors_formatted_" + authorIndex + "_organisation")
-                  .getValue(); // $NON-NLS-1$ //$NON-NLS-2$
+                  .getValue();
 
           String email =
               paperElement
                   .getFirstChildElement("authors_formatted_" + authorIndex + "_email")
-                  .getValue(); // $NON-NLS-1$ //$NON-NLS-2$
+                  .getValue();
 
           String firstname = "";
 
@@ -67,11 +66,10 @@ class DocumentToPaperMapper {
         authorIndex++;
       }
 
-      String title = paperElement.getFirstChildElement("title").getValue(); // $NON-NLS-1$
-      String keywords = paperElement.getFirstChildElement("keywords").getValue(); // $NON-NLS-1$
-      String topics = paperElement.getFirstChildElement("topics").getValue(); // $NON-NLS-1$
-      String contributionType =
-          paperElement.getFirstChildElement("contribution_type").getValue(); // $NON-NLS-1$
+      String title = paperElement.getFirstChildElement("title").getValue();
+      String keywords = paperElement.getFirstChildElement("keywords").getValue();
+      String topics = paperElement.getFirstChildElement("topics").getValue();
+      String contributionType = paperElement.getFirstChildElement("contribution_type").getValue();
 
       result.add(new Paper(paperId, title, authors, keywords, topics, contributionType));
     }

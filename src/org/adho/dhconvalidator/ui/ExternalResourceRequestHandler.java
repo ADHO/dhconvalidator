@@ -33,7 +33,7 @@ final class ExternalResourceRequestHandler implements RequestHandler {
             Thread.currentThread()
                 .getContextClassLoader()
                 .getResourceAsStream(
-                    "/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.dhc")); // $NON-NLS-1$
+                    "/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.dhc"));
     this.examplePictureName =
         exampleZipResult
             .getExternalResourcePathsStartsWith(
@@ -47,7 +47,7 @@ final class ExternalResourceRequestHandler implements RequestHandler {
       VaadinSession session, VaadinRequest request, VaadinResponse response) throws IOException {
 
     // does the request concern us?
-    if (request.getPathInfo().startsWith("/popup" + imagePath)) { // $NON-NLS-1$
+    if (request.getPathInfo().startsWith("/popup" + imagePath)) {
       ZipResult zipResult =
           (ZipResult) VaadinSession.getCurrent().getAttribute(SessionStorageKey.ZIPRESULT.name());
       // if this is about the example picture we use the example ZipResult
@@ -64,7 +64,7 @@ final class ExternalResourceRequestHandler implements RequestHandler {
         } else {
           throw new IOException(
               Messages.getString(
-                  "ExternalResourceRequestHandler.resourceNotFound", // $NON-NLS-1$
+                  "ExternalResourceRequestHandler.resourceNotFound",
                   request.getPathInfo().substring(PATH_PREFIX_LENGTH)));
         }
       }

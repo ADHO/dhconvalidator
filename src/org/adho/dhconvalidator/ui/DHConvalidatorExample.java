@@ -50,7 +50,7 @@ public class DHConvalidatorExample extends UI {
 
       // prepare downloader for input file
       Button btGetInputfile =
-          new Button(Messages.getString("DHConvalidatorExample.btInputCaption")); // $NON-NLS-1$
+          new Button(Messages.getString("DHConvalidatorExample.btInputCaption"));
       content.addComponent(btGetInputfile);
 
       FileDownloader inputFileDownloader =
@@ -63,16 +63,15 @@ public class DHConvalidatorExample extends UI {
                       return Thread.currentThread()
                           .getContextClassLoader()
                           .getResourceAsStream(
-                              "/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.odt"); // $NON-NLS-1$
+                              "/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.odt");
                     }
                   },
-                  "1_Digital_Humanities.odt")); // $NON-NLS-1$
+                  "1_Digital_Humanities.odt"));
       inputFileDownloader.extend(btGetInputfile);
 
       // prepare downloader for output file
       Button btGetOutputfile =
-          new Button(
-              Messages.getString("DHConvalidatorExample.btConversionResultCaption")); // $NON-NLS-1$
+          new Button(Messages.getString("DHConvalidatorExample.btConversionResultCaption"));
       content.addComponent(btGetOutputfile);
 
       FileDownloader outputFileDownloader =
@@ -85,16 +84,16 @@ public class DHConvalidatorExample extends UI {
                       return Thread.currentThread()
                           .getContextClassLoader()
                           .getResourceAsStream(
-                              "/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.dhc"); // $NON-NLS-1$
+                              "/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.dhc");
                     }
                   },
-                  "1_Digital_Humanities.dhc")); // $NON-NLS-1$
+                  "1_Digital_Humanities.dhc"));
       outputFileDownloader.extend(btGetOutputfile);
 
       // setup visual feedback
-      Label preview = new Label("", ContentMode.HTML); // $NON-NLS-1$
-      preview.addStyleName("tei-preview"); // $NON-NLS-1$
-      preview.setWidth("800px"); // $NON-NLS-1$
+      Label preview = new Label("", ContentMode.HTML);
+      preview.addStyleName("tei-preview");
+      preview.setWidth("800px");
 
       content.addComponent(preview);
       content.setComponentAlignment(preview, Alignment.MIDDLE_CENTER);
@@ -105,12 +104,12 @@ public class DHConvalidatorExample extends UI {
           Thread.currentThread()
               .getContextClassLoader()
               .getResourceAsStream(
-                  "/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.html"), // $NON-NLS-1$
+                  "/org/adho/dhconvalidator/conversion/example/1_Digital_Humanities.html"),
           buffer);
 
-      preview.setValue(buffer.toString("UTF-8")); // $NON-NLS-1$
+      preview.setValue(buffer.toString("UTF-8"));
 
-      Page.getCurrent().setTitle(Messages.getString("DHConvalidatorExample.title")); // $NON-NLS-1$
+      Page.getCurrent().setTitle(Messages.getString("DHConvalidatorExample.title"));
     } catch (Exception e) {
       e.printStackTrace();
     }
