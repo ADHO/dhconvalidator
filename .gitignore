@@ -4,4 +4,5 @@
 /WebContent/WEB-INF/classes/
 /build/
 /deploy/
+/dhconv.war
 /testdata/
