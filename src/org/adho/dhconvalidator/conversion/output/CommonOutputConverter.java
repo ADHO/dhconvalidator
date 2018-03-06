@@ -54,6 +54,20 @@ public class CommonOutputConverter implements OutputConverter {
     makeFigureHead(document);
     removeRevisions(document);
     adjustTableHeads(document);
+    normalizeTitle(document);
+  }
+
+  private void normalizeTitle(Document document) {
+    String titleXpath = "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title";
+    Nodes titles = document.query(titleXpath, xPathContext);
+    if (titles.size() == 0) {
+      return;
+    }
+    Node title = titles.get(0);
+    String titleString = title.getValue().replaceAll("\n", " ").trim();
+    Element newTitle = new Element("title", xPathContext.lookup("tei"));
+    newTitle.appendChild(titleString);
+    title.getParent().replaceChild(title, newTitle);
   }
 
   private void adjustTableHeads(Document document) {
@@ -338,3 +352,4 @@ public class CommonOutputConverter implements OutputConverter {
     }
   }
 }
+
