@@ -321,7 +321,7 @@ public class CommonOutputConverter implements OutputConverter {
 
     List<String> externalPicturesPaths =
         zipResult.getExternalResourcePathsStartsWith(
-            PropertyKey.tei_image_location.getValue().substring(1)); // strip leading slash
+            PropertyKey.tei_image_location.getValue().substring(1));
     if (!externalPicturesPaths.isEmpty()) {
       int minWidth = Integer.valueOf(PropertyKey.image_min_resolution_width.getValue());
       int minHeight = Integer.valueOf(PropertyKey.image_min_resolution_height.getValue());
@@ -345,6 +345,7 @@ public class CommonOutputConverter implements OutputConverter {
     }
   }
 
+
   /**
    * Moves images from one location to another.
    *
@@ -353,13 +354,13 @@ public class CommonOutputConverter implements OutputConverter {
    * @param newPathPart
    */
   protected void adjustImagePath(ZipResult zipResult, String oldPathPart, String newPathPart) {
-    if (!oldPathPart.equals(newPathPart)) {
-      List<String> externalResourceNames =
-          zipResult.getExternalResourcePathsStartsWith(oldPathPart);
-      for (String oldName : externalResourceNames) {
-        zipResult.moveExternalResource(
-            oldName, oldName.replaceFirst(Pattern.quote(oldPathPart), newPathPart));
-      }
+    if (oldPathPart.equals(newPathPart)) {
+      return;
+    }
+    List<String> externalResourceNames = zipResult.getExternalResourcePathsStartsWith(oldPathPart);
+    for (String oldName : externalResourceNames) {
+      String newName = oldName.replaceFirst(Pattern.quote(oldPathPart), newPathPart);
+      zipResult.moveExternalResource(oldName, newName);
     }
   }
 }
