@@ -55,15 +55,26 @@ public class CommonOutputConverter implements OutputConverter {
     removeRevisions(document);
     adjustTableHeads(document);
     normalizeTitle(document);
+    removeRendAttr(document);
+  }
+
+  private void removeRendAttr(Document document) {
+    String xpath = "//*[@rend]";
+    Nodes nodes = document.query(xpath, xPathContext);
+    for (int i = 0; i < nodes.size(); i++) {
+      Element element = (Element) nodes.get(i);
+      Attribute rend = element.getAttribute("rend");
+      element.removeAttribute(rend);
+    }
   }
 
   private void normalizeTitle(Document document) {
-    String titleXpath = "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title";
-    Nodes titles = document.query(titleXpath, xPathContext);
-    if (titles.size() == 0) {
+    String xpath = "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title";
+    Nodes nodes = document.query(xpath, xPathContext);
+    if (nodes.size() == 0) {
       return;
     }
-    Node title = titles.get(0);
+    Node title = nodes.get(0);
     String titleString = title.getValue().replaceAll("\n", " ").trim();
     Element newTitle = new Element("title", xPathContext.lookup("tei"));
     newTitle.appendChild(titleString);
