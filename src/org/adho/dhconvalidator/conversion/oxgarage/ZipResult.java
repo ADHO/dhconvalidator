@@ -34,23 +34,23 @@ public class ZipResult {
   private String documentName;
 
   /**
-   * @param is the source to read from (zipped input stream)
+   * @param inputStream the source to read from (zipped input stream)
    * @throws IOException in case of any failure
    */
-  public ZipResult(InputStream is) throws IOException {
-    this(is, null);
+  public ZipResult(InputStream inputStream) throws IOException {
+    this(inputStream, null);
   }
 
   /**
-   * @param is the source to read from (zipped input stream)
+   * @param inputStream the source to read from (zipped input stream)
    * @param documentName the name that should be used for the TEI file.
    * @throws IOException in case of any failure
    */
-  public ZipResult(InputStream is, String documentName) throws IOException {
+  public ZipResult(InputStream inputStream, String documentName) throws IOException {
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    IOUtils.copy(is, buffer);
+    IOUtils.copy(inputStream, buffer);
 
-    externalResources = new HashMap<String, byte[]>();
+    this.externalResources = new HashMap<String, byte[]>();
     if (isZipFile(buffer)) { // is the source a ZIP file or ...
       extractZipFile(buffer);
     } else { // ... do we have a single file?
@@ -63,11 +63,11 @@ public class ZipResult {
 
   /** @return the TEI document */
   public Document getDocument() {
-    return document;
+    return this.document;
   }
 
   public String getDocumentName() {
-    return documentName;
+    return this.documentName;
   }
 
   /**
@@ -75,7 +75,7 @@ public class ZipResult {
    * @return the resource data
    */
   public byte[] getExternalResource(String resourceKey) {
-    return externalResources.get(resourceKey);
+    return this.externalResources.get(resourceKey);
   }
 
   /**
@@ -84,7 +84,7 @@ public class ZipResult {
    */
   public List<String> getExternalResourcePathsStartsWith(String pathPart) {
     ArrayList<String> result = new ArrayList<>();
-    for (String path : externalResources.keySet()) {
+    for (String path : this.externalResources.keySet()) {
       if (path.startsWith(pathPart)) {
         result.add(path);
       }
@@ -99,7 +99,7 @@ public class ZipResult {
    * @param data
    */
   public void putExternalResource(String path, byte[] data) {
-    externalResources.put(path, data);
+    this.externalResources.put(path, data);
   }
 
   /**
@@ -109,7 +109,7 @@ public class ZipResult {
    * @param newResourceKey
    */
   public void moveExternalResource(String oldResourceKey, String newResourceKey) {
-    externalResources.put(newResourceKey, externalResources.remove(oldResourceKey));
+    this.externalResources.put(newResourceKey, externalResources.remove(oldResourceKey));
   }
 
   /**
@@ -125,17 +125,16 @@ public class ZipResult {
       zipOutputStream.putNextEntry(docEntry);
       Serializer serializer = new Serializer(zipOutputStream);
       serializer.setIndent(4);
-      serializer.write(document);
+      serializer.write(this.document);
       zipOutputStream.closeEntry();
 
-      for (Map.Entry<String, byte[]> entry : externalResources.entrySet()) {
+      for (Map.Entry<String, byte[]> entry : this.externalResources.entrySet()) {
         ZipEntry extResourceEntry = new ZipEntry(entry.getKey());
         zipOutputStream.putNextEntry(extResourceEntry);
         zipOutputStream.write(entry.getValue());
         zipOutputStream.closeEntry();
       }
     }
-
     return bos.toByteArray();
   }
 
