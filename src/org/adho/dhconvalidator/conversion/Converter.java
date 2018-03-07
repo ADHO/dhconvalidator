@@ -158,10 +158,10 @@ public class Converter {
     DocumentLog.logConversionStepOutput(Messages.getString("Converter.log3"), contentAsXhtml);
 
     // add the HTML to the result
-    zipResult.putResource(computedFilename + ".html", contentAsXhtml.getBytes("UTF-8"));
+    zipResult.putExternalResource(computedFilename + ".html", contentAsXhtml.getBytes("UTF-8"));
 
     // add original input file to the result
-    zipResult.putResource(computedFilename + "." + inputFilenameExtension, sourceData);
+    zipResult.putExternalResource(computedFilename + "." + inputFilenameExtension, sourceData);
 
     return zipResult;
   }
@@ -284,3 +284,4 @@ public class Converter {
     return contentAsXhtml;
   }
 }
+

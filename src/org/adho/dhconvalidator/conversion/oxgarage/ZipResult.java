@@ -98,7 +98,7 @@ public class ZipResult {
    * @param path path+name
    * @param data
    */
-  public void putResource(String path, byte[] data) {
+  public void putExternalResource(String path, byte[] data) {
     externalResources.put(path, data);
   }
 
