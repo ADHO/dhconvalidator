@@ -7,6 +7,9 @@ package org.adho.dhconvalidator.conversion.output;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
@@ -26,6 +29,7 @@ import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.properties.PropertyKey;
 import org.adho.dhconvalidator.user.User;
 import org.adho.dhconvalidator.util.DocumentUtil;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * An OutputConverter that does modifications common to all supported formats (so far).
@@ -309,6 +313,40 @@ public class CommonOutputConverter implements OutputConverter {
   @Override
   public void convert(ZipResult zipResult) throws IOException {
     checkImages(zipResult);
+    makeImageNamesUnique(zipResult);
+  }
+
+  private void makeImageNamesUnique(ZipResult zipResult) {
+    String image_location = PropertyKey.tei_image_location.getValue().substring(1);
+    List<String> externalPicturesPaths =
+        zipResult.getExternalResourcePathsStartsWith(image_location);
+    if (externalPicturesPaths.isEmpty()) {
+      return;
+    }
+    MessageDigest md;
+    try {
+      md = MessageDigest.getInstance("MD5");
+    } catch (NoSuchAlgorithmException e) {
+      return;
+    }
+    Document document = zipResult.getDocument();
+    for (String picturePath : externalPicturesPaths) {
+      byte[] pictureData = zipResult.getExternalResource(picturePath);
+      md.reset();
+      byte[] bytes = md.digest(pictureData);
+      BigInteger bigInt = new BigInteger(1, bytes);
+      String hash = String.format("%0" + (bytes.length << 1) + "x", bigInt);
+      String extension = FilenameUtils.getExtension(picturePath);
+      String directory = FilenameUtils.getFullPath(picturePath);
+      String newPicturePath = directory + hash + "." + extension;
+      zipResult.moveExternalResource(picturePath, newPicturePath);
+      String xpath = String.format("//tei:graphic['%s']", picturePath);
+      Nodes nodes = document.query(xpath, xPathContext);
+      for (int i = 0; i < nodes.size(); i++) {
+        Element element = (Element) nodes.get(i);
+        element.getAttribute("url").setValue(newPicturePath);
+      }
+    }
   }
 
   /**
