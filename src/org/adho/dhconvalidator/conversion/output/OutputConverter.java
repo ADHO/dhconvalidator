@@ -11,7 +11,7 @@ import org.adho.dhconvalidator.paper.Paper;
 import org.adho.dhconvalidator.user.User;
 
 /**
- * An Ouptput converter refines the TEI result of OxGarage.
+ * An Output converter refines the TEI result of OxGarage.
  *
  * @author marco.petris@web.de
  */
