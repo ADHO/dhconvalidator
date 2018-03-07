@@ -318,33 +318,32 @@ public class CommonOutputConverter implements OutputConverter {
    * @throws IOException
    */
   private void checkImages(ZipResult zipResult) throws IOException {
-
+    String image_location = PropertyKey.tei_image_location.getValue().substring(1);
     List<String> externalPicturesPaths =
-        zipResult.getExternalResourcePathsStartsWith(
-            PropertyKey.tei_image_location.getValue().substring(1));
-    if (!externalPicturesPaths.isEmpty()) {
-      int minWidth = Integer.valueOf(PropertyKey.image_min_resolution_width.getValue());
-      int minHeight = Integer.valueOf(PropertyKey.image_min_resolution_height.getValue());
+        zipResult.getExternalResourcePathsStartsWith(image_location);
+    if (externalPicturesPaths.isEmpty()) {
+      return;
+    }
+    int minWidth = Integer.valueOf(PropertyKey.image_min_resolution_width.getValue());
+    int minHeight = Integer.valueOf(PropertyKey.image_min_resolution_height.getValue());
 
-      for (String picturePath : externalPicturesPaths) {
-        byte[] pictureData = zipResult.getExternalResource(picturePath);
-        BufferedImage bimg = ImageIO.read(new ByteArrayInputStream(pictureData));
+    for (String picturePath : externalPicturesPaths) {
+      byte[] pictureData = zipResult.getExternalResource(picturePath);
+      BufferedImage bimg = ImageIO.read(new ByteArrayInputStream(pictureData));
 
-        if (bimg == null) {
-          throw new IOException(Messages.getString("CommonOutputConverter.imageparsingerror"));
-        }
+      if (bimg == null) {
+        throw new IOException(Messages.getString("CommonOutputConverter.imageparsingerror"));
+      }
 
-        int width = bimg.getWidth();
-        int height = bimg.getHeight();
+      int width = bimg.getWidth();
+      int height = bimg.getHeight();
 
-        if ((width < minWidth) || (height < minHeight)) {
-          throw new IOException(
-              Messages.getString("CommonOutputConverter.imageerror", minWidth, minHeight));
-        }
+      if ((width < minWidth) || (height < minHeight)) {
+        throw new IOException(
+            Messages.getString("CommonOutputConverter.imageerror", minWidth, minHeight));
       }
     }
   }
-
 
   /**
    * Moves images from one location to another.
