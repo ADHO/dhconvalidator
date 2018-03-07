@@ -61,6 +61,84 @@ public class ZipResult {
     }
   }
 
+  /** @return the TEI document */
+  public Document getDocument() {
+    return document;
+  }
+
+  public String getDocumentName() {
+    return documentName;
+  }
+
+  /**
+   * @param resourceKey path+name of the external resource
+   * @return the resource data
+   */
+  public byte[] getExternalResource(String resourceKey) {
+    return externalResources.get(resourceKey);
+  }
+
+  /**
+   * @param pathPart the beginning of the path
+   * @return all resources that have a path that matches the given path part
+   */
+  public List<String> getExternalResourcePathsStartsWith(String pathPart) {
+    ArrayList<String> result = new ArrayList<>();
+    for (String path : externalResources.keySet()) {
+      if (path.startsWith(pathPart)) {
+        result.add(path);
+      }
+    }
+    return Collections.unmodifiableList(result);
+  }
+
+  /**
+   * Adds a resource with the given path and the given data.
+   *
+   * @param path path+name
+   * @param data
+   */
+  public void putResource(String path, byte[] data) {
+    externalResources.put(path, data);
+  }
+
+  /**
+   * Moves the resource that can be found at oldResourceKey to newResourceKey
+   *
+   * @param oldResourceKey
+   * @param newResourceKey
+   */
+  public void moveExternalResource(String oldResourceKey, String newResourceKey) {
+    externalResources.put(newResourceKey, externalResources.remove(oldResourceKey));
+  }
+
+  /**
+   * @return this container as compressed data
+   * @throws IOException in case of any failure
+   */
+  public byte[] toZipData() throws IOException {
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+    try (ZipOutputStream zipOutputStream = new ZipOutputStream(bos)) {
+
+      ZipEntry docEntry = new ZipEntry(documentName);
+      zipOutputStream.putNextEntry(docEntry);
+      Serializer serializer = new Serializer(zipOutputStream);
+      serializer.setIndent(4);
+      serializer.write(document);
+      zipOutputStream.closeEntry();
+
+      for (Map.Entry<String, byte[]> entry : externalResources.entrySet()) {
+        ZipEntry extResourceEntry = new ZipEntry(entry.getKey());
+        zipOutputStream.putNextEntry(extResourceEntry);
+        zipOutputStream.write(entry.getValue());
+        zipOutputStream.closeEntry();
+      }
+    }
+
+    return bos.toByteArray();
+  }
+
   /**
    * @param buffer the source for the TEI file
    * @throws IOException in case of any failure
@@ -111,82 +189,5 @@ public class ZipResult {
     }
     return false;
   }
-
-  /** @return the TEI document */
-  public Document getDocument() {
-    return document;
-  }
-
-  /**
-   * @param resourceKey path+name of the external resource
-   * @return the resource data
-   */
-  public byte[] getExternalResource(String resourceKey) {
-    return externalResources.get(resourceKey);
-  }
-
-  /**
-   * Moves the resource that can be found at oldResourceKey to newResourceKey
-   *
-   * @param oldResourceKey
-   * @param newResourceKey
-   */
-  public void moveExternalResource(String oldResourceKey, String newResourceKey) {
-    externalResources.put(newResourceKey, externalResources.remove(oldResourceKey));
-  }
-
-  /**
-   * @return this container as compressed data
-   * @throws IOException in case of any failure
-   */
-  public byte[] toZipData() throws IOException {
-    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-    try (ZipOutputStream zipOutputStream = new ZipOutputStream(bos)) {
-
-      ZipEntry docEntry = new ZipEntry(documentName);
-      zipOutputStream.putNextEntry(docEntry);
-      Serializer serializer = new Serializer(zipOutputStream);
-      serializer.setIndent(4);
-      serializer.write(document);
-      zipOutputStream.closeEntry();
-
-      for (Map.Entry<String, byte[]> entry : externalResources.entrySet()) {
-        ZipEntry extResourceEntry = new ZipEntry(entry.getKey());
-        zipOutputStream.putNextEntry(extResourceEntry);
-        zipOutputStream.write(entry.getValue());
-        zipOutputStream.closeEntry();
-      }
-    }
-
-    return bos.toByteArray();
-  }
-
-  /**
-   * @param pathPart the beginning of the path
-   * @return all resources that have a path that matches the given path part
-   */
-  public List<String> getExternalResourcePathsStartsWith(String pathPart) {
-    ArrayList<String> result = new ArrayList<>();
-    for (String path : externalResources.keySet()) {
-      if (path.startsWith(pathPart)) {
-        result.add(path);
-      }
-    }
-    return Collections.unmodifiableList(result);
-  }
-
-  /**
-   * Adds a resource with the given path and the given data.
-   *
-   * @param path path+name
-   * @param data
-   */
-  public void putResource(String path, byte[] data) {
-    externalResources.put(path, data);
-  }
-
-  public String getDocumentName() {
-    return documentName;
-  }
 }
+
