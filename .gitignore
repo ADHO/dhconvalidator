@@ -1,8 +1,12 @@
+*.iml
 /.classpath
+/.idea/
 /.project
 /.settings/
 /WebContent/WEB-INF/classes/
 /build/
 /deploy/
 /dhconv.war
+/out/
+/test/
 /testdata/
