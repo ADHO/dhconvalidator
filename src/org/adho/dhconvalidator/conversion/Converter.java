@@ -36,8 +36,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
- * The converter that handles all steps to convert some input data to the final {@link ZipResult}
- * that gets returned the user.
+ * The converter handles all steps to convert input data to the final {@link ZipResult}.
  *
  * @author marco.petris@web.de
  */
@@ -284,4 +283,3 @@ public class Converter {
     return contentAsXhtml;
   }
 }
-

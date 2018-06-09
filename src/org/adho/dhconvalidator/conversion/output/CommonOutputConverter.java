@@ -58,8 +58,8 @@ public class CommonOutputConverter implements OutputConverter {
     makeFigureHead(document);
     removeRevisions(document);
     adjustTableHeads(document);
-    normalizeTitle(document);
-    removeRendAttr(document);
+    // normalizeTitle(document);
+    // removeRendAttr(document);
   }
 
   private void removeRendAttr(Document document) {
@@ -340,7 +340,7 @@ public class CommonOutputConverter implements OutputConverter {
       String directory = FilenameUtils.getFullPath(picturePath);
       String newPicturePath = directory + hash + "." + extension;
       zipResult.moveExternalResource(picturePath, newPicturePath);
-      String xpath = String.format("//tei:graphic['%s']", picturePath);
+      String xpath = String.format("//tei:graphic[@url='%s']", picturePath);
       Nodes nodes = document.query(xpath, xPathContext);
       for (int i = 0; i < nodes.size(); i++) {
         Element element = (Element) nodes.get(i);
@@ -401,4 +401,3 @@ public class CommonOutputConverter implements OutputConverter {
     }
   }
 }
-

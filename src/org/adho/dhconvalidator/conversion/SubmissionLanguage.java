@@ -6,12 +6,13 @@ import org.adho.dhconvalidator.properties.PropertyKey;
 public enum SubmissionLanguage {
   ENGLISH("Bibliography", "template.language.description.en", PropertyKey.templateFileEN),
   GERMAN("Bibliographie", "template.language.description.de", PropertyKey.templateFileDE),
+  SPANISH("Bibliografía", "template.language.description.es", PropertyKey.templateFileES),
   ;
+  private PropertyKey templatePropertyKey;
   private String bibliographyTranslation;
   private String languageDescriptionKey;
-  private PropertyKey templatePropertyKey;
 
-  private SubmissionLanguage(
+  SubmissionLanguage(
       String bibliographyTranslation,
       String languageDescriptionKey,
       PropertyKey templatePropertyKey) {
