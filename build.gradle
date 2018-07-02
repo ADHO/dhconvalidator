@@ -1,0 +1,25 @@
+apply plugin: 'war'
+
+repositories { flatDir { dirs 'libs' } }
+
+dependencies {
+  compile name: 'commons-io-2.1'
+  compile name: 'flute-1.3.0.gg2'
+  compile name: 'guava-16.0.1.vaadin1'
+  compile name: 'guava-18.0'
+  compile name: 'jsoup-1.8.1'
+  compile name: 'org.restlet'
+  compile name: 'org.restlet.ext.html'
+  compile name: 'sac-1.3'
+  compile name: 'serializer'
+  compile name: 'streamhtmlparser-jsilver-0.0.10.vaadin1'
+  compile name: 'vaadin-client-compiled-7.5.5'
+  compile name: 'vaadin-sass-compiler-0.9.12'
+  compile name: 'vaadin-server-7.5.5'
+  compile name: 'vaadin-shared-7.5.5'
+  compile name: 'vaadin-themes-7.5.5'
+  compile name: 'xercesImpl-2.8.1'
+  compile name: 'xml-apis'
+  compile name: 'xom-1.2.7'
+  providedCompile name: 'javax.servlet-api-3.0.1'
+}
