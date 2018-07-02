@@ -1,6 +1,6 @@
 # DHConvalidator
 
-Offical Repository:
+**Offical Repository:**
 [ADHO/dhconvalidator](https://github.com/ADHO/dhconvalidator)
 
 The goal of the DHConvalidator is a simplification of the creation of a
