@@ -233,7 +233,6 @@ public class Converter {
     for (int i = 0; i < imgElements.size(); i++) {
       Element imgElement = (Element) imgElements.get(i);
       imgElement.addAttribute(new Attribute("width", "100%"));
-      imgElement.addAttribute(new Attribute("height", "100%"));
     }
   }
 
