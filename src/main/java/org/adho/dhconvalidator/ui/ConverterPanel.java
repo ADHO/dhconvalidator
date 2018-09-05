@@ -139,10 +139,44 @@ public class ConverterPanel extends VerticalLayout implements View {
                         },
                         new ExecutionListener<Pair<ZipResult, String>>() {
                           @Override
-                          public void done(Pair<ZipResult, String> result) {}
+                          public void done(Pair<ZipResult, String> result) {
+                            // back to GUI foreground at this point
+                            String originalExtension =
+                                filename.substring(filename.lastIndexOf('.')+1);
+
+                            filename = result.getFirst().getDocumentName().substring(
+                                0, result.getFirst().getDocumentName().lastIndexOf('.'))
+                                + "." + originalExtension;
+
+                            // we store the result in the session for the ExternalResourceRequestHandler
+                            VaadinSession.getCurrent().setAttribute(
+                                SessionStorageKey.ZIPRESULT.name(), result.getFirst());
+
+                            appendLogMessage(
+                                Messages.getString("ConverterPanel.progress2"));
+
+                            preview.setValue(result.getSecond());
+                            resultCaption.setValue(
+                                Messages.getString(
+                                    "ConverterPanel.previewTitle",  filename ));
+                            prepareForResultDownload();
+                            progressBar.setVisible(false);
+                          }
 
                           @Override
-                          public void error(Throwable t) {}
+                          public void error(Throwable t) {
+                            // an error during background conversion
+                            LOGGER.log(Level.SEVERE, Messages.getString(
+                                "ConverterPanel.conversionErrorMsg"), t);
+                            String message = t.getLocalizedMessage();
+                            if (message == null) {
+                              message = Messages.getString(
+                                  "ConverterPanel.conversionErrorNullReplacement");
+                            }
+                            appendLogMessage(Messages.getString(
+                                "ConverterPanel.errorLogMsg", message));
+                            progressBar.setVisible(false);
+                          }
                         },
                         new ProgressListener() {
 
