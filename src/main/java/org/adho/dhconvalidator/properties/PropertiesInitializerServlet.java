@@ -5,6 +5,7 @@
 package org.adho.dhconvalidator.properties;
 
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -32,7 +33,7 @@ public class PropertiesInitializerServlet extends HttpServlet {
 
       Properties properties = new Properties();
 
-      properties.load(new FileInputStream(cfg.getServletContext().getRealPath(propertiesFile)));
+      properties.load(new InputStreamReader(new FileInputStream(cfg.getServletContext().getRealPath(propertiesFile)), "UTF8"));
 
       HashMap<Object, Object> propertyBuffer = new HashMap<>();
 
