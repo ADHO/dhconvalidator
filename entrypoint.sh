@@ -1,3 +1,11 @@
+# this is a Docker entrypoint script that will be executed
+# for each start of a container based on that image.
+#
+# the purpose here is simply to overwrite the settings in 
+# `dhconvalidator.properties` with parameters provided
+# on the command line, e.g. 
+# `docker run -e dhconvalidator_base_url=http://my.dhconvalidator.base.url …`
+
 #!/bin/sh
 
 cat <<EOF > ${JETTY_BASE}/webapps/ROOT/dhconvalidator.properties
@@ -29,5 +37,5 @@ userProviderClass=${dhconvalidator_userProviderClass}
 version=1.22
 EOF
 
-# run the command given in the Dockerfile at CMD 
+# run the original jetty entrypoint script (from the jetty base image) 
 exec /docker-entrypoint.sh
