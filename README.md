@@ -107,4 +107,31 @@ docker run -d --rm -p8080:8080 --name dhconvalidator -e dhconvalidator_base_url=
 ```
 will set the base url to `http://my.dhconvalidator.base.url`. 
 
- 
+### Docker-compose with OxGarage sidekick
+
+`docker-compose` allows you to easily run your own dedicated OxGarage 
+instance as a sidekick to the DHConvalidator.
+
+```
+version: '3'
+
+services:
+  dhconvalidator:
+    image: dhconvalidator
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      dhconvalidator_base_ur: http://localhost:8080
+      dhconvalidator_oxgarage_url: http://oxgarage:8080/ege-webservice/
+  oxgarage:
+    image: teic/oxgarage
+    restart: always
+    environment:
+      WEBSERVICE_URL: http://localhost:8080/ege-webservice/ 
+    volumes:
+      - /your/path/to/TEI/P5:/usr/share/xml/tei/odd:ro
+      - /your/path/to/Stylesheets:/usr/share/xml/tei/stylesheet:ro
+``` 
+NB: You need to provide your own copy of the TEI sources and Stylesheets! (see
+https://github.com/TEIC/oxgarage for more details on how to run that container)
