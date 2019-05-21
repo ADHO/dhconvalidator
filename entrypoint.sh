@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # this is a Docker entrypoint script that will be executed
 # for each start of a container based on that image.
 #
@@ -5,8 +7,6 @@
 # `dhconvalidator.properties` with parameters provided
 # on the command line, e.g. 
 # `docker run -e dhconvalidator_base_url=http://my.dhconvalidator.base.url …`
-
-#!/bin/sh
 
 cat <<EOF > ${JETTY_BASE}/webapps/ROOT/dhconvalidator.properties
 #base_url=http://adho.org/dhconvalidator-2018
