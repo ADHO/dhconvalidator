@@ -30,6 +30,19 @@ The .dhc package contains the original edited template file (docx or
 odt), the TEI version, integrated media files and a HTML version of the
 submission.
 
+## Overview of the process
+
+1. ConfTool is set up by the Local Organizers
+2. Contributors log into ConfTool to make their initial submission for review.
+3. On acceptance, contributors prepare the final version of their submission in a word processor of their choice
+4. ConValidator is set up by the Local Organizers to run on a server, and connected to ConfTool; see here: https://github.com/ADHO/dhconvalidator and here: https://www.conftool.net/ctforum/index.php?topic=368.0;wap2
+5. Then, contributors log onto the ConValidator webservice with their ConfTool credentials. They need to be given a link to the entry point. 
+6. There, they select the submission they would like to prepare and download the DOCX or ODT template file they need. The template contains some metadata (title, authors) and as formatting styles (DH-Heading1, DH-Blockquote, DH-Default, etc.)
+7. They transfer their text into the template as plain text, applying the formatting styles as applicable. They insert images. They insert the bibliographical references in the appropriate section of the template.
+8. They upload their ODT or DOCX file into the ConValidator, where they can check the conversion and execute the conversion to the DHC format. They download the DHC file from the ConValidator. This is essentially a ZIP archive containing their original OCT/DOCX file, an HTML rendering and an XML-TEI rendering, plus a folder with the image files, properly renamed).
+9. The DHC file is what contributors upload into ConfTool as their final submission.
+10. Local Organizers receive the DHC files, use the HTML version for the online publication of the abstracts and the XML-TEI files for archiving and for production of the Book of Abstracts, using this service: https://github.com/ADHO/TEI-to-PDF
+
 ## Installation
 
 Take the latest [WAR file release]
