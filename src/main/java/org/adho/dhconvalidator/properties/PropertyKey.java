@@ -62,6 +62,9 @@ public enum PropertyKey {
   templateFileDE,
   templateFileEN,
   templateFileES,
+  templateFileFR,
+  templateFileIT,
+  templateFileRU,
   defaultSubmissionLanguage,
   ;
 
