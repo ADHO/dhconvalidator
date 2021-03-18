@@ -10,7 +10,6 @@ RUN gradle war
 FROM jetty:alpine
 
 COPY --from=builder /home/gradle/dhconvalidator/build/libs/*.war /tmp/
-COPY entrypoint.sh /entrypoint.sh
 
 USER root:root
 RUN mkdir -p ${JETTY_BASE}/webapps/ROOT \
@@ -19,5 +18,4 @@ RUN mkdir -p ${JETTY_BASE}/webapps/ROOT \
 
 USER jetty:jetty
 
-ENTRYPOINT ["/entrypoint.sh"]
 CMD ["java","-jar","/usr/local/jetty/start.jar"]
