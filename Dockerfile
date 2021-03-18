@@ -3,7 +3,7 @@ FROM gradle:5.4 as builder
 
 WORKDIR /home/gradle/dhconvalidator
 USER root:root
-COPY . . 
+COPY . .
 RUN gradle war
 
 # step 2: run the application server
@@ -41,7 +41,7 @@ COPY entrypoint.sh /entrypoint.sh
 USER root:root
 RUN mkdir -p ${JETTY_BASE}/webapps/ROOT \
     && unzip /tmp/*.war -d ${JETTY_BASE}/webapps/ROOT \
-    && chown -R jetty:jetty ${JETTY_BASE}/webapps/ROOT 
+    && chown -R jetty:jetty ${JETTY_BASE}/webapps/ROOT
 
 USER jetty:jetty
 
