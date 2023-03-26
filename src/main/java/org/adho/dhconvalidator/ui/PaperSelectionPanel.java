@@ -82,7 +82,15 @@ public class PaperSelectionPanel extends CenterPanel implements View {
     languages =
         new ComboBox(
             Messages.getString("PaperSelectionPanel.language"),
-            Arrays.asList(SubmissionLanguage.values()));
+            Arrays.asList(
+              Arrays.asList(SubmissionLanguage.values())
+                .stream()
+                .filter(
+                  sl -> PropertyProvider.getProperties().getProperty(sl.getTemplatePropertyKey().name()) != null
+                )
+                .toArray()
+            )
+        );
     languages.setNullSelectionAllowed(false);
     languages.setValue(
         SubmissionLanguage.valueOf(
