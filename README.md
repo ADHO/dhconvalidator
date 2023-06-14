@@ -13,7 +13,8 @@ Word.
 
 The DHConvalidator works together with the conference management tool
 [ConfTool](http://www.conftool.net/) and 
-uses [OxGarage](https://oxgarage.tei-c.org/) to do the bulk conversion.
+uses [TEIGarage](https://teigarage.tei-c.org/) (formerly known as OxGarage) 
+to do the bulk conversion.
 
 The submission of the final version is composed of four steps after
 logging in:
@@ -53,8 +54,7 @@ create a WAR file yourself and extract it to a Servlet container (Jetty
 Copy the dhconvalidator.properties.example to dhconvalidator.properties
 and edit it as needed:
 - Set the ConfTool REST interface settings like URL and shared password. 
-- Set the OxGarage webservice URL (Note that the dhconvalidator 
-    TEI/Stylesheets profile must be installed for the OxGarage webservice)
+- Set the TEIGarage webservice URL (formerly OxGarage)
 - Edit settings for validation, min resolution, publication statement
 - and so on.
 
@@ -102,7 +102,7 @@ the DHConvalidator instance available at `http://localhost:8080/dhconv`.
 * dhconvalidator_image_min_resolution_height=`50`
 * dhconvalidator_image_min_resolution_width=`800`
 * dhconvalidator_logConversionStepOutput=`false`
-* dhconvalidator_oxgarage_url=`https://oxgarage.tei-c.org/ege-webservice/`
+* dhconvalidator_oxgarage_url=`https://teigarage.tei-c.org/ege-webservice/`
 * dhconvalidator_paperProviderClass=`org.adho.dhconvalidator.demo.DemoPaperProvider`
 * dhconvalidator_performSchemaValidation=`true`
 * dhconvalidator_publicationStmt=`'<publicationStmt xmlns="http://www.tei-c.org/ns/1.0"><publisher>Name, Institution</publisher><address><addrLine>Street</addrLine><addrLine>City</addrLine><addrLine>Country</addrLine><addrLine>Name</addrLine></address></publicationStmt>'`
@@ -120,9 +120,9 @@ docker run -d --rm -p8080:8080 --name dhconvalidator -e dhconvalidator_base_url=
 ```
 will set the base url to `http://my.dhconvalidator.base.url`. 
 
-### Docker-compose with OxGarage sidekick
+### Docker-compose with TEIGarage sidekick
 
-`docker-compose` allows you to easily run your own dedicated OxGarage 
+`docker-compose` allows you to easily run your own dedicated TEIGarage 
 instance as a sidekick to the DHConvalidator.
 
 ```
@@ -136,9 +136,9 @@ services:
       - "8080:8080"
     environment:
       dhconvalidator_base_ur: http://localhost:8080
-      dhconvalidator_oxgarage_url: http://oxgarage:8080/ege-webservice/
-  oxgarage:
-    image: teic/oxgarage
+      dhconvalidator_oxgarage_url: http://teigarage:8080/ege-webservice/
+  teigarage:
+    image: teic/teigarage
     restart: always
     environment:
       WEBSERVICE_URL: http://localhost:8080/ege-webservice/ 
@@ -146,5 +146,5 @@ services:
       - /your/path/to/TEI/P5:/usr/share/xml/tei/odd:ro
       - /your/path/to/Stylesheets:/usr/share/xml/tei/stylesheet:ro
 ``` 
-NB: You need to provide your own copy of the TEI sources and Stylesheets! (see
-https://github.com/TEIC/oxgarage for more details on how to run that container)
+NB: You may provide your own copy of the TEI sources and Stylesheets! (see
+https://github.com/TEIC/teigarage for more details on how to run that container)

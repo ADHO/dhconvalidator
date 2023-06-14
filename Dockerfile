@@ -23,7 +23,7 @@ ENV dhconvalidator_base_url=http://localhost:8080/dhconv \
     dhconvalidator_image_min_resolution_height=50 \
     dhconvalidator_image_min_resolution_width=800 \
     dhconvalidator_logConversionStepOutput=false \
-    dhconvalidator_oxgarage_url=https://oxgarage.tei-c.org/ege-webservice/ \
+    dhconvalidator_oxgarage_url=https://teigarage.tei-c.org/ege-webservice/ \
     dhconvalidator_paperProviderClass=org.adho.dhconvalidator.demo.DemoPaperProvider \
     dhconvalidator_performSchemaValidation=true \
     dhconvalidator_publicationStmt='<publicationStmt xmlns="http://www.tei-c.org/ns/1.0"><publisher>Name, Institution</publisher><address><addrLine>Street</addrLine><addrLine>City</addrLine><addrLine>Country</addrLine><addrLine>Name</addrLine></address></publicationStmt>' \
