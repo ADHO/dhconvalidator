@@ -34,6 +34,12 @@ import org.restlet.data.Method;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+
 /**
  * A client that talks to the ConfTool REST interface.
  *
@@ -146,7 +152,35 @@ public class ConfToolClient implements UserProvider, PaperProvider {
 
   private String getNonce() {
     Date date = new Date(new Date().getTime() * 60);
-    return String.valueOf(date.getTime());
+    String nonce = String.valueOf(date.getTime());
+    
+    // Log nonce value
+    try {
+      Logger logger = Logger.getLogger(this.getClass().getName());
+      logger.info("Generated nonce: " + nonce);
+    } catch (Exception e) {
+      System.err.println("Error logging nonce: " + e.getMessage());
+    }
+
+    // Write nonce value to a dedicated file
+    try {
+      FileWriter fileWriter = new FileWriter("/tmp/nonce_log.txt", true);
+      BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+      PrintWriter printWriter = new PrintWriter(bufferedWriter);
+      
+      SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      String timestamp = formatter.format(new Date());
+      
+      printWriter.println(timestamp + " - Generated nonce: " + nonce);
+      
+      printWriter.close();
+      bufferedWriter.close();
+      fileWriter.close();
+    } catch (IOException e) {
+      System.err.println("Error writing nonce to log file: " + e.getMessage());
+    }
+    
+    return nonce;
   }
 
   private ZipFs getDhcFile(User user, Paper paper) throws IOException {
