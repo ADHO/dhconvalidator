@@ -123,8 +123,8 @@ public class Converter {
 
     ByteArrayOutputStream conversionResultDocBuffer = new ByteArrayOutputStream();
 
-    Serializer serializer = new Serializer(conversionResultDocBuffer);
-    serializer.setIndent(2);
+    Serializer serializer = new Serializer(conversionResultDocBuffer, "UTF-8");
+    serializer.setIndent(0);
     serializer.write(document);
 
     DocumentLog.logConversionStepOutput(
@@ -149,8 +149,8 @@ public class Converter {
     }
 
     ByteArrayOutputStream xHtmlBuffer = new ByteArrayOutputStream();
-    serializer = new Serializer(xHtmlBuffer);
-    serializer.setIndent(2);
+    serializer = new Serializer(xHtmlBuffer, "UTF-8");
+    serializer.setIndent(0);
     serializer.write(xHtmlDoc);
     this.contentAsXhtml = xHtmlBuffer.toString("UTF-8");
 

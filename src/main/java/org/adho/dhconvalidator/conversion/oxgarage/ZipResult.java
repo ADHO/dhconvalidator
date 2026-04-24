@@ -123,8 +123,8 @@ public class ZipResult {
 
       ZipEntry docEntry = new ZipEntry(documentName);
       zipOutputStream.putNextEntry(docEntry);
-      Serializer serializer = new Serializer(zipOutputStream);
-      serializer.setIndent(4);
+      Serializer serializer = new Serializer(zipOutputStream, "UTF-8");
+      serializer.setIndent(0);
       serializer.write(this.document);
       zipOutputStream.closeEntry();
 

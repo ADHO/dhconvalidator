@@ -56,8 +56,8 @@ public class OxGarageConversionClient {
       byte[] sourceData, ConversionPath conversionPath, Properties properties) throws IOException {
 
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    Serializer serializer = new Serializer(buffer);
-    serializer.setIndent(2);
+    Serializer serializer = new Serializer(buffer, "UTF-8");
+    serializer.setIndent(0);
     serializer.write(convertToDocument(sourceData, conversionPath, properties));
     return buffer.toString("UTF-8");
   }
@@ -183,8 +183,8 @@ public class OxGarageConversionClient {
 
     ZipResult zipResult = new ZipResult(convert(file, conversionPath, properties));
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    Serializer serializer = new Serializer(buffer);
-    serializer.setIndent(2);
+    Serializer serializer = new Serializer(buffer, "UTF-8");
+    serializer.setIndent(0);
     serializer.write(zipResult.getDocument());
     return buffer.toString("UTF-8");
   }
